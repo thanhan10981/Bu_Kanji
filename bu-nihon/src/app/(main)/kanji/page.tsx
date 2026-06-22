@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search, Eraser, ScanLine, Download, CreditCard, PenTool,
   X, ChevronRight, Volume2, Pen, Sparkles, BookOpen, Zap,
@@ -341,7 +342,249 @@ function AnimatedMindmap() {
 }
 
 
+/* ── Từ ghép Dictionary ─────────────────────────── */
+const KANJI_COMPOUNDS: Record<string, Array<{word: string; reading: string; meaning: string}>> = {
+  "日": [{word:"日本",reading:"にほん",meaning:"Nhật Bản"},{word:"毎日",reading:"まいにち",meaning:"mỗi ngày"},{word:"今日",reading:"きょう",meaning:"hôm nay"},{word:"日曜日",reading:"にちようび",meaning:"Chủ Nhật"}],
+  "本": [{word:"日本",reading:"にほん",meaning:"Nhật Bản"},{word:"本当",reading:"ほんとう",meaning:"thật sự"},{word:"本屋",reading:"ほんや",meaning:"tiệm sách"},{word:"基本",reading:"きほん",meaning:"cơ bản"}],
+  "人": [{word:"日本人",reading:"にほんじん",meaning:"người Nhật"},{word:"外国人",reading:"がいこくじん",meaning:"người ngoại quốc"},{word:"人間",reading:"にんげん",meaning:"con người"},{word:"人口",reading:"じんこう",meaning:"dân số"}],
+  "山": [{word:"富士山",reading:"ふじさん",meaning:"núi Phú Sĩ"},{word:"登山",reading:"とざん",meaning:"leo núi"},{word:"火山",reading:"かざん",meaning:"núi lửa"},{word:"山道",reading:"やまみち",meaning:"đường núi"}],
+  "川": [{word:"小川",reading:"おがわ",meaning:"suối nhỏ"},{word:"川上",reading:"かわかみ",meaning:"thượng lưu"},{word:"川下",reading:"かわしも",meaning:"hạ lưu"}],
+  "火": [{word:"花火",reading:"はなび",meaning:"pháo hoa"},{word:"火山",reading:"かざん",meaning:"núi lửa"},{word:"火事",reading:"かじ",meaning:"đám cháy"},{word:"火曜日",reading:"かようび",meaning:"Thứ Ba"}],
+  "水": [{word:"水道",reading:"すいどう",meaning:"đường ống nước"},{word:"水曜日",reading:"すいようび",meaning:"Thứ Tư"},{word:"洪水",reading:"こうずい",meaning:"lũ lụt"},{word:"水泳",reading:"すいえい",meaning:"bơi lội"}],
+  "木": [{word:"木曜日",reading:"もくようび",meaning:"Thứ Năm"},{word:"木材",reading:"もくざい",meaning:"gỗ"},{word:"大木",reading:"たいぼく",meaning:"cây cổ thụ"},{word:"植木",reading:"うえき",meaning:"cây cảnh"}],
+  "金": [{word:"金曜日",reading:"きんようび",meaning:"Thứ Sáu"},{word:"金魚",reading:"きんぎょ",meaning:"cá vàng"},{word:"黄金",reading:"おうごん",meaning:"vàng ròng"},{word:"金属",reading:"きんぞく",meaning:"kim loại"}],
+  "土": [{word:"土曜日",reading:"どようび",meaning:"Thứ Bảy"},{word:"土地",reading:"とち",meaning:"đất đai"},{word:"土台",reading:"どだい",meaning:"nền móng"},{word:"粘土",reading:"ねんど",meaning:"đất sét"}],
+  "口": [{word:"出口",reading:"でぐち",meaning:"lối ra"},{word:"入口",reading:"いりぐち",meaning:"lối vào"},{word:"人口",reading:"じんこう",meaning:"dân số"},{word:"口頭",reading:"こうとう",meaning:"miệng"}],
+  "目": [{word:"目標",reading:"もくひょう",meaning:"mục tiêu"},{word:"注目",reading:"ちゅうもく",meaning:"chú ý"},{word:"目的",reading:"もくてき",meaning:"mục đích"},{word:"真面目",reading:"まじめ",meaning:"nghiêm túc"}],
+  "手": [{word:"手紙",reading:"てがみ",meaning:"thư"},{word:"上手",reading:"じょうず",meaning:"giỏi"},{word:"下手",reading:"へた",meaning:"kém"},{word:"握手",reading:"あくしゅ",meaning:"bắt tay"}],
+  "足": [{word:"足跡",reading:"あしあと",meaning:"dấu chân"},{word:"不足",reading:"ふそく",meaning:"thiếu"},{word:"満足",reading:"まんぞく",meaning:"thỏa mãn"},{word:"遠足",reading:"えんそく",meaning:"dã ngoại"}],
+  "気": [{word:"気持ち",reading:"きもち",meaning:"cảm giác"},{word:"天気",reading:"てんき",meaning:"thời tiết"},{word:"元気",reading:"げんき",meaning:"khỏe mạnh"},{word:"電気",reading:"でんき",meaning:"điện"}],
+  "行": [{word:"旅行",reading:"りょこう",meaning:"du lịch"},{word:"銀行",reading:"ぎんこう",meaning:"ngân hàng"},{word:"行動",reading:"こうどう",meaning:"hành động"},{word:"行列",reading:"ぎょうれつ",meaning:"hàng dài"}],
+  "食": [{word:"食事",reading:"しょくじ",meaning:"bữa ăn"},{word:"食堂",reading:"しょくどう",meaning:"căn-tin"},{word:"食料",reading:"しょくりょう",meaning:"thực phẩm"},{word:"和食",reading:"わしょく",meaning:"ẩm thực Nhật"}],
+  "学": [{word:"学校",reading:"がっこう",meaning:"trường học"},{word:"大学",reading:"だいがく",meaning:"đại học"},{word:"学生",reading:"がくせい",meaning:"học sinh"},{word:"留学",reading:"りゅうがく",meaning:"du học"}],
+  "先": [{word:"先生",reading:"せんせい",meaning:"giáo viên"},{word:"先月",reading:"せんげつ",meaning:"tháng trước"},{word:"先週",reading:"せんしゅう",meaning:"tuần trước"},{word:"先輩",reading:"せんぱい",meaning:"đàn anh"}],
+  "生": [{word:"先生",reading:"せんせい",meaning:"giáo viên"},{word:"学生",reading:"がくせい",meaning:"học sinh"},{word:"生活",reading:"せいかつ",meaning:"cuộc sống"},{word:"誕生日",reading:"たんじょうび",meaning:"sinh nhật"}],
+  "語": [{word:"日本語",reading:"にほんご",meaning:"tiếng Nhật"},{word:"英語",reading:"えいご",meaning:"tiếng Anh"},{word:"外国語",reading:"がいこくご",meaning:"ngoại ngữ"},{word:"語学",reading:"ごがく",meaning:"ngôn ngữ học"}],
+  "電": [{word:"電話",reading:"でんわ",meaning:"điện thoại"},{word:"電車",reading:"でんしゃ",meaning:"tàu điện"},{word:"電気",reading:"でんき",meaning:"điện"},{word:"電子",reading:"でんし",meaning:"điện tử"}],
+  "車": [{word:"電車",reading:"でんしゃ",meaning:"tàu điện"},{word:"自動車",reading:"じどうしゃ",meaning:"ô tô"},{word:"自転車",reading:"じてんしゃ",meaning:"xe đạp"},{word:"駐車場",reading:"ちゅうしゃじょう",meaning:"bãi đỗ xe"}],
+  "国": [{word:"外国",reading:"がいこく",meaning:"nước ngoài"},{word:"中国",reading:"ちゅうごく",meaning:"Trung Quốc"},{word:"国語",reading:"こくご",meaning:"ngôn ngữ"},{word:"国際",reading:"こくさい",meaning:"quốc tế"}],
+  "帰": [{word:"帰国",reading:"きこく",meaning:"về nước"},{word:"帰宅",reading:"きたく",meaning:"về nhà"},{word:"帰省",reading:"きせい",meaning:"về quê"},{word:"帰還",reading:"きかん",meaning:"trở về"}],
+  "見": [{word:"見学",reading:"けんがく",meaning:"tham quan"},{word:"見物",reading:"けんぶつ",meaning:"ngắm nhìn"},{word:"発見",reading:"はっけん",meaning:"phát hiện"},{word:"意見",reading:"いけん",meaning:"ý kiến"}],
+  "来": [{word:"来月",reading:"らいげつ",meaning:"tháng sau"},{word:"来週",reading:"らいしゅう",meaning:"tuần sau"},{word:"来年",reading:"らいねん",meaning:"năm sau"},{word:"出来る",reading:"できる",meaning:"có thể làm"}],
+  "聞": [{word:"新聞",reading:"しんぶん",meaning:"báo"},{word:"聞こえる",reading:"きこえる",meaning:"nghe thấy"},{word:"質問",reading:"しつもん",meaning:"câu hỏi"}],
+  "時": [{word:"時間",reading:"じかん",meaning:"thời gian"},{word:"時計",reading:"とけい",meaning:"đồng hồ"},{word:"同時",reading:"どうじ",meaning:"đồng thời"},{word:"時代",reading:"じだい",meaning:"thời đại"}],
+  "間": [{word:"時間",reading:"じかん",meaning:"thời gian"},{word:"人間",reading:"にんげん",meaning:"con người"},{word:"空間",reading:"くうかん",meaning:"không gian"},{word:"週間",reading:"しゅうかん",meaning:"tuần"}],
+  "大": [{word:"大学",reading:"だいがく",meaning:"đại học"},{word:"大人",reading:"おとな",meaning:"người lớn"},{word:"大事",reading:"だいじ",meaning:"quan trọng"},{word:"偉大",reading:"いだい",meaning:"vĩ đại"}],
+  "小": [{word:"小学校",reading:"しょうがっこう",meaning:"tiểu học"},{word:"小説",reading:"しょうせつ",meaning:"tiểu thuyết"},{word:"小川",reading:"おがわ",meaning:"suối nhỏ"},{word:"小鳥",reading:"ことり",meaning:"chim nhỏ"}],
+  "年": [{word:"来年",reading:"らいねん",meaning:"năm sau"},{word:"去年",reading:"きょねん",meaning:"năm ngoái"},{word:"今年",reading:"ことし",meaning:"năm nay"},{word:"毎年",reading:"まいとし",meaning:"mỗi năm"}],
+  "月": [{word:"今月",reading:"こんげつ",meaning:"tháng này"},{word:"先月",reading:"せんげつ",meaning:"tháng trước"},{word:"来月",reading:"らいげつ",meaning:"tháng sau"},{word:"月曜日",reading:"げつようび",meaning:"Thứ Hai"}],
+  "週": [{word:"今週",reading:"こんしゅう",meaning:"tuần này"},{word:"先週",reading:"せんしゅう",meaning:"tuần trước"},{word:"来週",reading:"らいしゅう",meaning:"tuần sau"},{word:"週末",reading:"しゅうまつ",meaning:"cuối tuần"}],
+  "語": [{word:"日本語",reading:"にほんご",meaning:"tiếng Nhật"},{word:"英語",reading:"えいご",meaning:"tiếng Anh"},{word:"語学",reading:"ごがく",meaning:"ngôn ngữ học"}],
+  "話": [{word:"電話",reading:"でんわ",meaning:"điện thoại"},{word:"会話",reading:"かいわ",meaning:"hội thoại"},{word:"話題",reading:"わだい",meaning:"chủ đề"},{word:"童話",reading:"どうわ",meaning:"truyện cổ tích"}],
+  "書": [{word:"図書館",reading:"としょかん",meaning:"thư viện"},{word:"教科書",reading:"きょうかしょ",meaning:"sách giáo khoa"},{word:"書類",reading:"しょるい",meaning:"tài liệu"},{word:"辞書",reading:"じしょ",meaning:"từ điển"}],
+  "読": [{word:"読書",reading:"どくしょ",meaning:"đọc sách"},{word:"読者",reading:"どくしゃ",meaning:"độc giả"},{word:"音読み",reading:"おんよみ",meaning:"âm On"},{word:"黙読",reading:"もくどく",meaning:"đọc thầm"}],
+  "買": [{word:"買い物",reading:"かいもの",meaning:"mua sắm"},{word:"売買",reading:"ばいばい",meaning:"mua bán"},{word:"買い手",reading:"かいて",meaning:"người mua"}],
+  "売": [{word:"売り場",reading:"うりば",meaning:"quầy bán"},{word:"売買",reading:"ばいばい",meaning:"mua bán"},{word:"販売",reading:"はんばい",meaning:"bán hàng"},{word:"売店",reading:"ばいてん",meaning:"cửa hàng nhỏ"}],
+  "天": [{word:"天気",reading:"てんき",meaning:"thời tiết"},{word:"天才",reading:"てんさい",meaning:"thiên tài"},{word:"天国",reading:"てんごく",meaning:"thiên đường"},{word:"天井",reading:"てんじょう",meaning:"trần nhà"}],
+  "空": [{word:"空港",reading:"くうこう",meaning:"sân bay"},{word:"空間",reading:"くうかん",meaning:"không gian"},{word:"青空",reading:"あおぞら",meaning:"bầu trời xanh"},{word:"空気",reading:"くうき",meaning:"không khí"}],
+};
+
+/* ── Kanji Compound Graph (draggable – Vue DevTools style) ── */
+function KanjiCompoundGraph({ kanji, levelColor }: { kanji: KanjiItem; levelColor: string }) {
+  const compounds = KANJI_COMPOUNDS[kanji.kanji] || [];
+  if (compounds.length === 0) return null;
+
+  const W = 360, H = 240;
+  const MX = W / 2, MY = H / 2;
+  const COLORS = ["#059669","#2563eb","#7c3aed","#d97706","#dc2626","#0891b2"];
+
+  // Initial positions: main at center, compounds in a fan-circle
+  const initPositions = () => {
+    const pos: Record<string, {x:number;y:number}> = { "__main__": { x: MX, y: MY } };
+    compounds.forEach((c, i) => {
+      const angle = (2 * Math.PI * i / compounds.length) - Math.PI / 2;
+      const r = Math.min(95, 70 + compounds.length * 4);
+      pos[c.word] = { x: MX + r * Math.cos(angle), y: MY + r * Math.sin(angle) };
+    });
+    return pos;
+  };
+
+  const [positions, setPositions] = React.useState<Record<string, {x:number;y:number}>>(initPositions);
+  const [dragging, setDragging] = React.useState<string | null>(null);
+  const [dragStart, setDragStart] = React.useState({ mx: 0, my: 0, nx: 0, ny: 0 });
+  const [hovered, setHovered] = React.useState<string | null>(null);
+  const svgRef = React.useRef<SVGSVGElement>(null);
+
+  // Reset when kanji changes
+  React.useEffect(() => { setPositions(initPositions()); }, [kanji.kanji]);
+
+  const startDrag = (e: React.PointerEvent<Element>, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const pos = positions[id];
+    setDragging(id);
+    setDragStart({ mx: e.clientX, my: e.clientY, nx: pos.x, ny: pos.y });
+    (e.currentTarget as Element).setPointerCapture(e.pointerId);
+  };
+  const onDrag = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (!dragging || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const sx = W / rect.width, sy = H / rect.height;
+    const nx = Math.max(48, Math.min(W - 48, dragStart.nx + (e.clientX - dragStart.mx) * sx));
+    const ny = Math.max(28, Math.min(H - 28, dragStart.ny + (e.clientY - dragStart.my) * sy));
+    setPositions(p => ({ ...p, [dragging]: { x: nx, y: ny } }));
+  };
+  const stopDrag = () => setDragging(null);
+
+  const mainPos = positions["__main__"] ?? { x: MX, y: MY };
+
+  return (
+    <div className="compound-graph-card animate-fade-in-up" style={{
+      borderRadius: 16,
+      border: "1px solid #e2e8f0",
+      background: "linear-gradient(145deg,#fafbff,#f0f4ff)",
+      overflow: "hidden",
+      position: "relative",
+    }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px 0", marginBottom: 4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+          <div style={{ width: 3, height: 16, borderRadius: 2, background: levelColor }} />
+          <span style={{ fontSize: 12, fontWeight: 800, color: "#1e293b" }}>
+            Từ ghép của&nbsp;
+            <span style={{ color: levelColor, fontFamily: "var(--font-jp)", fontSize: 14 }}>{kanji.kanji}</span>
+          </span>
+        </div>
+        <span style={{ fontSize: 10, color: "#94a3b8", background: "#f1f5f9", padding: "2px 8px", borderRadius: 9999, fontWeight: 600 }}>
+          {compounds.length} từ · kéo để sắp xếp
+        </span>
+      </div>
+
+      {/* Graph SVG */}
+      <svg
+        ref={svgRef}
+        width="100%"
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="xMidYMid meet"
+        style={{ display: "block", cursor: dragging ? "grabbing" : "default", touchAction: "none" }}
+        onPointerMove={onDrag}
+        onPointerUp={stopDrag}
+        onPointerLeave={stopDrag}
+      >
+        <defs>
+          {/* dot grid */}
+          <pattern id="cg-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="10" r="1" fill="#e2e8f0" />
+          </pattern>
+          {/* arrowhead marker per color */}
+          {COLORS.map((c, i) => (
+            <marker key={i} id={`cg-arrow-${i}`} markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill={c} opacity="0.7" />
+            </marker>
+          ))}
+          <marker id="cg-arrow-main" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill={levelColor} opacity="0.8" />
+          </marker>
+        </defs>
+
+        {/* Background */}
+        <rect width={W} height={H} fill="url(#cg-dots)" />
+
+        {/* Connecting lines */}
+        {compounds.map((c, i) => {
+          const cp = positions[c.word] ?? { x: 0, y: 0 };
+          const color = COLORS[i % COLORS.length];
+          // Direction: compound → main (arrow at main end)
+          const dx = mainPos.x - cp.x, dy = mainPos.y - cp.y;
+          const len = Math.sqrt(dx * dx + dy * dy) || 1;
+          const ux = dx / len, uy = dy / len;
+          // Shorten endpoints to card edge
+          const x1 = cp.x + ux * 46, y1 = cp.y + uy * 22;
+          const x2 = mainPos.x - ux * 34, y2 = mainPos.y - uy * 34;
+          return (
+            <g key={c.word}>
+              <line
+                x1={x1} y1={y1} x2={x2} y2={y2}
+                stroke={color} strokeWidth="1.5" strokeDasharray="5 4" opacity="0.6"
+                markerEnd={`url(#cg-arrow-${i % COLORS.length})`}
+                style={{ animation: "mm-dash 0.8s linear infinite", animationDelay: `${i * 0.15}s` }}
+              />
+              {/* midpoint dot */}
+              <circle cx={(x1+x2)/2} cy={(y1+y2)/2} r="2" fill={color} opacity="0.5" />
+            </g>
+          );
+        })}
+
+        {/* Compound nodes (draggable) */}
+        {compounds.map((c, i) => {
+          const cp = positions[c.word] ?? { x: 0, y: 0 };
+          const color = COLORS[i % COLORS.length];
+          const isHov = hovered === c.word;
+          const isDrag = dragging === c.word;
+          return (
+            <g
+              key={c.word}
+              transform={`translate(${cp.x},${cp.y})`}
+              style={{ cursor: isDrag ? "grabbing" : "grab" }}
+              onPointerDown={e => startDrag(e, c.word)}
+              onPointerEnter={() => setHovered(c.word)}
+              onPointerLeave={() => setHovered(null)}
+            >
+              {/* Card shadow */}
+              <rect x="-50" y="-28" width="100" height="56" rx="11"
+                fill="rgba(0,0,0,0.06)" transform="translate(2,3)" />
+              {/* Card bg */}
+              <rect x="-50" y="-28" width="100" height="56" rx="11"
+                fill="white"
+                stroke={isHov || isDrag ? color : "#e2e8f0"}
+                strokeWidth={isHov || isDrag ? "2" : "1"}
+                style={{ filter: isDrag ? "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" : "none", transition: "all 0.15s" }}
+              />
+              {/* Left accent bar */}
+              <rect x="-50" y="-28" width="3" height="56" rx="11" fill={color} />
+              {/* Compound word */}
+              <text x="-20" y="-9" textAnchor="middle" fontSize="18"
+                fontFamily="var(--font-jp)" fontWeight="800" fill="#1e293b">{c.word}</text>
+              {/* Reading */}
+              <text x="10" y="-9" textAnchor="start" fontSize="9"
+                fontFamily="var(--font-jp)" fill={color} fontWeight="600">{c.reading}</text>
+              {/* Meaning */}
+              <text x="-20" y="6" textAnchor="middle" fontSize="9" fill="#64748b">{c.meaning}</text>
+              {/* Drag hint dots */}
+              {[0,1,2].map(d => <circle key={d} cx={20 + d * 6} cy="6" r="1.5" fill="#cbd5e1" />)}
+            </g>
+          );
+        })}
+
+        {/* Main kanji node (draggable, centered) */}
+        <g
+          transform={`translate(${mainPos.x},${mainPos.y})`}
+          style={{ cursor: dragging === "__main__" ? "grabbing" : "grab" }}
+          onPointerDown={e => startDrag(e, "__main__")}
+        >
+          {/* Outer ring */}
+          <circle r="34" fill={levelColor} opacity="0.12" />
+          <circle r="28" fill={levelColor} opacity="0.9"
+            style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.2))" }} />
+          {/* Gloss */}
+          <ellipse cx="0" cy="-10" rx="12" ry="7" fill="rgba(255,255,255,0.25)" />
+          {/* Kanji */}
+          <text textAnchor="middle" dy=".35em" fontSize="22"
+            fontFamily="var(--font-jp)" fontWeight="900" fill="white">{kanji.kanji}</text>
+        </g>
+      </svg>
+
+      {/* Footer hint */}
+      <div style={{ padding: "6px 14px 10px", fontSize: 10, color: "#94a3b8", display: "flex", alignItems: "center", gap: 5, borderTop: "1px solid #f1f5f9" }}>
+        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="none" stroke="#94a3b8" strokeWidth="1"/><path d="M5 3v4M3 5h4" stroke="#94a3b8" strokeWidth="1"/></svg>
+        Kéo thả các ô để sắp xếp · Click vào từ để tra cứu
+      </div>
+    </div>
+  );
+}
+
 export default function KanjiPage() {
+
 
   const [query, setQuery] = useState("");
   const [activeLevel, setActiveLevel] = useState<Level>("N5");
@@ -356,6 +599,7 @@ export default function KanjiPage() {
   const [recognizing, setRecognizing] = useState(false);
   const [recognized, setRecognized] = useState<string | null>(null);
   const [heroPulse, setHeroPulse] = useState(0);
+  const router = useRouter();
 
   const meta = LEVEL_META[activeLevel];
 
@@ -434,7 +678,7 @@ export default function KanjiPage() {
     }, 1200);
   };
 
-  const openDetail = (k: KanjiItem) => { setSelectedKanji(k); setDetailOpen(true); };
+  const openDetail = (k: KanjiItem) => { router.push(`/kanji/${encodeURIComponent(k.kanji)}`); };
 
   return (
     <>
@@ -990,7 +1234,7 @@ export default function KanjiPage() {
                       <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 6, background: "rgba(255,255,255,0.6)", color: "#64748b" }}>{selectedKanji.strokeCount} nét</span>
                     </div>
                   </div>
-                  <button onClick={() => setDetailOpen(true)} style={{ padding: "8px 14px", borderRadius: 10, background: LEVEL_META[selectedKanji.level].color, color: "#fff", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4, whiteSpace: "nowrap" }}>
+                  <button onClick={() => openDetail(selectedKanji)} style={{ padding: "8px 14px", borderRadius: 10, background: LEVEL_META[selectedKanji.level].color, color: "#fff", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4, whiteSpace: "nowrap" }}>
                     Chi tiết <ChevronRight size={12} />
                   </button>
                 </div>
@@ -998,6 +1242,9 @@ export default function KanjiPage() {
             )}
 
             {/* ── Animated Mindmap (inline in left panel) ── */}
+            {selectedKanji && KANJI_COMPOUNDS[selectedKanji.kanji]?.length > 0 && (
+              <KanjiCompoundGraph kanji={selectedKanji} levelColor={LEVEL_META[selectedKanji.level].color} />
+            )}
             <AnimatedMindmap />
           </div>
 
