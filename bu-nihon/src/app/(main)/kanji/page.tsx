@@ -379,7 +379,6 @@ const KANJI_COMPOUNDS: Record<string, Array<{word: string; reading: string; mean
   "年": [{word:"来年",reading:"らいねん",meaning:"năm sau"},{word:"去年",reading:"きょねん",meaning:"năm ngoái"},{word:"今年",reading:"ことし",meaning:"năm nay"},{word:"毎年",reading:"まいとし",meaning:"mỗi năm"}],
   "月": [{word:"今月",reading:"こんげつ",meaning:"tháng này"},{word:"先月",reading:"せんげつ",meaning:"tháng trước"},{word:"来月",reading:"らいげつ",meaning:"tháng sau"},{word:"月曜日",reading:"げつようび",meaning:"Thứ Hai"}],
   "週": [{word:"今週",reading:"こんしゅう",meaning:"tuần này"},{word:"先週",reading:"せんしゅう",meaning:"tuần trước"},{word:"来週",reading:"らいしゅう",meaning:"tuần sau"},{word:"週末",reading:"しゅうまつ",meaning:"cuối tuần"}],
-  "語": [{word:"日本語",reading:"にほんご",meaning:"tiếng Nhật"},{word:"英語",reading:"えいご",meaning:"tiếng Anh"},{word:"語学",reading:"ごがく",meaning:"ngôn ngữ học"}],
   "話": [{word:"電話",reading:"でんわ",meaning:"điện thoại"},{word:"会話",reading:"かいわ",meaning:"hội thoại"},{word:"話題",reading:"わだい",meaning:"chủ đề"},{word:"童話",reading:"どうわ",meaning:"truyện cổ tích"}],
   "書": [{word:"図書館",reading:"としょかん",meaning:"thư viện"},{word:"教科書",reading:"きょうかしょ",meaning:"sách giáo khoa"},{word:"書類",reading:"しょるい",meaning:"tài liệu"},{word:"辞書",reading:"じしょ",meaning:"từ điển"}],
   "読": [{word:"読書",reading:"どくしょ",meaning:"đọc sách"},{word:"読者",reading:"どくしゃ",meaning:"độc giả"},{word:"音読み",reading:"おんよみ",meaning:"âm On"},{word:"黙読",reading:"もくどく",meaning:"đọc thầm"}],
