@@ -17,142 +17,22 @@ function GoogleIcon() {
   );
 }
 
-/* ── Monkey SVG Character ── */
-function MonkeySVG({ eyesCovered }: { eyesCovered: boolean }) {
+/* ── Monkey Emoji Hanger ── */
+function MonkeyHanger({ peekMode }: { peekMode: boolean }) {
   return (
-    <svg
-      viewBox="0 0 120 140"
-      width="110"
-      height="130"
-      style={{ display: "block", filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.35))" }}
-    >
-      {/* === TAIL / HANG ROPE === */}
-      <path
-        d="M60 10 Q80 2 90 -10"
-        stroke="#7c5c3b"
-        strokeWidth="6"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/* === EARS === */}
-      <ellipse cx="24" cy="62" rx="13" ry="11" fill="#8B6340" />
-      <ellipse cx="24" cy="62" rx="8" ry="7" fill="#e8a87c" />
-      <ellipse cx="96" cy="62" rx="13" ry="11" fill="#8B6340" />
-      <ellipse cx="96" cy="62" rx="8" ry="7" fill="#e8a87c" />
-
-      {/* === HEAD === */}
-      <ellipse cx="60" cy="60" rx="38" ry="36" fill="#8B6340" />
-
-      {/* === FACE PLATE === */}
-      <ellipse cx="60" cy="70" rx="26" ry="22" fill="#e8a87c" />
-
-      {/* === EYES (normal) === */}
-      {!eyesCovered && (
-        <>
-          {/* Left eye white */}
-          <ellipse cx="46" cy="58" rx="9" ry="9" fill="white" />
-          {/* Right eye white */}
-          <ellipse cx="74" cy="58" rx="9" ry="9" fill="white" />
-          {/* Left pupil */}
-          <ellipse cx="47" cy="59" rx="5" ry="5.5" fill="#1a0a00" />
-          {/* Right pupil */}
-          <ellipse cx="75" cy="59" rx="5" ry="5.5" fill="#1a0a00" />
-          {/* Left shine */}
-          <circle cx="49" cy="57" r="1.8" fill="white" />
-          {/* Right shine */}
-          <circle cx="77" cy="57" r="1.8" fill="white" />
-        </>
-      )}
-
-      {/* === HANDS COVERING EYES === */}
-      {eyesCovered && (
-        <>
-          {/* Left hand covering left eye */}
-          <ellipse cx="46" cy="57" rx="14" ry="12" fill="#8B6340" />
-          <ellipse cx="46" cy="57" rx="11" ry="9" fill="#c47a45" />
-          {/* Fingers left */}
-          <ellipse cx="35" cy="50" rx="5" ry="7" fill="#8B6340" transform="rotate(-15 35 50)" />
-          <ellipse cx="40" cy="47" rx="5" ry="7.5" fill="#8B6340" transform="rotate(-5 40 47)" />
-          <ellipse cx="46" cy="46" rx="5" ry="7.5" fill="#8B6340" />
-          <ellipse cx="52" cy="47" rx="5" ry="7.5" fill="#8B6340" transform="rotate(5 52 47)" />
-          <ellipse cx="57" cy="50" rx="5" ry="7" fill="#8B6340" transform="rotate(15 57 50)" />
-
-          {/* Right hand covering right eye */}
-          <ellipse cx="74" cy="57" rx="14" ry="12" fill="#8B6340" />
-          <ellipse cx="74" cy="57" rx="11" ry="9" fill="#c47a45" />
-          {/* Fingers right */}
-          <ellipse cx="63" cy="50" rx="5" ry="7" fill="#8B6340" transform="rotate(-15 63 50)" />
-          <ellipse cx="68" cy="47" rx="5" ry="7.5" fill="#8B6340" transform="rotate(-5 68 47)" />
-          <ellipse cx="74" cy="46" rx="5" ry="7.5" fill="#8B6340" />
-          <ellipse cx="80" cy="47" rx="5" ry="7.5" fill="#8B6340" transform="rotate(5 80 47)" />
-          <ellipse cx="85" cy="50" rx="5" ry="7" fill="#8B6340" transform="rotate(15 85 50)" />
-
-          {/* Peek eyes above hands */}
-          <ellipse cx="46" cy="49" rx="6" ry="4" fill="white" />
-          <ellipse cx="74" cy="49" rx="6" ry="4" fill="white" />
-          <ellipse cx="46" cy="50" rx="3" ry="2.5" fill="#1a0a00" />
-          <ellipse cx="74" cy="50" rx="3" ry="2.5" fill="#1a0a00" />
-        </>
-      )}
-
-      {/* === NOSE === */}
-      <ellipse cx="60" cy="74" rx="7" ry="5" fill="#c47a45" />
-      <circle cx="57" cy="74" r="2" fill="#7a4020" />
-      <circle cx="63" cy="74" r="2" fill="#7a4020" />
-
-      {/* === MOUTH === */}
-      {!eyesCovered ? (
-        /* Happy smile */
-        <path d="M50 83 Q60 92 70 83" stroke="#7a4020" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      ) : (
-        /* Shy / embarrassed expression */
-        <path d="M52 85 Q60 82 68 85" stroke="#7a4020" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      )}
-
-      {/* === BLUSH when eyes covered === */}
-      {eyesCovered && (
-        <>
-          <ellipse cx="36" cy="78" rx="9" ry="6" fill="#e07070" opacity="0.4" />
-          <ellipse cx="84" cy="78" rx="9" ry="6" fill="#e07070" opacity="0.4" />
-        </>
-      )}
-
-      {/* === LEFT ARM hanging === */}
-      <path
-        d="M26 55 Q10 48 8 30 Q7 20 16 18"
-        stroke="#8B6340"
-        strokeWidth="9"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Left hand grip */}
-      <circle cx="16" cy="18" r="8" fill="#8B6340" />
-      <circle cx="16" cy="18" r="5" fill="#c47a45" />
-
-      {/* === RIGHT ARM hanging === */}
-      <path
-        d="M94 55 Q110 48 112 30 Q113 20 104 18"
-        stroke="#8B6340"
-        strokeWidth="9"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Right hand grip */}
-      <circle cx="104" cy="18" r="8" fill="#8B6340" />
-      <circle cx="104" cy="18" r="5" fill="#c47a45" />
-
-      {/* === BODY === */}
-      <ellipse cx="60" cy="118" rx="24" ry="22" fill="#8B6340" />
-      <ellipse cx="60" cy="120" rx="16" ry="16" fill="#c47a45" />
-
-      {/* === LEGS === */}
-      <path d="M48 132 Q42 145 36 148" stroke="#8B6340" strokeWidth="9" strokeLinecap="round" fill="none" />
-      <path d="M72 132 Q78 145 84 148" stroke="#8B6340" strokeWidth="9" strokeLinecap="round" fill="none" />
-      {/* Feet */}
-      <ellipse cx="34" cy="150" rx="10" ry="6" fill="#8B6340" transform="rotate(-15 34 150)" />
-      <ellipse cx="86" cy="150" rx="10" ry="6" fill="#8B6340" transform="rotate(15 86 150)" />
-    </svg>
+    <div className="monkey-hanger">
+      {/* Rope from top */}
+      <div className="monkey-rope" />
+      {/* The monkey itself: 🐒 normal, 🙈 covering eyes */}
+      <div className={`monkey-emoji ${peekMode ? "peek" : ""}`}>
+        <span className="monkey-face">
+          {peekMode ? "🙈" : "🐒"}
+        </span>
+        {peekMode && (
+          <span className="monkey-blush-bubble">😳</span>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -176,12 +56,10 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
 
   const isLoggedIn = useAppStore((s) => s.isLoggedIn);
 
-  // Close modal when user logs in
   useEffect(() => {
     if (isLoggedIn && open) onClose();
   }, [isLoggedIn, open, onClose]);
 
-  // Auto-focus email
   useEffect(() => {
     if (open) {
       setError(null);
@@ -191,7 +69,6 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     }
   }, [open, tab]);
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -208,18 +85,14 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     setError(null);
     setSuccess(null);
     setLoading(true);
-
     try {
       if (tab === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
+          email, password,
+          options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
         });
         if (error) throw error;
         setSuccess("Kiểm tra email của bạn để xác nhận tài khoản! 📬");
@@ -228,15 +101,10 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Đã xảy ra lỗi";
-      if (msg.includes("Invalid login credentials")) {
-        setError("Email hoặc mật khẩu không đúng.");
-      } else if (msg.includes("User already registered")) {
-        setError("Email này đã được đăng ký. Hãy đăng nhập.");
-      } else if (msg.includes("Password should be")) {
-        setError("Mật khẩu phải có ít nhất 6 ký tự.");
-      } else {
-        setError(msg);
-      }
+      if (msg.includes("Invalid login credentials")) setError("Email hoặc mật khẩu không đúng.");
+      else if (msg.includes("User already registered")) setError("Email này đã được đăng ký. Hãy đăng nhập.");
+      else if (msg.includes("Password should be")) setError("Mật khẩu phải có ít nhất 6 ký tự.");
+      else setError(msg);
     }
     setLoading(false);
   };
@@ -246,9 +114,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
     setError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) {
       setError("Không thể kết nối Google. Thử lại sau.");
@@ -259,60 +125,123 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
   return (
     <>
       <style>{`
-        @keyframes login-modal-in {
-          from { opacity: 0; transform: scale(0.94) translateY(16px); }
-          to   { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        /* ── Keyframes ── */
         @keyframes login-overlay-in {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        @keyframes monkey-swing {
-          0%   { transform: rotate(-6deg) translateY(0px); }
-          25%  { transform: rotate(-2deg) translateY(-5px); }
-          50%  { transform: rotate(6deg)  translateY(0px); }
-          75%  { transform: rotate(2deg)  translateY(-5px); }
-          100% { transform: rotate(-6deg) translateY(0px); }
+        @keyframes login-card-in {
+          from { opacity: 0; transform: scale(0.93) translateY(20px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @keyframes monkey-bounce-in {
-          0%   { opacity: 0; transform: translateY(-40px) rotate(-10deg); }
-          60%  { opacity: 1; transform: translateY(8px) rotate(4deg); }
-          80%  { transform: translateY(-4px) rotate(-2deg); }
+        @keyframes monkey-drop-in {
+          0%   { opacity: 0; transform: translateY(-60px) rotate(-15deg); }
+          55%  { opacity: 1; transform: translateY(12px) rotate(6deg); }
+          75%  { transform: translateY(-4px) rotate(-3deg); }
           100% { transform: translateY(0) rotate(0deg); }
+        }
+        @keyframes monkey-swing {
+          0%,100% { transform: rotate(-8deg); }
+          50%      { transform: rotate(8deg); }
+        }
+        @keyframes monkey-swing-fast {
+          0%,100% { transform: rotate(-5deg); }
+          50%      { transform: rotate(5deg); }
+        }
+        @keyframes blush-pop {
+          0%   { opacity: 0; transform: scale(0.4) translateY(4px); }
+          60%  { opacity: 1; transform: scale(1.2) translateY(-2px); }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
         }
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
+        @keyframes rope-sway {
+          0%,100% { transform-origin: top center; transform: rotate(-3deg); }
+          50%      { transform-origin: top center; transform: rotate(3deg); }
+        }
+
+        /* ── Overlay & Card ── */
         .login-overlay {
           animation: login-overlay-in 0.2s ease both;
         }
-        .login-card-wrapper {
-          animation: login-modal-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
+        .login-card-wrap {
+          animation: login-card-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
           position: relative;
         }
-        .monkey-container {
+
+        /* ── Monkey layout ── */
+        .monkey-hanger {
           position: absolute;
-          top: -20px;
-          right: -90px;
-          width: 110px;
+          top: -8px;
+          right: -76px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          /* swing pivot at the very top */
           transform-origin: top center;
-          animation: monkey-bounce-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both,
-                     monkey-swing 3s ease-in-out 0.5s infinite;
+          animation:
+            monkey-drop-in 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.1s both,
+            monkey-swing 2.8s ease-in-out 0.7s infinite;
           pointer-events: none;
-          z-index: 10;
+          z-index: 20;
+          filter: drop-shadow(0 6px 16px rgba(0,0,0,0.28));
         }
-        .monkey-container.peeking {
-          animation: monkey-bounce-in 0s both,
-                     monkey-swing 1.5s ease-in-out infinite;
+        .monkey-hanger.peeking {
+          animation:
+            monkey-swing-fast 1.2s ease-in-out infinite;
         }
+
+        /* Rope */
+        .monkey-rope {
+          width: 4px;
+          height: 36px;
+          background: linear-gradient(180deg, #a97c50 0%, #7c5c3b 100%);
+          border-radius: 2px;
+          animation: rope-sway 2.8s ease-in-out 0.7s infinite;
+          transform-origin: top center;
+        }
+        .monkey-hanger.peeking .monkey-rope {
+          animation: rope-sway 1.2s ease-in-out infinite;
+        }
+
+        /* Emoji */
+        .monkey-emoji {
+          position: relative;
+          font-size: 64px;
+          line-height: 1;
+          user-select: none;
+          transition: font-size 0.2s ease;
+        }
+        .monkey-emoji.peek {
+          font-size: 60px;
+        }
+        .monkey-face {
+          display: block;
+          transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        /* Blush bubble */
+        .monkey-blush-bubble {
+          position: absolute;
+          bottom: -18px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 20px;
+          animation: blush-pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        /* ── Tabs ── */
         .login-tab-active {
           background: var(--color-brand-500);
           color: #fff;
           box-shadow: 0 2px 8px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
         }
+
+        /* ── Input ── */
         .login-input {
           width: 100%;
-          padding: 11px 40px 11px 42px;
+          padding: 11px 44px 11px 42px;
           border: 1.5px solid var(--color-border);
           border-radius: 10px;
           background: var(--color-card-bg);
@@ -320,12 +249,15 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           font-size: 14px;
           outline: none;
           transition: border-color 0.18s, box-shadow 0.18s;
+          box-sizing: border-box;
         }
         .login-input:focus {
           border-color: var(--color-brand-500);
           box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 15%, transparent);
         }
         .login-input::placeholder { color: var(--color-text-muted); }
+
+        /* ── Buttons ── */
         .login-btn-primary {
           width: 100%;
           padding: 12px;
@@ -348,6 +280,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           box-shadow: 0 6px 20px rgba(99,102,241,0.35);
         }
         .login-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
         .login-btn-google {
           width: 100%;
           padding: 11px;
@@ -370,10 +303,10 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           transform: translateY(-1px);
           box-shadow: 0 4px 14px rgba(66,133,244,0.15);
         }
-        [data-theme="dark"] .login-btn-google:hover:not(:disabled) {
-          background: #1e263a;
-        }
+        [data-theme="dark"] .login-btn-google:hover:not(:disabled) { background: #1e263a; }
         .login-btn-google:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Divider ── */
         .login-divider {
           display: flex;
           align-items: center;
@@ -388,164 +321,127 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           height: 1px;
           background: var(--color-border);
         }
+
+        /* ── Alerts ── */
         .login-error {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 12px;
-          border-radius: 8px;
-          background: #fef2f2;
-          border: 1px solid #fecaca;
-          color: #dc2626;
-          font-size: 13px;
+          display: flex; align-items: center; gap: 8px;
+          padding: 10px 12px; border-radius: 8px;
+          background: #fef2f2; border: 1px solid #fecaca;
+          color: #dc2626; font-size: 13px;
         }
         [data-theme="dark"] .login-error {
-          background: #2a1515;
-          border-color: #7f1d1d;
-          color: #f87171;
+          background: #2a1515; border-color: #7f1d1d; color: #f87171;
         }
         .login-success {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 12px;
-          border-radius: 8px;
-          background: #f0fdf4;
-          border: 1px solid #bbf7d0;
-          color: #16a34a;
-          font-size: 13px;
+          display: flex; align-items: center; gap: 8px;
+          padding: 10px 12px; border-radius: 8px;
+          background: #f0fdf4; border: 1px solid #bbf7d0;
+          color: #16a34a; font-size: 13px;
         }
         [data-theme="dark"] .login-success {
-          background: #0f2a1a;
-          border-color: #14532d;
-          color: #4ade80;
+          background: #0f2a1a; border-color: #14532d; color: #4ade80;
         }
+
+        /* ── Input icons & toggle ── */
         .input-icon {
           position: absolute;
-          left: 13px;
-          top: 50%;
+          left: 13px; top: 50%;
           transform: translateY(-50%);
           color: var(--color-text-muted);
           pointer-events: none;
         }
         .pw-toggle {
           position: absolute;
-          right: 12px;
-          top: 50%;
+          right: 10px; top: 50%;
           transform: translateY(-50%);
-          background: none;
-          border: none;
+          background: none; border: none;
           cursor: pointer;
           color: var(--color-text-muted);
-          padding: 2px;
-          display: flex;
+          padding: 4px 5px;
+          display: flex; align-items: center;
           border-radius: 6px;
-          transition: color 0.15s, background 0.15s;
+          transition: background 0.15s, color 0.15s;
+          font-size: 15px;
+          line-height: 1;
         }
         .pw-toggle:hover {
+          background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
           color: var(--color-brand-500);
-          background: color-mix(in srgb, var(--color-brand-500) 10%, transparent);
         }
-        /* Eye icon transition */
-        .pw-eye-icon {
-          transition: opacity 0.18s, transform 0.18s;
+
+        /* ── Responsive: hide monkey on very small screens ── */
+        @media (max-width: 520px) {
+          .monkey-hanger { right: -60px; }
+          .monkey-emoji { font-size: 48px; }
+          .monkey-rope  { height: 28px; }
         }
       `}</style>
 
-      {/* Overlay */}
+      {/* ── OVERLAY ── */}
       <div
         className="login-overlay"
         onClick={onClose}
         style={{
-          position: "fixed",
-          inset: 0,
+          position: "fixed", inset: 0,
           background: "rgba(0,0,0,0.55)",
           backdropFilter: "blur(6px)",
           zIndex: 2000,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: "flex", alignItems: "center", justifyContent: "center",
           padding: 16,
         }}
       >
-        {/* Wrapper for card + monkey */}
+        {/* ── CARD WRAPPER (relative so monkey can hang off it) ── */}
         <div
-          className="login-card-wrapper"
+          className="login-card-wrap"
           onClick={(e) => e.stopPropagation()}
-          style={{
-            width: "100%",
-            maxWidth: 420,
-            /* extra right padding so monkey fits */
-          }}
+          style={{ width: "100%", maxWidth: 420 }}
         >
-          {/* 🐒 Monkey character hanging on the right side */}
-          <div className={`monkey-container${showPw ? " peeking" : ""}`}>
-            <MonkeySVG eyesCovered={showPw} />
-          </div>
+          {/* 🐒 MONKEY HANGER */}
+          <MonkeyHanger peekMode={showPw} />
 
-          {/* Card */}
-          <div
-            style={{
-              width: "100%",
-              background: "var(--color-card-bg)",
-              borderRadius: 20,
-              border: "1px solid var(--color-border)",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.22)",
-              overflow: "hidden",
-            }}
-          >
-            {/* Header gradient bar */}
+          {/* ── CARD ── */}
+          <div style={{
+            background: "var(--color-card-bg)",
+            borderRadius: 20,
+            border: "1px solid var(--color-border)",
+            boxShadow: "0 24px 64px rgba(0,0,0,0.22)",
+            overflow: "hidden",
+          }}>
+            {/* Rainbow bar */}
             <div style={{
               height: 5,
               background: "linear-gradient(90deg, var(--color-brand-500), #8b5cf6, #ec4899)",
             }} />
 
             <div style={{ padding: "28px 28px 24px" }}>
-              {/* Close btn */}
+              {/* Close */}
               <button
                 id="login-modal-close"
                 onClick={onClose}
                 style={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  width: 32,
-                  height: 32,
-                  borderRadius: 8,
+                  position: "absolute", top: 16, right: 16,
+                  width: 32, height: 32, borderRadius: 8,
                   border: "1.5px solid var(--color-border)",
-                  background: "transparent",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  background: "transparent", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                   color: "var(--color-text-muted)",
                 }}
               >
                 <X size={16} />
               </button>
 
-              {/* Logo + Title */}
+              {/* Logo */}
               <div style={{ textAlign: "center", marginBottom: 24 }}>
                 <div style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 14,
+                  width: 52, height: 52, borderRadius: 14,
                   background: "linear-gradient(135deg, var(--color-brand-500), #8b5cf6)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                   margin: "0 auto 14px",
                   boxShadow: "0 8px 24px color-mix(in srgb, var(--color-brand-500) 35%, transparent)",
                 }}>
                   <span style={{ fontSize: 24, fontFamily: "var(--font-jp)" }}>漢</span>
                 </div>
-                <h2 style={{
-                  margin: 0,
-                  fontSize: 22,
-                  fontWeight: 800,
-                  color: "var(--color-text-primary)",
-                  letterSpacing: "-0.4px",
-                }}>
+                <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.4px" }}>
                   Bú Kanji
                 </h2>
                 <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--color-text-muted)" }}>
@@ -553,14 +449,11 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                 </p>
               </div>
 
-              {/* Tab switcher */}
+              {/* Tabs */}
               <div style={{
-                display: "flex",
-                gap: 4,
-                padding: 4,
+                display: "flex", gap: 4, padding: 4,
                 background: "var(--color-border-light)",
-                borderRadius: 10,
-                marginBottom: 20,
+                borderRadius: 10, marginBottom: 20,
               }}>
                 {(["login", "signup"] as AuthTab[]).map((t) => (
                   <button
@@ -568,20 +461,12 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                     onClick={() => { setTab(t); setError(null); setSuccess(null); }}
                     className={tab === t ? "login-tab-active" : ""}
                     style={{
-                      flex: 1,
-                      padding: "8px 0",
-                      borderRadius: 8,
-                      border: "none",
-                      background: "transparent",
+                      flex: 1, padding: "8px 0", borderRadius: 8,
+                      border: "none", background: "transparent",
                       color: tab === t ? "#fff" : "var(--color-text-secondary)",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      cursor: "pointer",
+                      fontSize: 13, fontWeight: 600, cursor: "pointer",
                       transition: "all 0.18s ease",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 6,
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                     }}
                   >
                     {t === "login" ? <><LogIn size={14} /> Đăng nhập</> : <><UserPlus size={14} /> Đăng ký</>}
@@ -589,13 +474,8 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                 ))}
               </div>
 
-              {/* Google button */}
-              <button
-                id="login-google-btn"
-                className="login-btn-google"
-                onClick={handleGoogle}
-                disabled={googleLoading || loading}
-              >
+              {/* Google */}
+              <button id="login-google-btn" className="login-btn-google" onClick={handleGoogle} disabled={googleLoading || loading}>
                 {googleLoading
                   ? <span style={{ width: 18, height: 18, border: "2px solid #4285F4", borderTopColor: "transparent", borderRadius: "50%", display: "inline-block", animation: "spin 0.8s linear infinite" }} />
                   : <GoogleIcon />
@@ -605,7 +485,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
 
               <div className="login-divider" style={{ margin: "16px 0" }}>hoặc</div>
 
-              {/* Email/Password form */}
+              {/* Form */}
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {/* Email */}
                 <div style={{ position: "relative" }}>
@@ -636,34 +516,20 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                     required
                     autoComplete={tab === "login" ? "current-password" : "new-password"}
                   />
+                  {/* Eye toggle — also triggers monkey */}
                   <button
                     type="button"
-                    className="pw-toggle"
                     id="login-pw-toggle"
+                    className="pw-toggle"
                     onClick={() => setShowPw(!showPw)}
                     tabIndex={-1}
                     title={showPw ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                   >
-                    <span className="pw-eye-icon" style={{ display: "flex" }}>
-                      {showPw ? (
-                        /* eye-off: password visible → monkey covers eyes */
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                          <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                          <line x1="1" y1="1" x2="23" y2="23" />
-                        </svg>
-                      ) : (
-                        /* eye: password hidden → monkey looks normally */
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      )}
-                    </span>
+                    {showPw ? "🙈" : "👁️"}
                   </button>
                 </div>
 
-                {/* Error / Success messages */}
+                {/* Alerts */}
                 {error && (
                   <div className="login-error">
                     <AlertCircle size={15} style={{ flexShrink: 0 }} />
@@ -694,14 +560,8 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                 </button>
               </form>
 
-              {/* Footer hint */}
-              <p style={{
-                marginTop: 16,
-                fontSize: 11,
-                color: "var(--color-text-muted)",
-                textAlign: "center",
-                lineHeight: 1.5,
-              }}>
+              {/* Footer */}
+              <p style={{ marginTop: 16, fontSize: 11, color: "var(--color-text-muted)", textAlign: "center", lineHeight: 1.5 }}>
                 Bằng cách tiếp tục, bạn đồng ý với{" "}
                 <span style={{ color: "var(--color-brand-500)", cursor: "pointer" }}>Điều khoản dịch vụ</span>
                 {" "}và{" "}
