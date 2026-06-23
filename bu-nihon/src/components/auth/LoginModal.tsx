@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/lib/store";
-import { MonkeyMascot } from "./MonkeyMascot";
+import { MonkeyMascot, MonkeyBodyLayer } from "./MonkeyMascot";
 
 /* ─────────────────────────────────────────
    Google icon
@@ -165,11 +165,13 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           animation: lm-card-in 0.3s cubic-bezier(0.34,1.56,0.64,1) 0.06s both;
         }
 
-        /* The card itself */
+        /* The card itself — z-index 5 creates depth sandwich */
         .lm-card {
           background: var(--color-card-bg);
           border-radius: 28px;
           overflow: hidden;
+          position: relative;
+          z-index: 5;
           box-shadow:
             0 0 0 1px var(--color-border),
             0 4px 8px rgba(0,0,0,0.06),
@@ -376,21 +378,43 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         {/* ── CARD WRAPPER ── */}
         <div className="lm-wrap" onClick={(e) => e.stopPropagation()}>
 
-          {/* 🐒 Monkey mascot — centered, peeking over the top edge of the card */}
+          {/* ════════════════════════════════════════════════
+              DEPTH LAYERS — monkey climbing over card
+              Layer 2 (body behind card): MonkeyBodyLayer
+              Layer 3: the card itself (rendered below)
+              Layer 4 (head+hands in front): MonkeyMascot
+          ════════════════════════════════════════════════ */}
+
+          {/* Layer 2 — body behind card */}
           <div
             style={{
               position: "absolute",
-              /* y=130 of SVG (hands) aligns with card top (y=0 of wrap) */
-              top: -130,
+              top: 0,           /* body visible right from card top */
               left: "50%",
               transform: "translateX(-50%)",
-              zIndex: 10,
+              zIndex: 1,        /* behind the card (z-index 5) */
               pointerEvents: "none",
-              filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.28))",
               userSelect: "none",
             }}
           >
-            <MonkeyMascot coverEyes={showPw} />
+            <MonkeyBodyLayer />
+          </div>
+
+          {/* Layer 4 — head + animated hands in front of card */}
+          <div
+            style={{
+              position: "absolute",
+              /* Hands (SVG y≈182) align with card top when top = -(220-182) = -38.
+                 Head (SVG y≈83) is 83px above that → total 121px above card. */
+              top: -148,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 10,       /* in front of card (z-index 5) */
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          >
+            <MonkeyMascot showPassword={showPw} />
           </div>
 
           {/* ── CARD ── */}
