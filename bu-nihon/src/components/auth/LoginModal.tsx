@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, Mail, Lock, LogIn, UserPlus, AlertCircle, CheckCircle2 } from "lucide-react";
+import {
+  X, Mail, Lock, LogIn, UserPlus,
+  AlertCircle, CheckCircle2, Eye, EyeOff,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/lib/store";
+import { MonkeyMascot } from "./MonkeyMascot";
 
-/* ── Google Icon SVG ── */
+/* ─────────────────────────────────────────
+   Google icon
+───────────────────────────────────────── */
 function GoogleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -17,25 +23,28 @@ function GoogleIcon() {
   );
 }
 
-/* ── Monkey Emoji Hanger ── */
-function MonkeyHanger({ peekMode }: { peekMode: boolean }) {
+/* ─────────────────────────────────────────
+   Spinner helper
+───────────────────────────────────────── */
+function Spinner({ color = "#fff" }: { color?: string }) {
   return (
-    <div className="monkey-hanger">
-      {/* Rope from top */}
-      <div className="monkey-rope" />
-      {/* The monkey itself: 🐒 normal, 🙈 covering eyes */}
-      <div className={`monkey-emoji ${peekMode ? "peek" : ""}`}>
-        <span className="monkey-face">
-          {peekMode ? "🙈" : "🐒"}
-        </span>
-        {peekMode && (
-          <span className="monkey-blush-bubble">😳</span>
-        )}
-      </div>
-    </div>
+    <span
+      style={{
+        width: 18, height: 18,
+        border: `2.5px solid ${color}`,
+        borderTopColor: "transparent",
+        borderRadius: "50%",
+        display: "inline-block",
+        animation: "lm-spin 0.75s linear infinite",
+        flexShrink: 0,
+      }}
+    />
   );
 }
 
+/* ─────────────────────────────────────────
+   Types
+───────────────────────────────────────── */
 type AuthTab = "login" | "signup";
 
 interface LoginModalProps {
@@ -43,48 +52,49 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
+/* ─────────────────────────────────────────
+   LoginModal
+───────────────────────────────────────── */
 export function LoginModal({ open, onClose }: LoginModalProps) {
-  const [tab, setTab] = useState<AuthTab>("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [tab, setTab]             = useState<AuthTab>("login");
+  const [email, setEmail]         = useState("");
+  const [password, setPassword]   = useState("");
+  const [showPw, setShowPw]       = useState(false);
+  const [loading, setLoading]     = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError]         = useState<string | null>(null);
+  const [success, setSuccess]     = useState<string | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
 
   const isLoggedIn = useAppStore((s) => s.isLoggedIn);
 
-  useEffect(() => {
-    if (isLoggedIn && open) onClose();
-  }, [isLoggedIn, open, onClose]);
+  /* auto-close when logged in */
+  useEffect(() => { if (isLoggedIn && open) onClose(); }, [isLoggedIn, open, onClose]);
 
+  /* reset & focus on open/tab change */
   useEffect(() => {
     if (open) {
-      setError(null);
-      setSuccess(null);
-      setShowPw(false);
+      setError(null); setSuccess(null); setShowPw(false);
       setTimeout(() => emailRef.current?.focus(), 80);
     }
   }, [open, tab]);
 
+  /* Escape to close */
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, [open, onClose]);
 
   if (!open) return null;
 
   const supabase = createClient();
 
+  /* ── Auth handlers ── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setLoading(true);
+    setError(null); setSuccess(null); setLoading(true);
     try {
       if (tab === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -96,8 +106,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         });
         if (error) throw error;
         setSuccess("Kiểm tra email của bạn để xác nhận tài khoản! 📬");
-        setLoading(false);
-        return;
+        setLoading(false); return;
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Đã xảy ra lỗi";
@@ -110,392 +119,339 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
   };
 
   const handleGoogle = async () => {
-    setGoogleLoading(true);
-    setError(null);
+    setGoogleLoading(true); setError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
-    if (error) {
-      setError("Không thể kết nối Google. Thử lại sau.");
-      setGoogleLoading(false);
-    }
+    if (error) { setError("Không thể kết nối Google. Thử lại sau."); setGoogleLoading(false); }
   };
 
+  /* ────────────────────────────────────────
+     Render
+  ──────────────────────────────────────── */
   return (
     <>
+      {/* ── Global styles for this modal ── */}
       <style>{`
-        /* ── Keyframes ── */
-        @keyframes login-overlay-in {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+        @keyframes lm-spin      { to { transform: rotate(360deg); } }
+        @keyframes lm-overlay   { from { opacity:0; } to { opacity:1; } }
+        @keyframes lm-card-in {
+          from { opacity:0; transform: scale(0.92) translateY(24px); }
+          to   { opacity:1; transform: scale(1)    translateY(0);     }
         }
-        @keyframes login-card-in {
-          from { opacity: 0; transform: scale(0.93) translateY(20px); }
-          to   { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes monkey-drop-in {
-          0%   { opacity: 0; transform: translateY(-60px) rotate(-15deg); }
-          55%  { opacity: 1; transform: translateY(12px) rotate(6deg); }
-          75%  { transform: translateY(-4px) rotate(-3deg); }
-          100% { transform: translateY(0) rotate(0deg); }
-        }
-        @keyframes monkey-swing {
-          0%,100% { transform: rotate(-8deg); }
-          50%      { transform: rotate(8deg); }
-        }
-        @keyframes monkey-swing-fast {
-          0%,100% { transform: rotate(-5deg); }
-          50%      { transform: rotate(5deg); }
-        }
-        @keyframes blush-pop {
-          0%   { opacity: 0; transform: scale(0.4) translateY(4px); }
-          60%  { opacity: 1; transform: scale(1.2) translateY(-2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        @keyframes rope-sway {
-          0%,100% { transform-origin: top center; transform: rotate(-3deg); }
-          50%      { transform-origin: top center; transform: rotate(3deg); }
+        @keyframes lm-slide-alert {
+          from { opacity:0; transform: translateY(-6px); }
+          to   { opacity:1; transform: translateY(0);    }
         }
 
-        /* ── Overlay & Card ── */
-        .login-overlay {
-          animation: login-overlay-in 0.2s ease both;
+        .lm-overlay {
+          position: fixed; inset: 0; z-index: 2000;
+          display: flex; align-items: center; justify-content: center;
+          padding: 20px;
+          background: rgba(6,6,20,0.62);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          animation: lm-overlay 0.22s ease both;
         }
-        .login-card-wrap {
-          animation: login-card-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+
+        /* Card wrapper — needs overflow visible for the monkey */
+        .lm-wrap {
           position: relative;
+          width: 100%;
+          max-width: 420px;
+          animation: lm-card-in 0.3s cubic-bezier(0.34,1.56,0.64,1) 0.06s both;
         }
 
-        /* ── Monkey layout ── */
-        .monkey-hanger {
-          position: absolute;
-          top: -8px;
-          right: -76px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          /* swing pivot at the very top */
-          transform-origin: top center;
-          animation:
-            monkey-drop-in 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.1s both,
-            monkey-swing 2.8s ease-in-out 0.7s infinite;
-          pointer-events: none;
-          z-index: 20;
-          filter: drop-shadow(0 6px 16px rgba(0,0,0,0.28));
-        }
-        .monkey-hanger.peeking {
-          animation:
-            monkey-swing-fast 1.2s ease-in-out infinite;
+        /* The card itself */
+        .lm-card {
+          background: var(--color-card-bg);
+          border-radius: 28px;
+          overflow: hidden;
+          box-shadow:
+            0 0 0 1px var(--color-border),
+            0 4px 8px rgba(0,0,0,0.06),
+            0 16px 40px rgba(0,0,0,0.18),
+            0 40px 80px rgba(0,0,0,0.12);
         }
 
-        /* Rope */
-        .monkey-rope {
-          width: 4px;
-          height: 36px;
-          background: linear-gradient(180deg, #a97c50 0%, #7c5c3b 100%);
-          border-radius: 2px;
-          animation: rope-sway 2.8s ease-in-out 0.7s infinite;
-          transform-origin: top center;
-        }
-        .monkey-hanger.peeking .monkey-rope {
-          animation: rope-sway 1.2s ease-in-out infinite;
-        }
-
-        /* Emoji */
-        .monkey-emoji {
-          position: relative;
-          font-size: 64px;
-          line-height: 1;
-          user-select: none;
-          transition: font-size 0.2s ease;
-        }
-        .monkey-emoji.peek {
-          font-size: 60px;
-        }
-        .monkey-face {
-          display: block;
-          transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-        }
-
-        /* Blush bubble */
-        .monkey-blush-bubble {
-          position: absolute;
-          bottom: -18px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 20px;
-          animation: blush-pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+        /* Top rainbow bar */
+        .lm-topbar {
+          height: 5px;
+          background: linear-gradient(90deg,
+            #6366f1 0%, #8b5cf6 30%, #ec4899 65%, #f59e0b 100%
+          );
         }
 
         /* ── Tabs ── */
-        .login-tab-active {
+        .lm-tab-rail {
+          display: flex; gap: 3px; padding: 4px;
+          background: var(--color-border-light);
+          border-radius: 12px;
+        }
+        .lm-tab {
+          flex: 1; display: flex; align-items: center; justify-content: center;
+          gap: 6px; padding: 9px 0;
+          border: none; border-radius: 9px;
+          background: transparent;
+          color: var(--color-text-secondary);
+          font-size: 13px; font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .lm-tab:hover:not(.active) {
+          background: rgba(99,102,241,0.06);
+          color: var(--color-text-primary);
+        }
+        .lm-tab.active {
           background: var(--color-brand-500);
           color: #fff;
-          box-shadow: 0 2px 8px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
+          box-shadow: 0 2px 12px color-mix(in srgb, var(--color-brand-500) 45%, transparent);
+          transform: scale(1.02);
         }
 
-        /* ── Input ── */
-        .login-input {
+        /* ── Inputs ── */
+        .lm-input-wrap { position: relative; }
+        .lm-input-icon {
+          position: absolute; left: 13px; top: 50%;
+          transform: translateY(-50%);
+          color: var(--color-text-muted);
+          pointer-events: none; display: flex;
+          transition: color 0.18s;
+        }
+        .lm-input {
           width: 100%;
-          padding: 11px 44px 11px 42px;
+          padding: 12px 44px 12px 42px;
           border: 1.5px solid var(--color-border);
-          border-radius: 10px;
+          border-radius: 12px;
           background: var(--color-card-bg);
           color: var(--color-text-primary);
-          font-size: 14px;
+          font-size: 14px; line-height: 1.4;
           outline: none;
-          transition: border-color 0.18s, box-shadow 0.18s;
+          transition: border-color 0.2s, box-shadow 0.2s;
           box-sizing: border-box;
         }
-        .login-input:focus {
+        .lm-input::placeholder { color: var(--color-text-muted); }
+        .lm-input:focus {
           border-color: var(--color-brand-500);
-          box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 15%, transparent);
+          box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--color-brand-500) 14%, transparent);
         }
-        .login-input::placeholder { color: var(--color-text-muted); }
-
-        /* ── Buttons ── */
-        .login-btn-primary {
-          width: 100%;
-          padding: 12px;
-          border-radius: 10px;
-          border: none;
-          background: linear-gradient(135deg, var(--color-brand-500), #8b5cf6);
-          color: #fff;
-          font-size: 14px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-        }
-        .login-btn-primary:hover:not(:disabled) {
-          opacity: 0.92;
-          transform: translateY(-1px);
-          box-shadow: 0 6px 20px rgba(99,102,241,0.35);
-        }
-        .login-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .login-btn-google {
-          width: 100%;
-          padding: 11px;
-          border-radius: 10px;
-          border: 1.5px solid var(--color-border);
-          background: var(--color-card-bg);
-          color: var(--color-text-primary);
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-        }
-        .login-btn-google:hover:not(:disabled) {
-          border-color: #4285F4;
-          background: #f8f9ff;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 14px rgba(66,133,244,0.15);
-        }
-        [data-theme="dark"] .login-btn-google:hover:not(:disabled) { background: #1e263a; }
-        .login-btn-google:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* ── Divider ── */
-        .login-divider {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          color: var(--color-text-muted);
-          font-size: 12px;
-        }
-        .login-divider::before,
-        .login-divider::after {
-          content: "";
-          flex: 1;
-          height: 1px;
-          background: var(--color-border);
-        }
-
-        /* ── Alerts ── */
-        .login-error {
-          display: flex; align-items: center; gap: 8px;
-          padding: 10px 12px; border-radius: 8px;
-          background: #fef2f2; border: 1px solid #fecaca;
-          color: #dc2626; font-size: 13px;
-        }
-        [data-theme="dark"] .login-error {
-          background: #2a1515; border-color: #7f1d1d; color: #f87171;
-        }
-        .login-success {
-          display: flex; align-items: center; gap: 8px;
-          padding: 10px 12px; border-radius: 8px;
-          background: #f0fdf4; border: 1px solid #bbf7d0;
-          color: #16a34a; font-size: 13px;
-        }
-        [data-theme="dark"] .login-success {
-          background: #0f2a1a; border-color: #14532d; color: #4ade80;
-        }
-
-        /* ── Input icons & toggle ── */
-        .input-icon {
-          position: absolute;
-          left: 13px; top: 50%;
-          transform: translateY(-50%);
-          color: var(--color-text-muted);
-          pointer-events: none;
-        }
-        .pw-toggle {
-          position: absolute;
-          right: 10px; top: 50%;
-          transform: translateY(-50%);
-          background: none; border: none;
-          cursor: pointer;
-          color: var(--color-text-muted);
-          padding: 4px 5px;
-          display: flex; align-items: center;
-          border-radius: 6px;
-          transition: background 0.15s, color 0.15s;
-          font-size: 15px;
-          line-height: 1;
-        }
-        .pw-toggle:hover {
-          background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+        .lm-input:focus + .lm-input-icon-overlay,
+        .lm-input-wrap:focus-within .lm-input-icon {
           color: var(--color-brand-500);
         }
 
-        /* ── Responsive: hide monkey on very small screens ── */
-        @media (max-width: 520px) {
-          .monkey-hanger { right: -60px; }
-          .monkey-emoji { font-size: 48px; }
-          .monkey-rope  { height: 28px; }
+        /* Eye toggle */
+        .lm-pw-toggle {
+          position: absolute; right: 11px; top: 50%;
+          transform: translateY(-50%);
+          background: none; border: none;
+          cursor: pointer; display: flex; align-items: center;
+          color: var(--color-text-muted);
+          padding: 4px 5px; border-radius: 7px;
+          transition: background 0.15s, color 0.15s, transform 0.2s;
+        }
+        .lm-pw-toggle:hover {
+          background: color-mix(in srgb, var(--color-brand-500) 10%, transparent);
+          color: var(--color-brand-500);
+          transform: translateY(-50%) scale(1.12);
+        }
+
+        /* ── Buttons ── */
+        .lm-btn-google {
+          width: 100%; display: flex; align-items: center; justify-content: center;
+          gap: 10px; padding: 12px;
+          border: 1.5px solid var(--color-border);
+          border-radius: 12px;
+          background: var(--color-card-bg);
+          color: var(--color-text-primary);
+          font-size: 14px; font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s, transform 0.18s, box-shadow 0.2s;
+        }
+        .lm-btn-google:hover:not(:disabled) {
+          border-color: #4285F4;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(66,133,244,0.18);
+        }
+        [data-theme="dark"] .lm-btn-google:hover:not(:disabled) {
+          background: rgba(66,133,244,0.08);
+        }
+        .lm-btn-google:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .lm-btn-primary {
+          width: 100%; display: flex; align-items: center; justify-content: center;
+          gap: 8px; padding: 13px;
+          border: none; border-radius: 12px;
+          background: linear-gradient(135deg, var(--color-brand-500) 0%, #8b5cf6 60%, #a855f7 100%);
+          color: #fff;
+          font-size: 14px; font-weight: 700;
+          cursor: pointer;
+          transition: opacity 0.18s, transform 0.18s, box-shadow 0.18s;
+          box-shadow: 0 4px 16px color-mix(in srgb, var(--color-brand-500) 35%, transparent);
+        }
+        .lm-btn-primary:hover:not(:disabled) {
+          opacity: 0.9;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 28px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
+        }
+        .lm-btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        /* Close button */
+        .lm-close {
+          position: absolute; top: 14px; right: 14px;
+          width: 32px; height: 32px;
+          border: 1.5px solid var(--color-border);
+          border-radius: 9px;
+          background: transparent; cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          color: var(--color-text-muted);
+          transition: background 0.15s, color 0.15s, transform 0.3s, border-color 0.15s;
+        }
+        .lm-close:hover {
+          background: #fef2f2;
+          border-color: #fecaca;
+          color: #ef4444;
+          transform: rotate(90deg);
+        }
+        [data-theme="dark"] .lm-close:hover {
+          background: rgba(239,68,68,0.12);
+        }
+
+        /* Divider */
+        .lm-divider {
+          display: flex; align-items: center; gap: 12px;
+          color: var(--color-text-muted); font-size: 12px;
+        }
+        .lm-divider::before, .lm-divider::after {
+          content: ""; flex: 1; height: 1px; background: var(--color-border);
+        }
+
+        /* Alerts */
+        .lm-alert {
+          display: flex; align-items: flex-start; gap: 9px;
+          padding: 11px 13px; border-radius: 10px;
+          font-size: 13px; line-height: 1.45;
+          animation: lm-slide-alert 0.22s ease both;
+        }
+        .lm-alert-error {
+          background: #fef2f2; border: 1.5px solid #fecaca; color: #dc2626;
+        }
+        [data-theme="dark"] .lm-alert-error {
+          background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.35); color: #f87171;
+        }
+        .lm-alert-success {
+          background: #f0fdf4; border: 1.5px solid #bbf7d0; color: #16a34a;
+        }
+        [data-theme="dark"] .lm-alert-success {
+          background: rgba(22,163,74,0.1); border-color: rgba(22,163,74,0.35); color: #4ade80;
+        }
+
+        /* Logo icon */
+        .lm-logo-icon {
+          width: 56px; height: 56px; border-radius: 16px;
+          background: linear-gradient(135deg, var(--color-brand-500), #8b5cf6);
+          display: flex; align-items: center; justify-content: center;
+          margin: 0 auto 14px;
+          box-shadow:
+            0 8px 24px color-mix(in srgb, var(--color-brand-500) 40%, transparent),
+            0 2px 8px rgba(0,0,0,0.1);
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .lm-logo-icon:hover { transform: scale(1.07) rotate(-4deg); }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+          .lm-wrap { max-width: 100%; }
+          .lm-card { border-radius: 22px; }
+          .lm-overlay { padding: 12px; align-items: flex-end; }
+          .lm-wrap { animation-name: lm-card-in; }
         }
       `}</style>
 
       {/* ── OVERLAY ── */}
-      <div
-        className="login-overlay"
-        onClick={onClose}
-        style={{
-          position: "fixed", inset: 0,
-          background: "rgba(0,0,0,0.55)",
-          backdropFilter: "blur(6px)",
-          zIndex: 2000,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: 16,
-        }}
-      >
-        {/* ── CARD WRAPPER (relative so monkey can hang off it) ── */}
-        <div
-          className="login-card-wrap"
-          onClick={(e) => e.stopPropagation()}
-          style={{ width: "100%", maxWidth: 420 }}
-        >
-          {/* 🐒 MONKEY HANGER */}
-          <MonkeyHanger peekMode={showPw} />
+      <div className="lm-overlay" onClick={onClose}>
+
+        {/* ── CARD WRAPPER ── */}
+        <div className="lm-wrap" onClick={(e) => e.stopPropagation()}>
+
+          {/* 🐒 Monkey mascot — hangs at top-left, hands on modal top edge */}
+          <MonkeyMascot coverEyes={showPw} />
 
           {/* ── CARD ── */}
-          <div style={{
-            background: "var(--color-card-bg)",
-            borderRadius: 20,
-            border: "1px solid var(--color-border)",
-            boxShadow: "0 24px 64px rgba(0,0,0,0.22)",
-            overflow: "hidden",
-          }}>
-            {/* Rainbow bar */}
-            <div style={{
-              height: 5,
-              background: "linear-gradient(90deg, var(--color-brand-500), #8b5cf6, #ec4899)",
-            }} />
+          <div className="lm-card">
+            {/* Top gradient bar */}
+            <div className="lm-topbar" />
 
-            <div style={{ padding: "28px 28px 24px" }}>
-              {/* Close */}
-              <button
-                id="login-modal-close"
-                onClick={onClose}
-                style={{
-                  position: "absolute", top: 16, right: 16,
-                  width: 32, height: 32, borderRadius: 8,
-                  border: "1.5px solid var(--color-border)",
-                  background: "transparent", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "var(--color-text-muted)",
-                }}
-              >
-                <X size={16} />
+            {/* Card body */}
+            <div style={{ padding: "28px 28px 26px", position: "relative" }}>
+
+              {/* Close button */}
+              <button id="login-modal-close" className="lm-close" onClick={onClose} aria-label="Đóng">
+                <X size={15} />
               </button>
 
-              {/* Logo */}
-              <div style={{ textAlign: "center", marginBottom: 24 }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 14,
-                  background: "linear-gradient(135deg, var(--color-brand-500), #8b5cf6)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  margin: "0 auto 14px",
-                  boxShadow: "0 8px 24px color-mix(in srgb, var(--color-brand-500) 35%, transparent)",
-                }}>
-                  <span style={{ fontSize: 24, fontFamily: "var(--font-jp)" }}>漢</span>
+              {/* ── Logo + Title ── */}
+              <div style={{ textAlign: "center", marginBottom: 22 }}>
+                <div className="lm-logo-icon">
+                  <span style={{ fontSize: 26, fontFamily: "var(--font-jp)", color: "#fff", lineHeight: 1 }}>漢</span>
                 </div>
-                <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.4px" }}>
+                <h2 style={{
+                  margin: 0, fontSize: 22, fontWeight: 800,
+                  color: "var(--color-text-primary)", letterSpacing: "-0.5px",
+                }}>
                   Bú Kanji
                 </h2>
-                <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--color-text-muted)" }}>
-                  {tab === "login" ? "Đăng nhập để theo dõi tiến trình học" : "Tạo tài khoản miễn phí"}
+                <p style={{ margin: "5px 0 0", fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.4 }}>
+                  {tab === "login"
+                    ? "Đăng nhập để theo dõi tiến trình học ✨"
+                    : "Tạo tài khoản miễn phí và bắt đầu học 🎌"}
                 </p>
               </div>
 
-              {/* Tabs */}
-              <div style={{
-                display: "flex", gap: 4, padding: 4,
-                background: "var(--color-border-light)",
-                borderRadius: 10, marginBottom: 20,
-              }}>
+              {/* ── Tab switcher ── */}
+              <div className="lm-tab-rail" style={{ marginBottom: 18 }}>
                 {(["login", "signup"] as AuthTab[]).map((t) => (
                   <button
                     key={t}
+                    className={`lm-tab${tab === t ? " active" : ""}`}
                     onClick={() => { setTab(t); setError(null); setSuccess(null); }}
-                    className={tab === t ? "login-tab-active" : ""}
-                    style={{
-                      flex: 1, padding: "8px 0", borderRadius: 8,
-                      border: "none", background: "transparent",
-                      color: tab === t ? "#fff" : "var(--color-text-secondary)",
-                      fontSize: 13, fontWeight: 600, cursor: "pointer",
-                      transition: "all 0.18s ease",
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                    }}
                   >
-                    {t === "login" ? <><LogIn size={14} /> Đăng nhập</> : <><UserPlus size={14} /> Đăng ký</>}
+                    {t === "login"
+                      ? <><LogIn size={13} /> Đăng nhập</>
+                      : <><UserPlus size={13} /> Đăng ký</>}
                   </button>
                 ))}
               </div>
 
-              {/* Google */}
-              <button id="login-google-btn" className="login-btn-google" onClick={handleGoogle} disabled={googleLoading || loading}>
-                {googleLoading
-                  ? <span style={{ width: 18, height: 18, border: "2px solid #4285F4", borderTopColor: "transparent", borderRadius: "50%", display: "inline-block", animation: "spin 0.8s linear infinite" }} />
-                  : <GoogleIcon />
-                }
+              {/* ── Google button ── */}
+              <button
+                id="login-google-btn"
+                className="lm-btn-google"
+                onClick={handleGoogle}
+                disabled={googleLoading || loading}
+              >
+                {googleLoading ? <Spinner color="#4285F4" /> : <GoogleIcon />}
                 Tiếp tục với Google
               </button>
 
-              <div className="login-divider" style={{ margin: "16px 0" }}>hoặc</div>
+              {/* ── OR divider ── */}
+              <div className="lm-divider" style={{ margin: "14px 0" }}>hoặc</div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* ── Form ── */}
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+
                 {/* Email */}
-                <div style={{ position: "relative" }}>
-                  <span className="input-icon"><Mail size={16} /></span>
+                <div className="lm-input-wrap">
+                  <span className="lm-input-icon">
+                    <Mail size={16} />
+                  </span>
                   <input
                     ref={emailRef}
                     id="login-email-input"
                     type="email"
-                    className="login-input"
-                    placeholder="Email"
+                    className="lm-input"
+                    placeholder="Email của bạn"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -504,42 +460,44 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                 </div>
 
                 {/* Password */}
-                <div style={{ position: "relative" }}>
-                  <span className="input-icon"><Lock size={16} /></span>
+                <div className="lm-input-wrap">
+                  <span className="lm-input-icon">
+                    <Lock size={16} />
+                  </span>
                   <input
                     id="login-password-input"
                     type={showPw ? "text" : "password"}
-                    className="login-input"
+                    className="lm-input"
                     placeholder={tab === "signup" ? "Mật khẩu (ít nhất 6 ký tự)" : "Mật khẩu"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete={tab === "login" ? "current-password" : "new-password"}
                   />
-                  {/* Eye toggle — also triggers monkey */}
+                  {/* Eye/monkey toggle — triggers mascot */}
                   <button
                     type="button"
                     id="login-pw-toggle"
-                    className="pw-toggle"
+                    className="lm-pw-toggle"
                     onClick={() => setShowPw(!showPw)}
                     tabIndex={-1}
                     title={showPw ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                   >
-                    {showPw ? "🙈" : "👁️"}
+                    {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
 
                 {/* Alerts */}
                 {error && (
-                  <div className="login-error">
-                    <AlertCircle size={15} style={{ flexShrink: 0 }} />
-                    {error}
+                  <div className="lm-alert lm-alert-error" role="alert">
+                    <AlertCircle size={15} style={{ flexShrink: 0, marginTop: 1 }} />
+                    <span>{error}</span>
                   </div>
                 )}
                 {success && (
-                  <div className="login-success">
-                    <CheckCircle2 size={15} style={{ flexShrink: 0 }} />
-                    {success}
+                  <div className="lm-alert lm-alert-success" role="status">
+                    <CheckCircle2 size={15} style={{ flexShrink: 0, marginTop: 1 }} />
+                    <span>{success}</span>
                   </div>
                 )}
 
@@ -547,25 +505,34 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
                 <button
                   id="login-submit-btn"
                   type="submit"
-                  className="login-btn-primary"
+                  className="lm-btn-primary"
                   disabled={loading || googleLoading}
                   style={{ marginTop: 4 }}
                 >
-                  {loading
-                    ? <span style={{ width: 18, height: 18, border: "2px solid #fff", borderTopColor: "transparent", borderRadius: "50%", display: "inline-block", animation: "spin 0.8s linear infinite" }} />
-                    : tab === "login"
-                      ? <><LogIn size={16} /> Đăng nhập</>
-                      : <><UserPlus size={16} /> Tạo tài khoản</>
-                  }
+                  {loading ? (
+                    <Spinner />
+                  ) : tab === "login" ? (
+                    <><LogIn size={16} /> Đăng nhập</>
+                  ) : (
+                    <><UserPlus size={16} /> Tạo tài khoản</>
+                  )}
                 </button>
               </form>
 
               {/* Footer */}
-              <p style={{ marginTop: 16, fontSize: 11, color: "var(--color-text-muted)", textAlign: "center", lineHeight: 1.5 }}>
+              <p style={{
+                marginTop: 18, fontSize: 11,
+                color: "var(--color-text-muted)",
+                textAlign: "center", lineHeight: 1.6,
+              }}>
                 Bằng cách tiếp tục, bạn đồng ý với{" "}
-                <span style={{ color: "var(--color-brand-500)", cursor: "pointer" }}>Điều khoản dịch vụ</span>
-                {" "}và{" "}
-                <span style={{ color: "var(--color-brand-500)", cursor: "pointer" }}>Chính sách bảo mật</span>
+                <span style={{ color: "var(--color-brand-500)", cursor: "pointer" }}>
+                  Điều khoản dịch vụ
+                </span>{" "}
+                và{" "}
+                <span style={{ color: "var(--color-brand-500)", cursor: "pointer" }}>
+                  Chính sách bảo mật
+                </span>
               </p>
             </div>
           </div>
