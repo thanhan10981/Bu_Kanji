@@ -148,7 +148,9 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         .lm-overlay {
           position: fixed; inset: 0; z-index: 2000;
           display: flex; align-items: center; justify-content: center;
+          /* extra top padding so monkey above card isn't clipped */
           padding: 20px;
+          padding-top: 150px;
           background: rgba(6,6,20,0.62);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
@@ -361,11 +363,10 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         .lm-logo-icon:hover { transform: scale(1.07) rotate(-4deg); }
 
         /* Responsive */
-        @media (max-width: 480px) {
+        @media (max-width: 520px) {
           .lm-wrap { max-width: 100%; }
           .lm-card { border-radius: 22px; }
-          .lm-overlay { padding: 12px; align-items: flex-end; }
-          .lm-wrap { animation-name: lm-card-in; }
+          .lm-overlay { padding: 12px; padding-top: 130px; align-items: flex-start; }
         }
       `}</style>
 
@@ -375,8 +376,22 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         {/* ── CARD WRAPPER ── */}
         <div className="lm-wrap" onClick={(e) => e.stopPropagation()}>
 
-          {/* 🐒 Monkey mascot — hangs at top-left, hands on modal top edge */}
-          <MonkeyMascot coverEyes={showPw} />
+          {/* 🐒 Monkey mascot — centered, peeking over the top edge of the card */}
+          <div
+            style={{
+              position: "absolute",
+              /* y=130 of SVG (hands) aligns with card top (y=0 of wrap) */
+              top: -130,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 10,
+              pointerEvents: "none",
+              filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.28))",
+              userSelect: "none",
+            }}
+          >
+            <MonkeyMascot coverEyes={showPw} />
+          </div>
 
           {/* ── CARD ── */}
           <div className="lm-card">
