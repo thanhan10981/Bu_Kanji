@@ -1,167 +1,359 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useSpring, useTransform } from "framer-motion";
 
-/* ─────────────────────────────────────────
-   Types
-───────────────────────────────────────── */
-interface MonkeyMascotProps {
+export interface MonkeyMascotProps {
   showPassword: boolean;
 }
 
-/* ─────────────────────────────────────────
-   SVG Defs — gradients & filters for 3D premium look
-───────────────────────────────────────── */
-function MonkeyDefs() {
+/* ─────────────────────────────────────
+   SVG DEFS — gradients & filters
+   Premium Pixar/Duolingo quality
+───────────────────────────────────── */
+function Defs() {
   return (
     <defs>
-      {/* ── Head sphere – warm brown, lit from upper-left ── */}
-      <radialGradient id="mk-head" cx="36%" cy="28%" r="70%">
-        <stop offset="0%"   stopColor="#D4894A" />
-        <stop offset="35%"  stopColor="#A86530" />
-        <stop offset="70%"  stopColor="#7A4520" />
-        <stop offset="100%" stopColor="#4A2510" />
+      {/* ── Head ── main warm brown, lit upper-left */}
+      <radialGradient id="g-head" cx="34%" cy="26%" r="72%">
+        <stop offset="0%"   stopColor="#E09858" />
+        <stop offset="22%"  stopColor="#C07838" />
+        <stop offset="55%"  stopColor="#8A5220" />
+        <stop offset="82%"  stopColor="#5C3010" />
+        <stop offset="100%" stopColor="#361A06" />
       </radialGradient>
 
-      {/* ── Face muzzle – lighter, peachy ── */}
-      <radialGradient id="mk-face" cx="42%" cy="35%" r="65%">
-        <stop offset="0%"   stopColor="#F2C890" />
-        <stop offset="45%"  stopColor="#D4966A" />
-        <stop offset="100%" stopColor="#A06840" />
+      {/* Head — secondary rim colour (warm amber) */}
+      <radialGradient id="g-head-rim" cx="78%" cy="72%" r="55%">
+        <stop offset="0%"   stopColor="rgba(200,130,60,0.18)" />
+        <stop offset="100%" stopColor="rgba(200,130,60,0)" />
       </radialGradient>
 
-      {/* ── Ear outer ── */}
-      <radialGradient id="mk-ear-out" cx="40%" cy="30%" r="68%">
-        <stop offset="0%"   stopColor="#C47840" />
-        <stop offset="100%" stopColor="#5A3015" />
+      {/* ── Face muzzle ── creamy peach */}
+      <radialGradient id="g-face" cx="40%" cy="32%" r="68%">
+        <stop offset="0%"   stopColor="#F8D8A8" />
+        <stop offset="38%"  stopColor="#E4B478" />
+        <stop offset="72%"  stopColor="#C48450" />
+        <stop offset="100%" stopColor="#906030" />
       </radialGradient>
 
-      {/* ── Ear inner ── */}
-      <radialGradient id="mk-ear-in" cx="45%" cy="40%" r="60%">
-        <stop offset="0%"   stopColor="#F0B898" />
-        <stop offset="100%" stopColor="#C07858" />
+      {/* ── Ears ── */}
+      <radialGradient id="g-ear-out" cx="38%" cy="28%" r="70%">
+        <stop offset="0%"   stopColor="#D08840" />
+        <stop offset="55%"  stopColor="#9A5E28" />
+        <stop offset="100%" stopColor="#4E2808" />
+      </radialGradient>
+      <radialGradient id="g-ear-in" cx="42%" cy="38%" r="62%">
+        <stop offset="0%"   stopColor="#F5C8A4" />
+        <stop offset="55%"  stopColor="#DC9A70" />
+        <stop offset="100%" stopColor="#B06844" />
       </radialGradient>
 
-      {/* ── Body / arms ── */}
-      <radialGradient id="mk-body" cx="38%" cy="25%" r="72%">
-        <stop offset="0%"   stopColor="#C07840" />
-        <stop offset="50%"  stopColor="#8B5530" />
-        <stop offset="100%" stopColor="#4A2510" />
-      </radialGradient>
-
-      {/* ── Palm / hand ── */}
-      <radialGradient id="mk-palm" cx="40%" cy="30%" r="65%">
-        <stop offset="0%"   stopColor="#E8B078" />
-        <stop offset="100%" stopColor="#A06845" />
-      </radialGradient>
-
-      {/* ── Eyeball glossy dark ── */}
-      <radialGradient id="mk-eye-ball" cx="28%" cy="22%" r="75%">
-        <stop offset="0%"   stopColor="#2C1400" />
-        <stop offset="45%"  stopColor="#1A0A00" />
-        <stop offset="100%" stopColor="#0D0500" />
-      </radialGradient>
-
-      {/* ── Eye white ── */}
-      <radialGradient id="mk-eye-white" cx="35%" cy="28%" r="70%">
+      {/* ── Eye sclera ── glossy white with blue tint */}
+      <radialGradient id="g-eye-w" cx="32%" cy="24%" r="72%">
         <stop offset="0%"   stopColor="#FFFFFF" />
-        <stop offset="100%" stopColor="#E8E0D8" />
+        <stop offset="60%"  stopColor="#F0EBE4" />
+        <stop offset="100%" stopColor="#D8D0C8" />
       </radialGradient>
 
-      {/* ── Eye iris ring ── */}
-      <radialGradient id="mk-iris" cx="30%" cy="25%" r="70%">
-        <stop offset="0%"   stopColor="#4A2800" />
-        <stop offset="100%" stopColor="#1A0800" />
+      {/* ── Iris ── deep warm brown */}
+      <radialGradient id="g-iris" cx="26%" cy="20%" r="78%">
+        <stop offset="0%"   stopColor="#4A2400" />
+        <stop offset="42%"  stopColor="#2A1000" />
+        <stop offset="100%" stopColor="#0A0200" />
+      </radialGradient>
+
+      {/* ── Iris light ring ── amber limbal ring */}
+      <radialGradient id="g-iris-ring" cx="50%" cy="50%" r="50%">
+        <stop offset="65%"  stopColor="rgba(0,0,0,0)" />
+        <stop offset="82%"  stopColor="rgba(180,100,20,0.55)" />
+        <stop offset="100%" stopColor="rgba(180,100,20,0)" />
       </radialGradient>
 
       {/* ── Nose ── */}
-      <radialGradient id="mk-nose" cx="38%" cy="30%" r="65%">
-        <stop offset="0%"   stopColor="#D4A080" />
-        <stop offset="100%" stopColor="#904830" />
+      <radialGradient id="g-nose" cx="36%" cy="28%" r="68%">
+        <stop offset="0%"   stopColor="#DDB090" />
+        <stop offset="55%"  stopColor="#A86848" />
+        <stop offset="100%" stopColor="#7A3E20" />
       </radialGradient>
 
-      {/* ── Ambient occlusion shadow under head ── */}
-      <radialGradient id="mk-ao" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stopColor="rgba(0,0,0,0.35)" />
-        <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+      {/* ── Hands / arms — fur dorsal ── */}
+      <radialGradient id="g-hand" cx="36%" cy="28%" r="72%">
+        <stop offset="0%"   stopColor="#D49048" />
+        <stop offset="40%"  stopColor="#A06530" />
+        <stop offset="100%" stopColor="#542A0C" />
+      </radialGradient>
+
+      {/* ── Finger cylinder — warm sausage gradient ── */}
+      <linearGradient id="g-fing" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stopColor="#6A3A18" />
+        <stop offset="16%"  stopColor="#C07848" />
+        <stop offset="48%"  stopColor="#E4A860" />
+        <stop offset="80%"  stopColor="#B87040" />
+        <stop offset="100%" stopColor="#6A3A18" />
+      </linearGradient>
+
+      {/* ── Fingertip / palm inner ── */}
+      <radialGradient id="g-tip" cx="42%" cy="32%" r="68%">
+        <stop offset="0%"   stopColor="#F8CCA0" />
+        <stop offset="60%"  stopColor="#D09060" />
+        <stop offset="100%" stopColor="#A86038" />
+      </radialGradient>
+
+      {/* ── Palm (cover hand) ── */}
+      <radialGradient id="g-palm" cx="40%" cy="36%" r="66%">
+        <stop offset="0%"   stopColor="#F0BC88" />
+        <stop offset="55%"  stopColor="#C88050" />
+        <stop offset="100%" stopColor="#804820" />
+      </radialGradient>
+
+      {/* ── Cheek flush ── */}
+      <radialGradient id="g-cheek" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stopColor="rgba(255,120,100,0.7)" />
+        <stop offset="60%"  stopColor="rgba(255,100,80,0.28)" />
+        <stop offset="100%" stopColor="rgba(255,100,80,0)" />
       </radialGradient>
 
       {/* ── Drop shadow filter ── */}
-      <filter id="mk-shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#3A1800" floodOpacity="0.4" />
+      <filter id="f-drop" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="7" stdDeviation="11" floodColor="#2A1000" floodOpacity="0.38" />
       </filter>
 
-      {/* ── Soft glow filter for eyes ── */}
-      <filter id="mk-eye-glow" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="1.5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
+      {/* ── Soft shadow (lighter) ── */}
+      <filter id="f-shadow-sm" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="3" stdDeviation="6" floodColor="#2A1000" floodOpacity="0.22" />
       </filter>
 
       {/* ── Fur texture overlay ── */}
-      <filter id="mk-fur">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
-        <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
-        <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blend" />
+      <filter id="f-fur" colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.72 0.58" numOctaves="4" seed="12" result="noise" />
+        <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
+        <feBlend in="SourceGraphic" in2="gray" mode="overlay" result="blend" />
         <feComposite in="blend" in2="SourceGraphic" operator="in" />
       </filter>
 
-      {/* ── Clip: head circle ── */}
-      <clipPath id="mk-head-clip">
-        <ellipse cx="120" cy="80" rx="72" ry="70" />
+      {/* ── AO ── */}
+      <radialGradient id="g-ao" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stopColor="rgba(0,0,0,0.32)" />
+        <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+      </radialGradient>
+
+      {/* ── Eye glow rim ── */}
+      <filter id="f-eye-glow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="2.8" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+
+      {/* ── Clip paths for eyes ── */}
+      <clipPath id="clip-eye-l">
+        <ellipse cx="113" cy="82" rx="21" ry="23" />
+      </clipPath>
+      <clipPath id="clip-eye-r">
+        <ellipse cx="167" cy="82" rx="21" ry="23" />
       </clipPath>
     </defs>
   );
 }
 
-/* ─────────────────────────────────────────
+/* ──────────────────────────────────────────
+   GRIPPING HAND — fingers curl down over card edge
+───────────────────────────────────────────*/
+function GrippingHand({ cx, cy, flipX }: { cx: number; cy: number; flipX?: boolean }) {
+  const sx = flipX ? -1 : 1;
+
+  // [xOffset, length, width, rotationAngle]
+  const fingers: [number, number, number, number][] = [
+    [-17, 22, 13.5, -4],
+    [ -5, 25, 14.5,  0],
+    [  6, 23, 14.5,  1],
+    [ 17, 18, 12.5,  4],
+  ];
+
+  return (
+    <g transform={`translate(${cx},${cy})`} filter="url(#f-shadow-sm)">
+      {/* Pillow palm */}
+      <ellipse cx={0} cy={-4} rx={37} ry={15} fill="url(#g-hand)" />
+      {/* Palm highlight */}
+      <ellipse cx={sx * -4} cy={-8} rx={26} ry={8} fill="rgba(225,165,85,0.30)" />
+      {/* Knuckle shine row */}
+      <path
+        d={`M${sx*-25},-3 Q${sx*-8},-10 ${sx*8},-10 Q${sx*22},-6 ${sx*27},-2`}
+        stroke="rgba(240,175,85,0.7)" strokeWidth="2.5" fill="none" strokeLinecap="round"
+      />
+      {/* Fur texture overlay on palm */}
+      <ellipse cx={0} cy={-4} rx={37} ry={15} fill="url(#g-hand)" filter="url(#f-fur)" opacity="0.12" />
+
+      {/* Thumb */}
+      <g transform={`rotate(${sx * -20}, ${sx * -28}, 4)`}>
+        <path
+          d={`M${sx*-26},2 Q${sx*-32},8 ${sx*-32},17 Q${sx*-32},23 ${sx*-26},24`}
+          stroke="url(#g-fing)" strokeWidth="16" strokeLinecap="round" fill="none"
+        />
+        <ellipse cx={sx*-26} cy={25} rx={8.5} ry={8} fill="url(#g-tip)" />
+        <ellipse cx={sx*-26} cy={23} rx={5} ry={4} fill="rgba(255,228,190,0.54)" />
+        <path d={`M${sx*-32},13 Q${sx*-26},11 ${sx*-20},13`}
+          stroke="rgba(225,155,68,0.62)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* 4 fingers */}
+      {fingers.map(([xOff, len, w, angle], i) => {
+        const fx = sx * xOff;
+        const midY = len * 0.44;
+        return (
+          <g key={i} transform={`rotate(${sx * angle}, ${fx}, 0)`}>
+            <path
+              d={`M${fx - w/2},1 C${fx - w*0.54},${midY*0.5} ${fx - w*0.58},${midY} ${fx - w*0.48},${len-2} Q${fx},${len + w*0.6} ${fx + w*0.48},${len-2} C${fx + w*0.58},${midY} ${fx + w*0.54},${midY*0.5} ${fx + w/2},1 Z`}
+              fill="url(#g-fing)"
+            />
+            {/* Tip cap */}
+            <ellipse cx={fx} cy={len} rx={w*0.60} ry={w*0.55} fill="url(#g-tip)" opacity="0.95" />
+            <ellipse cx={fx} cy={len-2} rx={w*0.34} ry={w*0.27} fill="rgba(255,232,188,0.52)" />
+            {/* Middle knuckle */}
+            <path
+              d={`M${fx - w*0.76},${midY-2} Q${fx},${midY-5} ${fx + w*0.76},${midY-2}`}
+              stroke="rgba(235,165,68,0.68)" strokeWidth="1.8" fill="none" strokeLinecap="round"
+            />
+            <path
+              d={`M${fx - w*0.72},${midY+2.5} Q${fx},${midY+0.5} ${fx + w*0.72},${midY+2.5}`}
+              stroke="rgba(65,25,5,0.18)" strokeWidth="1.2" fill="none" strokeLinecap="round"
+            />
+            {/* Proximal knuckle bump */}
+            <ellipse cx={fx} cy={5} rx={w*0.78} ry={4.5} fill="rgba(228,158,68,0.48)" />
+          </g>
+        );
+      })}
+
+      {/* Palm underside shadow */}
+      <ellipse cx={0} cy={-10} rx={35} ry={7} fill="rgba(65,25,5,0.14)" />
+    </g>
+  );
+}
+
+/* ──────────────────────────────────────────
+   COVER HAND — palm toward viewer (shy eye-cover)
+───────────────────────────────────────────*/
+function CoverHand({ cx, cy, flipX }: { cx: number; cy: number; flipX?: boolean }) {
+  const sx = flipX ? -1 : 1;
+
+  return (
+    <g transform={`translate(${cx},${cy})`} filter="url(#f-drop)">
+
+      {/* Palm shape */}
+      <path
+        d={`
+          M${sx*-24},16
+          C${sx*-26}, 2 ${sx*-22},-13 ${sx*-13},-19
+          C${sx* -6},-23 ${sx*  6},-23 ${sx* 13},-19
+          C${sx* 22},-13 ${sx* 26},  2 ${sx* 24}, 16
+          C${sx* 22}, 30 ${sx* 13}, 39 ${sx*  0}, 41
+          C${sx*-13}, 39 ${sx*-22}, 30 ${sx*-24}, 16
+          Z
+        `}
+        fill="url(#g-hand)"
+      />
+      {/* Palm top highlight */}
+      <ellipse cx={sx*-3} cy={9} rx={17} ry={23} fill="rgba(230,170,90,0.22)" transform={`rotate(${sx*5})`} />
+      {/* Fur overlay */}
+      <path
+        d={`M${sx*-24},16 C${sx*-26},2 ${sx*-22},-13 ${sx*-13},-19 C${sx*-6},-23 ${sx*6},-23 ${sx*13},-19 C${sx*22},-13 ${sx*26},2 ${sx*24},16 C${sx*22},30 ${sx*13},39 ${sx*0},41 C${sx*-13},39 ${sx*-22},30 ${sx*-24},16 Z`}
+        fill="url(#g-hand)" filter="url(#f-fur)" opacity="0.10"
+      />
+      {/* Palm rim light */}
+      <ellipse cx={sx*19} cy={13} rx={8} ry={17} fill="rgba(225,160,74,0.14)" />
+
+      {/* Knuckle bumps */}
+      <path
+        d={`M${sx*-20},-18 Q${sx*-10},-24 ${sx*0},-26 Q${sx*10},-24 ${sx*20},-18`}
+        stroke="rgba(235,170,80,0.72)" strokeWidth="3" fill="none" strokeLinecap="round"
+      />
+      <path
+        d={`M${sx*-18},-15 Q${sx*-9},-19 ${sx*0},-21 Q${sx*9},-19 ${sx*18},-15`}
+        stroke="rgba(75,32,5,0.16)" strokeWidth="1.4" fill="none" strokeLinecap="round"
+      />
+
+      {/* Pinky */}
+      <g>
+        <path d={`M${sx*20},-16 Q${sx*21},-25 ${sx*20},-35`}
+          stroke="url(#g-fing)" strokeWidth="14" strokeLinecap="round" fill="none" />
+        <ellipse cx={sx*20} cy={-36} rx={7.5} ry={7.2} fill="url(#g-tip)" />
+        <ellipse cx={sx*20} cy={-38} rx={4.5} ry={3.5} fill="rgba(255,230,188,0.54)" />
+        <path d={`M${sx*14},-26 Q${sx*20},-28 ${sx*26},-26`}
+          stroke="rgba(235,162,68,0.62)" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* Ring */}
+      <g>
+        <path d={`M${sx*8},-22 Q${sx*8},-32 ${sx*7},-43`}
+          stroke="url(#g-fing)" strokeWidth="16" strokeLinecap="round" fill="none" />
+        <ellipse cx={sx*7} cy={-44} rx={8.5} ry={8.2} fill="url(#g-tip)" />
+        <ellipse cx={sx*7} cy={-46} rx={5} ry={4} fill="rgba(255,230,188,0.54)" />
+        <path d={`M${sx*1},-33 Q${sx*7.5},-35 ${sx*14},-33`}
+          stroke="rgba(235,162,68,0.62)" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* Middle */}
+      <g>
+        <path d={`M${sx*-4},-24 Q${sx*-4},-34 ${sx*-4},-47`}
+          stroke="url(#g-fing)" strokeWidth="17" strokeLinecap="round" fill="none" />
+        <ellipse cx={sx*-4} cy={-48} rx={9} ry={8.8} fill="url(#g-tip)" />
+        <ellipse cx={sx*-4} cy={-50} rx={5.5} ry={4.5} fill="rgba(255,230,188,0.54)" />
+        <path d={`M${sx*-11},-36 Q${sx*-4},-38 ${sx*3},-36`}
+          stroke="rgba(235,162,68,0.62)" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* Index */}
+      <g>
+        <path d={`M${sx*-16},-21 Q${sx*-15},-31 ${sx*-14},-43`}
+          stroke="url(#g-fing)" strokeWidth="15" strokeLinecap="round" fill="none" />
+        <ellipse cx={sx*-14} cy={-44} rx={8} ry={7.8} fill="url(#g-tip)" />
+        <ellipse cx={sx*-14} cy={-46} rx={5} ry={4} fill="rgba(255,230,188,0.54)" />
+        <path d={`M${sx*-21},-33 Q${sx*-14},-35 ${sx*-7},-33`}
+          stroke="rgba(235,162,68,0.62)" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* Thumb */}
+      <path
+        d={`M${sx*-26},13 C${sx*-37},7 ${sx*-39},-2 ${sx*-35},-10 C${sx*-31},-17 ${sx*-21},-15 ${sx*-18},-8 C${sx*-15},0 ${sx*-18},8 ${sx*-26},13 Z`}
+        fill="url(#g-fing)"
+      />
+      <ellipse cx={sx*-29} cy={2} rx={6} ry={9} fill="rgba(235,168,78,0.28)" />
+
+      {/* Palm base shadow */}
+      <ellipse cx={0} cy={35} rx={22} ry={6} fill="rgba(65,25,5,0.10)" />
+    </g>
+  );
+}
+
+/* ─────────────────────────────────────────────
    MonkeyMascot — main export
-───────────────────────────────────────── */
+───────────────────────────────────────────── */
 export function MonkeyMascot({ showPassword }: MonkeyMascotProps) {
-  /* ── Pupil spring physics ── */
-  const springCfg = { stiffness: 280, damping: 28, mass: 0.6 };
+  const springCfg = { stiffness: 300, damping: 30, mass: 0.55 };
   const rawX = useSpring(0, springCfg);
   const rawY = useSpring(0, springCfg);
+  const pupilX = useTransform(rawX, v => Math.max(-5,   Math.min(5,   v)));
+  const pupilY = useTransform(rawY, v => Math.max(-4.5, Math.min(4.5, v)));
 
-  /* Clamp to ±5px */
-  const pupilX = useTransform(rawX, v => Math.max(-5, Math.min(5, v)));
-  const pupilY = useTransform(rawY, v => Math.max(-5, Math.min(5, v)));
-
-  /* ── Blink state ── */
   const [blinking, setBlinking] = useState(false);
-  const blinkRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  /* ── Refs ── */
+  const blinkRef     = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isMobileRef  = useRef(false);
+  const isMobile     = useRef(false);
 
-  /* ── Detect mobile ── */
-  useEffect(() => {
-    isMobileRef.current = window.matchMedia("(pointer:coarse)").matches;
-  }, []);
+  useEffect(() => { isMobile.current = window.matchMedia("(pointer:coarse)").matches; }, []);
 
-  /* ── Mouse tracking ── */
   const onMouseMove = useCallback((e: MouseEvent) => {
-    if (isMobileRef.current || showPassword) return;
+    if (isMobile.current || showPassword) return;
     const el = containerRef.current;
     if (!el) return;
-
     const rect = el.getBoundingClientRect();
-    // Eye center in screen space (approx. cx=120, cy=78 within 240px-wide SVG)
-    const scaleX = rect.width / 240;
-    const scaleY = rect.height / 220; // approx rendered height
-    const eyeX = rect.left + 120 * scaleX;
-    const eyeY = rect.top  +  78 * scaleY;
-
+    const eyeX = rect.left + rect.width  * 0.50;
+    const eyeY = rect.top  + rect.height * 0.40;
     const dx = e.clientX - eyeX;
     const dy = e.clientY - eyeY;
     const dist = Math.hypot(dx, dy) || 1;
-    const t = Math.min(1, dist / 300);
-    rawX.set((dx / dist) * 5 * t);
-    rawY.set((dy / dist) * 5 * t);
+    const t = Math.min(1, dist / 280);
+    rawX.set((dx / dist) * 5   * t);
+    rawY.set((dy / dist) * 4.5 * t);
   }, [showPassword, rawX, rawY]);
 
   useEffect(() => {
@@ -169,12 +361,8 @@ export function MonkeyMascot({ showPassword }: MonkeyMascotProps) {
     return () => window.removeEventListener("mousemove", onMouseMove);
   }, [onMouseMove]);
 
-  /* reset pupils when covering */
-  useEffect(() => {
-    if (showPassword) { rawX.set(0); rawY.set(0); }
-  }, [showPassword, rawX, rawY]);
+  useEffect(() => { if (showPassword) { rawX.set(0); rawY.set(0); } }, [showPassword, rawX, rawY]);
 
-  /* ── Random blink scheduler ── */
   useEffect(() => {
     if (showPassword) return;
     const schedule = () => {
@@ -187,366 +375,197 @@ export function MonkeyMascot({ showPassword }: MonkeyMascotProps) {
     return () => { if (blinkRef.current) clearTimeout(blinkRef.current); };
   }, [showPassword]);
 
-  /* ── Hand spring (cover-eyes y-offset) ── */
-  const handSpring = useSpring(showPassword ? -88 : 0, {
-    stiffness: 320,
-    damping:   26,
-    mass:      0.8,
-  });
-  useEffect(() => {
-    handSpring.set(showPassword ? -88 : 0);
-  }, [showPassword, handSpring]);
-
   return (
-    <div ref={containerRef} style={{ position: "relative", width: 240, height: 220 }}>
-
-      {/* ══════════════════════════════════════════
-          LAYER 2 — body/arms behind card
-          (rendered at z-index 1 in LoginModal)
-      ══════════════════════════════════════════ */}
-
-      {/* ══════════════════════════════════════════
-          LAYER 4 — head + gripping hands in front
-      ══════════════════════════════════════════ */}
+    <div
+      ref={containerRef}
+      style={{ position: "relative", width: 280, height: 230, pointerEvents: "none", userSelect: "none" }}
+    >
       <motion.svg
-        viewBox="0 0 240 220"
-        width="240"
-        height="220"
+        viewBox="0 0 280 230"
+        width="280" height="230"
         overflow="visible"
         style={{ display: "block", position: "absolute", top: 0, left: 0 }}
-        animate={{ rotate: [0, -2.5, 2.5, -1.5, 1.5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
+        /* Gentle idle sway */
+        animate={{ rotate: [0, -2.2, 2.2, -1.6, 1.6, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
       >
-        <MonkeyDefs />
+        <Defs />
 
-        {/* ── Ambient shadow under chin (depth cue) ── */}
-        <ellipse cx="120" cy="148" rx="68" ry="14" fill="url(#mk-ao)" />
+        {/* ── AO shadow beneath head ── */}
+        <ellipse cx="140" cy="150" rx="90" ry="13" fill="url(#g-ao)" />
 
-        {/* ── EARS (behind head) ── */}
-        {/* Left ear */}
-        <ellipse cx="52"  cy="86" rx="26" ry="23" fill="url(#mk-ear-out)" filter="url(#mk-shadow)" />
-        <ellipse cx="52"  cy="86" rx="16" ry="14" fill="url(#mk-ear-in)"  />
-        {/* Right ear */}
-        <ellipse cx="188" cy="86" rx="26" ry="23" fill="url(#mk-ear-out)" filter="url(#mk-shadow)" />
-        <ellipse cx="188" cy="86" rx="16" ry="14" fill="url(#mk-ear-in)"  />
+        {/* ══════════════════════════════════════
+            GRIPPING HANDS — normal state
+        ══════════════════════════════════════ */}
+        <motion.g
+          animate={{ opacity: showPassword ? 0 : 1, y: showPassword ? 12 : 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+        >
+          <GrippingHand cx={63}  cy={148} flipX={false} />
+          <GrippingHand cx={217} cy={148} flipX={true}  />
+        </motion.g>
 
-        {/* ── HEAD SPHERE ── */}
-        <ellipse
-          cx="120" cy="83"
-          rx="72" ry="70"
-          fill="url(#mk-head)"
-          filter="url(#mk-shadow)"
-        />
-        {/* Fur texture overlay */}
-        <ellipse cx="120" cy="83" rx="72" ry="70" fill="url(#mk-head)" filter="url(#mk-fur)" opacity="0.18" />
-        {/* Rim light from right */}
-        <ellipse cx="120" cy="83" rx="72" ry="70"
-          fill="none"
-          stroke="rgba(220,140,70,0.25)"
-          strokeWidth="12"
-          strokeDasharray="180 300"
-          strokeDashoffset="-80"
-        />
+        {/* ══════════════════════════════════════
+            HEAD + FACE + EYES (always on top)
+        ══════════════════════════════════════ */}
 
-        {/* ── FACE MUZZLE ── */}
-        <ellipse cx="120" cy="100" rx="48" ry="42" fill="url(#mk-face)" />
-        {/* Face highlight */}
-        <ellipse cx="108" cy="88" rx="20" ry="14" fill="rgba(255,230,190,0.22)" />
+        {/* Ears */}
+        <ellipse cx="68"  cy="84" rx="28" ry="25" fill="url(#g-ear-out)" filter="url(#f-shadow-sm)" />
+        <ellipse cx="68"  cy="85" rx="17" ry="16" fill="url(#g-ear-in)"  />
+        <ellipse cx="212" cy="84" rx="28" ry="25" fill="url(#g-ear-out)" filter="url(#f-shadow-sm)" />
+        <ellipse cx="212" cy="85" rx="17" ry="16" fill="url(#g-ear-in)"  />
 
-        {/* ── EYE AREAS (white sclera) ── */}
-        {/* Left eye socket */}
-        <ellipse cx="93"  cy="80" rx="22" ry="23" fill="url(#mk-eye-white)" />
-        {/* Right eye socket */}
-        <ellipse cx="147" cy="80" rx="22" ry="23" fill="url(#mk-eye-white)" />
+        {/* Head sphere */}
+        <ellipse cx="140" cy="86" rx="75" ry="71" fill="url(#g-head)" filter="url(#f-drop)" />
+        {/* Fur texture */}
+        <ellipse cx="140" cy="86" rx="75" ry="71" fill="url(#g-head)" filter="url(#f-fur)" opacity="0.15" />
+        {/* Rim light from right-back */}
+        <ellipse cx="140" cy="86" rx="75" ry="71" fill="url(#g-head-rim)" />
+        {/* Top specular highlight */}
+        <ellipse cx="118" cy="38" rx="34" ry="19" fill="rgba(255,210,155,0.18)" transform="rotate(-22,118,38)" />
+        {/* Secondary specular */}
+        <ellipse cx="152" cy="42" rx="14" ry="8"  fill="rgba(255,215,165,0.10)" transform="rotate(-15,152,42)" />
 
-        {/* ── Eye shadow rims ── */}
-        <ellipse cx="93"  cy="80" rx="22" ry="23" fill="none" stroke="rgba(80,40,10,0.25)" strokeWidth="2.5" />
-        <ellipse cx="147" cy="80" rx="22" ry="23" fill="none" stroke="rgba(80,40,10,0.25)" strokeWidth="2.5" />
+        {/* Face muzzle */}
+        <ellipse cx="140" cy="101" rx="51" ry="45" fill="url(#g-face)" />
+        {/* Muzzle top highlight */}
+        <ellipse cx="126" cy="88"  rx="25" ry="17" fill="rgba(255,234,196,0.22)" />
 
-        {/* ── IRISES + PUPILS (animated, mouse-tracking) ── */}
+        {/* ── Eye whites ── */}
+        <ellipse cx="113" cy="82" rx="22" ry="24" fill="url(#g-eye-w)" />
+        <ellipse cx="167" cy="82" rx="22" ry="24" fill="url(#g-eye-w)" />
+        {/* Eye rim shadow */}
+        <ellipse cx="113" cy="82" rx="22" ry="24" fill="none" stroke="rgba(80,38,8,0.16)" strokeWidth="2.2" />
+        <ellipse cx="167" cy="82" rx="22" ry="24" fill="none" stroke="rgba(80,38,8,0.16)" strokeWidth="2.2" />
+
+        {/* ── Pupils — mouse-tracking ── */}
         {!showPassword && (
           <>
-            {/* Left iris */}
+            {/* LEFT EYE */}
             <motion.g style={{ x: pupilX, y: pupilY }}>
-              {blinking ? (
-                /* Blink: eyelid closes */
-                <rect x="75" y="77" width="36" height="7" rx="3.5" fill="url(#mk-head)" />
-              ) : (
-                <>
-                  {/* Iris ring */}
-                  <circle cx="93" cy="80" r="14" fill="url(#mk-iris)" />
-                  {/* Pupil */}
-                  <circle cx="93" cy="80" r="9.5" fill="url(#mk-eye-ball)" />
-                  {/* Primary specular highlight */}
-                  <circle cx="97" cy="75" r="4.5" fill="rgba(255,255,255,0.92)" />
-                  {/* Secondary soft highlight */}
-                  <circle cx="89" cy="84" r="2.5" fill="rgba(255,255,255,0.35)" />
-                  {/* Corneal glint */}
-                  <ellipse cx="98" cy="73" rx="2" ry="1.2" fill="white" opacity="0.6" transform="rotate(-30,98,73)" />
-                </>
-              )}
+              <g clipPath="url(#clip-eye-l)">
+                {blinking ? (
+                  /* Blink lid */
+                  <rect x="92" y="79" width="42" height="7" rx="3.5" fill="url(#g-head)" />
+                ) : (
+                  <>
+                    {/* Iris */}
+                    <circle cx="113" cy="82" r="15" fill="url(#g-iris)" />
+                    {/* Limbal ring */}
+                    <circle cx="113" cy="82" r="15" fill="url(#g-iris-ring)" />
+                    {/* Pupil */}
+                    <circle cx="113" cy="82" r="9"  fill="#060200" />
+                    {/* Primary catchlight */}
+                    <circle cx="117" cy="77" r="5.2" fill="rgba(255,255,255,0.96)" />
+                    {/* Secondary catchlight */}
+                    <circle cx="110" cy="87" r="2.4" fill="rgba(255,255,255,0.40)" />
+                    {/* Micro specular */}
+                    <ellipse cx="119" cy="75" rx="2.4" ry="1.4" fill="white" opacity="0.58" transform="rotate(-32,119,75)" />
+                    {/* Ambient iris glow */}
+                    <circle cx="113" cy="82" r="9" fill="rgba(120,60,0,0.08)" />
+                  </>
+                )}
+              </g>
             </motion.g>
 
-            {/* Right iris */}
+            {/* RIGHT EYE */}
             <motion.g style={{ x: pupilX, y: pupilY }}>
-              {blinking ? (
-                <rect x="129" y="77" width="36" height="7" rx="3.5" fill="url(#mk-head)" />
-              ) : (
-                <>
-                  <circle cx="147" cy="80" r="14" fill="url(#mk-iris)" />
-                  <circle cx="147" cy="80" r="9.5" fill="url(#mk-eye-ball)" />
-                  <circle cx="151" cy="75" r="4.5" fill="rgba(255,255,255,0.92)" />
-                  <circle cx="143" cy="84" r="2.5" fill="rgba(255,255,255,0.35)" />
-                  <ellipse cx="152" cy="73" rx="2" ry="1.2" fill="white" opacity="0.6" transform="rotate(-30,152,73)" />
-                </>
-              )}
+              <g clipPath="url(#clip-eye-r)">
+                {blinking ? (
+                  <rect x="147" y="79" width="42" height="7" rx="3.5" fill="url(#g-head)" />
+                ) : (
+                  <>
+                    <circle cx="167" cy="82" r="15" fill="url(#g-iris)" />
+                    <circle cx="167" cy="82" r="15" fill="url(#g-iris-ring)" />
+                    <circle cx="167" cy="82" r="9"  fill="#060200" />
+                    <circle cx="171" cy="77" r="5.2" fill="rgba(255,255,255,0.96)" />
+                    <circle cx="164" cy="87" r="2.4" fill="rgba(255,255,255,0.40)" />
+                    <ellipse cx="173" cy="75" rx="2.4" ry="1.4" fill="white" opacity="0.58" transform="rotate(-32,173,75)" />
+                    <circle cx="167" cy="82" r="9" fill="rgba(120,60,0,0.08)" />
+                  </>
+                )}
+              </g>
             </motion.g>
           </>
         )}
 
-        {/* Eyes covered state: hands show instead of pupils */}
+        {/* ── Closed eyes (password visible) ── */}
         {showPassword && (
           <>
-            {/* Closed eyes behind hands */}
-            <path d="M75 80 Q93 88 111 80" stroke="rgba(80,40,10,0.4)" strokeWidth="3" fill="none" strokeLinecap="round" />
-            <path d="M129 80 Q147 88 165 80" stroke="rgba(80,40,10,0.4)" strokeWidth="3" fill="none" strokeLinecap="round" />
+            <path d="M93 83 Q113 93 133 83" stroke="rgba(75,38,8,0.40)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            <path d="M147 83 Q167 93 187 83" stroke="rgba(75,38,8,0.40)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            {/* closed-eye lash shadow */}
+            <path d="M93 80 Q113 86 133 80" stroke="rgba(75,38,8,0.12)" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <path d="M147 80 Q167 86 187 80" stroke="rgba(75,38,8,0.12)" strokeWidth="2" fill="none" strokeLinecap="round" />
           </>
         )}
 
-        {/* ── EYEBROWS ── */}
+        {/* ── Eyebrows ── */}
         <motion.path
-          d={showPassword ? "M76 58 Q93 52 110 58" : "M76 60 Q93 54 110 61"}
-          stroke="#4A2C10" strokeWidth="4" fill="none" strokeLinecap="round"
-          animate={{ d: showPassword ? "M76 58 Q93 52 110 58" : "M76 60 Q93 54 110 61" }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          d="M97 61 Q113 55 129 62"
+          stroke="#3A2008" strokeWidth="4.5" fill="none" strokeLinecap="round"
+          animate={{ d: showPassword ? "M97 59 Q113 53 129 59" : "M97 61 Q113 55 129 62" }}
+          transition={{ type: "spring", stiffness: 220, damping: 22 }}
         />
         <motion.path
-          d={showPassword ? "M130 58 Q147 52 164 58" : "M130 61 Q147 54 164 60"}
-          stroke="#4A2C10" strokeWidth="4" fill="none" strokeLinecap="round"
-          animate={{ d: showPassword ? "M130 58 Q147 52 164 58" : "M130 61 Q147 54 164 60" }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          d="M151 62 Q167 55 183 61"
+          stroke="#3A2008" strokeWidth="4.5" fill="none" strokeLinecap="round"
+          animate={{ d: showPassword ? "M151 59 Q167 53 183 59" : "M151 62 Q167 55 183 61" }}
+          transition={{ type: "spring", stiffness: 220, damping: 22 }}
         />
 
-        {/* ── NOSE ── */}
-        <ellipse cx="120" cy="108" rx="12" ry="8.5" fill="url(#mk-nose)" />
-        <ellipse cx="115" cy="108" rx="4.5" ry="3.5" fill="rgba(80,30,10,0.55)" />
-        <ellipse cx="125" cy="108" rx="4.5" ry="3.5" fill="rgba(80,30,10,0.55)" />
-        {/* Nose highlight */}
-        <ellipse cx="118" cy="105" rx="4" ry="2.5" fill="rgba(255,200,160,0.5)" />
+        {/* ── Nose ── */}
+        <ellipse cx="140" cy="109" rx="12.5" ry="9.5" fill="url(#g-nose)" />
+        <ellipse cx="134" cy="109" rx="4.5" ry="3.8" fill="rgba(75,28,8,0.58)" />
+        <ellipse cx="146" cy="109" rx="4.5" ry="3.8" fill="rgba(75,28,8,0.58)" />
+        <ellipse cx="138" cy="105" rx="4.2" ry="2.8" fill="rgba(255,205,162,0.48)" />
 
-        {/* ── MOUTH ── */}
+        {/* ── Mouth ── */}
         <motion.path
-          d={showPassword
-            ? "M106 122 Q120 118 134 122"   /* flat/embarrassed */
-            : "M104 120 Q120 134 136 120"}  /* big warm smile    */
-          stroke="#7A3515" strokeWidth="3" fill="none" strokeLinecap="round"
-          animate={{ d: showPassword ? "M106 122 Q120 118 134 122" : "M104 120 Q120 134 136 120" }}
-          transition={{ type: "spring", stiffness: 180, damping: 18 }}
+          d="M124 120 Q140 135 156 120"
+          stroke="#7A3312" strokeWidth="3.5" fill="none" strokeLinecap="round"
+          animate={{ d: showPassword ? "M126 122 Q140 118 154 122" : "M124 120 Q140 135 156 120" }}
+          transition={{ type: "spring", stiffness: 190, damping: 20 }}
         />
-        {/* Smile cheek dimples */}
+        {/* Mouth corners */}
         {!showPassword && (
           <>
-            <ellipse cx="78"  cy="118" rx="14" ry="10" fill="rgba(230,130,100,0.3)" />
-            <ellipse cx="162" cy="118" rx="14" ry="10" fill="rgba(230,130,100,0.3)" />
+            <circle cx="124" cy="120" r="2.5" fill="#B25030" opacity="0.55" />
+            <circle cx="156" cy="120" r="2.5" fill="#B25030" opacity="0.55" />
           </>
         )}
-        {/* Blush when covering */}
-        <AnimatePresence>
-          {showPassword && (
-            <>
-              <motion.ellipse
-                cx="78" cy="118" rx="14" ry="10" fill="rgba(240,120,100,0.45)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-              <motion.ellipse
-                cx="162" cy="118" rx="14" ry="10" fill="rgba(240,120,100,0.45)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </>
-          )}
-        </AnimatePresence>
 
-        {/* ═══════════════════════════════
-            GRIPPING HANDS
-            Normal: at bottom (card top edge)
-            Cover:  raised over eyes
-        ═══════════════════════════════ */}
-
-        {/* ── Left arm + hand ── */}
-        <motion.g style={{ y: handSpring }}>
-          {/* Arm */}
-          <motion.path
-            d={showPassword
-              ? "M82 148 C74 136 72 110 80 88"
-              : "M82 148 C70 162 56 174 44 182"}
-            stroke="url(#mk-body)" strokeWidth="18" strokeLinecap="round" fill="none"
-            animate={{ d: showPassword
-              ? "M82 148 C74 136 72 110 80 88"
-              : "M82 148 C70 162 56 174 44 182"
-            }}
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-          {/* Palm */}
-          <motion.ellipse
-            animate={showPassword
-              ? { cx: 85,  cy: 82, rx: 24, ry: 20, transform: "rotate(0,85,82)"  }
-              : { cx: 40,  cy: 182, rx: 30, ry: 12, transform: "rotate(-12,40,182)" }
-            }
-            fill="url(#mk-body)"
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-          <motion.ellipse
-            animate={showPassword
-              ? { cx: 85,  cy: 82,  rx: 20, ry: 16, transform: "rotate(0,85,82)"    }
-              : { cx: 40,  cy: 181, rx: 24, ry:  9,  transform: "rotate(-12,40,181)" }
-            }
-            fill="url(#mk-palm)"
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-
-          {/* Fingers — fan shape */}
-          <AnimatePresence mode="wait">
-            {showPassword ? (
-              <motion.g key="fingers-cover-l"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ellipse cx="69"  cy="71" rx="5.5" ry="10" fill="url(#mk-body)" transform="rotate(-25,69,71)" />
-                <ellipse cx="77"  cy="66" rx="5.5" ry="10.5" fill="url(#mk-body)" transform="rotate(-10,77,66)" />
-                <ellipse cx="86"  cy="64" rx="5.5" ry="11" fill="url(#mk-body)" />
-                <ellipse cx="95"  cy="66" rx="5.5" ry="10.5" fill="url(#mk-body)" transform="rotate(10,95,66)" />
-                <ellipse cx="103" cy="71" rx="5.5" ry="10" fill="url(#mk-body)" transform="rotate(25,103,71)" />
-                {/* Peek-through eye */}
-                <ellipse cx="85"  cy="76" rx="11" ry="6"   fill="url(#mk-eye-white)" />
-                <circle  cx="86"  cy="77" r="4"             fill="url(#mk-eye-ball)"   />
-                <circle  cx="88"  cy="75" r="1.8"           fill="rgba(255,255,255,0.9)" />
-              </motion.g>
-            ) : (
-              <motion.g key="fingers-rest-l"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ellipse cx="22"  cy="175" rx="5" ry="10"   fill="url(#mk-body)" transform="rotate(-30,22,175)" />
-                <ellipse cx="30"  cy="171" rx="5" ry="10.5" fill="url(#mk-body)" transform="rotate(-14,30,171)" />
-                <ellipse cx="40"  cy="170" rx="5" ry="11"   fill="url(#mk-body)" />
-                <ellipse cx="50"  cy="171" rx="5" ry="10.5" fill="url(#mk-body)" transform="rotate(14,50,171)" />
-                <ellipse cx="58"  cy="175" rx="5" ry="10"   fill="url(#mk-body)" transform="rotate(28,58,175)" />
-              </motion.g>
-            )}
-          </AnimatePresence>
-        </motion.g>
-
-        {/* ── Right arm + hand ── */}
-        <motion.g style={{ y: handSpring }}>
-          <motion.path
-            d={showPassword
-              ? "M158 148 C166 136 168 110 160 88"
-              : "M158 148 C170 162 184 174 196 182"}
-            stroke="url(#mk-body)" strokeWidth="18" strokeLinecap="round" fill="none"
-            animate={{ d: showPassword
-              ? "M158 148 C166 136 168 110 160 88"
-              : "M158 148 C170 162 184 174 196 182"
-            }}
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-          <motion.ellipse
-            animate={showPassword
-              ? { cx: 155, cy: 82,  rx: 24, ry: 20, transform: "rotate(0,155,82)"   }
-              : { cx: 200, cy: 182, rx: 30, ry: 12,  transform: "rotate(12,200,182)" }
-            }
-            fill="url(#mk-body)"
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-          <motion.ellipse
-            animate={showPassword
-              ? { cx: 155, cy: 82,  rx: 20, ry: 16, transform: "rotate(0,155,82)"    }
-              : { cx: 200, cy: 181, rx: 24, ry:  9,  transform: "rotate(12,200,181)"  }
-            }
-            fill="url(#mk-palm)"
-            transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          />
-
-          <AnimatePresence mode="wait">
-            {showPassword ? (
-              <motion.g key="fingers-cover-r"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ellipse cx="137" cy="71" rx="5.5" ry="10"   fill="url(#mk-body)" transform="rotate(-25,137,71)" />
-                <ellipse cx="145" cy="66" rx="5.5" ry="10.5" fill="url(#mk-body)" transform="rotate(-10,145,66)" />
-                <ellipse cx="154" cy="64" rx="5.5" ry="11"   fill="url(#mk-body)" />
-                <ellipse cx="163" cy="66" rx="5.5" ry="10.5" fill="url(#mk-body)" transform="rotate(10,163,66)" />
-                <ellipse cx="171" cy="71" rx="5.5" ry="10"   fill="url(#mk-body)" transform="rotate(25,171,71)" />
-                {/* Peek-through eye */}
-                <ellipse cx="154" cy="76" rx="11" ry="6"   fill="url(#mk-eye-white)" />
-                <circle  cx="155" cy="77" r="4"             fill="url(#mk-eye-ball)"   />
-                <circle  cx="157" cy="75" r="1.8"           fill="rgba(255,255,255,0.9)" />
-              </motion.g>
-            ) : (
-              <motion.g key="fingers-rest-r"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ellipse cx="182" cy="175" rx="5" ry="10"   fill="url(#mk-body)" transform="rotate(-28,182,175)" />
-                <ellipse cx="190" cy="171" rx="5" ry="10.5" fill="url(#mk-body)" transform="rotate(-14,190,171)" />
-                <ellipse cx="200" cy="170" rx="5" ry="11"   fill="url(#mk-body)" />
-                <ellipse cx="210" cy="171" rx="5" ry="10.5" fill="url(#mk-body)" transform="rotate(14,210,171)" />
-                <ellipse cx="218" cy="175" rx="5" ry="10"   fill="url(#mk-body)" transform="rotate(30,218,175)" />
-              </motion.g>
-            )}
-          </AnimatePresence>
-        </motion.g>
-
-        {/* ── HEAD top spec highlight (3D rim light) ── */}
-        <ellipse
-          cx="104" cy="36"
-          rx="28" ry="16"
-          fill="rgba(255,200,140,0.18)"
-          transform="rotate(-20,104,36)"
+        {/* ── Cheek blush ── */}
+        <motion.ellipse
+          cx="92" cy="112" rx="16" ry="11"
+          fill="url(#g-cheek)"
+          animate={{ opacity: showPassword ? 0.9 : 0.55 }}
+          transition={{ duration: 0.35 }}
         />
+        <motion.ellipse
+          cx="188" cy="112" rx="16" ry="11"
+          fill="url(#g-cheek)"
+          animate={{ opacity: showPassword ? 0.9 : 0.55 }}
+          transition={{ duration: 0.35 }}
+        />
+
+        {/* ══════════════════════════════════════
+            COVER HANDS — password visible
+        ══════════════════════════════════════ */}
+        <motion.g
+          animate={showPassword
+            ? { opacity: 1, y: 0   }
+            : { opacity: 0, y: 38  }
+          }
+          transition={{ type: "spring", stiffness: 340, damping: 30 }}
+        >
+          <CoverHand cx={106} cy={94} flipX={false} />
+          <CoverHand cx={174} cy={94} flipX={true}  />
+        </motion.g>
 
       </motion.svg>
     </div>
   );
 }
 
-/* ──────────────────────────────────────────────────────────
-   MonkeyBodyLayer — rendered BEHIND the login card (z-index 1)
-   Shows only the body/torso that peeks below the card top.
-────────────────────────────────────────────────────────── */
-export function MonkeyBodyLayer() {
-  return (
-    <svg
-      viewBox="0 0 240 80"
-      width="240"
-      height="80"
-      overflow="visible"
-      style={{ display: "block" }}
-    >
-      <defs>
-        <radialGradient id="mkb-body" cx="38%" cy="20%" r="72%">
-          <stop offset="0%"   stopColor="#C07840" />
-          <stop offset="50%"  stopColor="#8B5530" />
-          <stop offset="100%" stopColor="#4A2510" />
-        </radialGradient>
-        <radialGradient id="mkb-belly" cx="42%" cy="35%" r="60%">
-          <stop offset="0%"   stopColor="#F2C890" />
-          <stop offset="60%"  stopColor="#D4966A" />
-          <stop offset="100%" stopColor="#A06840" />
-        </radialGradient>
-        <filter id="mkb-shadow">
-          <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#3A1800" floodOpacity="0.35" />
-        </filter>
-      </defs>
-
-      {/* Body torso (top part visible just below card rim) */}
-      <ellipse cx="120" cy="20" rx="58" ry="52" fill="url(#mkb-body)" filter="url(#mkb-shadow)" />
-      {/* Belly */}
-      <ellipse cx="120" cy="28" rx="36" ry="34" fill="url(#mkb-belly)" />
-      {/* Body highlight */}
-      <ellipse cx="106" cy="8" rx="22" ry="14" fill="rgba(220,150,80,0.22)" />
-    </svg>
-  );
-}
+export function MonkeyBodyLayer() { return null; }

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Share2, Maximize2, Trophy, LogIn, LogOut, Settings, User } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { createClient } from "@/lib/supabase/client";
+import { api } from "@/lib/api";
 import { LoginModal } from "@/components/auth/LoginModal";
 
 function Avatar({ name, avatarUrl, size = 32 }: { name: string; avatarUrl: string | null; size?: number }) {
@@ -53,7 +53,7 @@ function Avatar({ name, avatarUrl, size = 32 }: { name: string; avatarUrl: strin
 }
 
 export function Header() {
-  const { isLoggedIn, userProfile, loginModalOpen, setLoginModalOpen } = useAppStore();
+  const { isLoggedIn, userProfile, loginModalOpen, setLoginModalOpen, setUser } = useAppStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -85,8 +85,8 @@ export function Header() {
   };
 
   const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await api.post("/auth/logout");
+    setUser(null);
     setDropdownOpen(false);
   };
 
