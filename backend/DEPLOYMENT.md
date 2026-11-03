@@ -1,5 +1,9 @@
 # Deploy Bu Kanji: Vercel + Render
 
+Nếu chưa có backend/database/email service, bắt đầu với
+[DEPLOYMENT-START-HERE.md](../DEPLOYMENT-START-HERE.md). Blueprint hiện tạo cả PostgreSQL
+và API để triển khai thử; gói database Free chỉ là trial, cần chọn gói lâu dài khi production.
+
 Frontend root `bu-nihon`; backend root `backend`. Dữ liệu PostgreSQL bền vững, không lưu
 trong filesystem Render. Cấu hình chuẩn: browser → Vercel `/api` → Render `/api`.
 Chưa có URL/backend được tạo bởi tài liệu này; thay mọi placeholder trước khi triển khai.
@@ -22,7 +26,8 @@ SQL auth ban đầu dùng CREATE IF NOT EXISTS nên có thể ghi nhận databas
 migration cũ, nhưng phải kiểm tra schema hiện có tương thích trước khi chạy. Không reset bảng.
 Nếu migration đã ghi nhận bị sửa, runner từ chối; thêm file số mới thay vì sửa migration cũ.
 
-Render Shell/one-off hoặc máy vận hành kết nối database đều dùng `npm run migrate` trong
+Start command Render mới `npm run start:render` tự kiểm tra biến và migrate trước khi start.
+Render Shell/one-off hoặc máy vận hành kết nối database cũng dùng `npm run migrate` trong
 root backend. Không giả định gói hosting có pre-deploy; nếu dùng pre-deploy có thể đặt
 `npm run migrate`, nhưng phải xác minh quyền/tính năng hosting. Lần đầu health có thể chưa
 healthy trước khi migrate; hoàn tất migrate rồi deploy/restart. Khi rollback chỉ rollback
@@ -36,7 +41,7 @@ Có thể dùng blueprint `render.yaml` ở root repo hoặc tạo Node Web Serv
 | --- | --- |
 | Root Directory | `backend` |
 | Install + Build Command | `npm ci && npm run build` |
-| Start Command | `npm run start:prod` |
+| Start Command | `npm run start:render` |
 | Health Check Path | `/api/health` |
 | Node | 22 LTS |
 
@@ -52,8 +57,9 @@ Thiết lập biến theo `.env.production.example`:
 - GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET và GOOGLE_CALLBACK_URL nếu dùng Google OAuth.
   Callback phải là `https://FRONTEND-DOMAIN/api/auth/google/callback`, không phải origin Render.
 
-Blueprint không tự tạo database hoặc quản lý domain. Kiểm tra chi phí dịch vụ trong dashboard
-trước khi tạo; hướng dẫn không yêu cầu nâng gói để chạy migration.
+Blueprint tạo PostgreSQL riêng và nối DATABASE_URL tự động; không quản lý domain hay Resend.
+Kiểm tra gói/chi phí trong dashboard; không cần nâng gói chỉ để chạy migration vì start command
+đã chạy migration trước khi khởi động API.
 
 ## 3. Vercel frontend
 

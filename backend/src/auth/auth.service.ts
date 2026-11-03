@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
@@ -12,6 +12,7 @@ import { RefreshSession } from './entities/refresh-session.entity';
 import { EmailVerificationCode } from './entities/email-verification-code.entity';
 import { PasswordResetToken } from './entities/password-reset-token.entity';
 import { MailService } from './mail.service';
+import { authCapabilities } from './capabilities';
 
 const ACCESS_TOKEN_TTL_SECONDS = 15 * 60;
 const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -50,6 +51,7 @@ export class AuthService {
   }
 
   async register(email: string, password: string) {
+    this.requireEmailService();
     const normalizedEmail = this.normalizeEmail(email);
     const existing = await this.users.findOneBy({ email: normalizedEmail });
     if (existing?.emailVerified) throw new ConflictException('Email này đã được đăng ký.');
@@ -74,6 +76,7 @@ export class AuthService {
   }
 
   async resendVerification(email: string) {
+    this.requireEmailService();
     const user = await this.users.findOneBy({ email: this.normalizeEmail(email) });
     if (user && !user.emailVerified) await this.createAndSendVerificationCode(user);
     return { message: 'Nếu email hợp lệ, mã xác thực đã được gửi.' };
@@ -152,6 +155,7 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
+    this.requireEmailService();
     const user = await this.users.findOneBy({ email: this.normalizeEmail(email) });
     if (user) {
       const token = randomBytes(32).toString('base64url');
@@ -247,5 +251,10 @@ export class AuthService {
   private async findMatchingSecret<T>(items: T[], secret: string, getHash: (item: T) => string) {
     for (const item of items) if (await argon2.verify(getHash(item), secret)) return item;
     return null;
+  }
+
+  private requireEmailService() {
+    if (!authCapabilities(key => this.config.get<string>(key)).emailRegistration)
+      throw new ServiceUnavailableException('Đăng ký và khôi phục tài khoản tạm thời chưa sẵn sàng. Vui lòng thử lại sau.');
   }
 }

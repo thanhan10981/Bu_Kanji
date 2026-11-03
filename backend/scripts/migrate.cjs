@@ -2,6 +2,7 @@ const { Client } = require('pg');
 const { readFileSync, readdirSync } = require('node:fs');
 const { join } = require('node:path');
 const { createHash } = require('node:crypto');
+const { databaseSsl } = require('./database-ssl.cjs');
 require('@nestjs/config').ConfigModule.forRoot();
 
 async function migrate() {
@@ -10,7 +11,7 @@ async function migrate() {
       host: process.env.POSTGRES_HOST, port: Number(process.env.POSTGRES_PORT || 5432),
       user: process.env.POSTGRES_USER, password: process.env.POSTGRES_PASSWORD, database: process.env.POSTGRES_DB,
     }),
-    ...(process.env.DATABASE_SSL === 'true' ? { ssl: { rejectUnauthorized: true } } : {}),
+    ssl: databaseSsl(process.env),
   });
   await client.connect();
   try {

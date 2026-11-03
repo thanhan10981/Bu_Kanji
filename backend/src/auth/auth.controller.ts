@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request, Response } from 'express';
 import { randomBytes } from 'crypto';
@@ -12,10 +12,15 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { EmailDto } from './dto/email.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { safeReturnPath } from './return-path';
+import { authCapabilities } from './capabilities';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly auth: AuthService, private readonly config: ConfigService) {}
+
+  @Public()
+  @Get('config')
+  capabilities() { return authCapabilities(key => this.config.get<string>(key)); }
 
   @Public()
   @Post('register')
@@ -81,6 +86,7 @@ export class AuthController {
   @Public()
   @Get('google')
   google(@Query('returnTo') returnTo: string | undefined, @Res() response: Response) {
+    if (!this.capabilities().googleLogin) throw new ServiceUnavailableException('Đăng nhập Google tạm thời chưa sẵn sàng.');
     const state = randomBytes(32).toString('base64url');
     response.cookie('oauth_state', state, { ...this.cookieOptions(), httpOnly: true, maxAge: 10 * 60 * 1000, path: '/api/auth/google/callback' });
     response.cookie('oauth_return', safeReturnPath(returnTo), { ...this.cookieOptions(), maxAge: 10 * 60 * 1000, path: '/api/auth/google/callback' });

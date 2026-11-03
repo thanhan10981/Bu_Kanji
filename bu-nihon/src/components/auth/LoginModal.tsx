@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Lock, LogIn, Mail, UserPlus, X } from "lucide-react";
 import { api, ApiError, type AppUser } from "@/lib/api";
@@ -31,6 +32,12 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const setUser = useAppStore((state) => state.setUser);
+  const authConfig = useQuery({
+    queryKey: ['auth-capabilities'],
+    queryFn: () => api.get<{ emailRegistration: boolean; passwordReset: boolean; googleLogin: boolean }>('/auth/config'),
+    enabled: open, retry: false, staleTime: 60_000,
+  });
+  const unavailable = authConfig.isPending || authConfig.isError;
 
   if (!open) return null;
 
@@ -44,6 +51,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
     void run(async () => {
+      if (unavailable) throw new Error('Đăng nhập tạm thời chưa sẵn sàng.');
       if (mode === "login") {
         const { user } = await api.post<{ user: AppUser }>("/auth/login", { email, password });
         setUser(user); onClose(); return;
@@ -130,6 +138,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
               </button>
               <button
                 className={`lm-tab${mode === "signup" ? " active" : ""}`}
+                disabled={unavailable || !authConfig.data?.emailRegistration}
                 onClick={() => setMode("signup")}
               >
                 <UserPlus size={14} /> Đăng ký
@@ -138,18 +147,21 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           )}
 
           {/* google */}
-          {(mode === "login" || mode === "signup") && (
+          {(mode === "login" || mode === "signup") && authConfig.data?.googleLogin && (
             <button className="lm-google" type="button" disabled={loading} onClick={api.googleLogin}>
               <GoogleIcon /> Tiếp tục với Google
             </button>
           )}
 
           {/* divider */}
-          {(mode === "login" || mode === "signup") && (
+          {(mode === "login" || mode === "signup") && authConfig.data?.googleLogin && (
             <div className="lm-divider"><span>hoặc</span></div>
           )}
 
           {/* form */}
+          {authConfig.isError && <p className="lm-alert error" role="alert">Không thể kết nối dịch vụ đăng nhập. <button type="button" onClick={() => authConfig.refetch()}>Thử lại</button></p>}
+          {authConfig.isPending && <p role="status">Đang kiểm tra dịch vụ đăng nhập…</p>}
+          {authConfig.data && !authConfig.data.emailRegistration && <p className="lm-alert" role="status">Đăng ký tài khoản mới tạm thời chưa sẵn sàng.</p>}
           <form onSubmit={submit} className="lm-form">
             {mode !== "verify" && (
               <label className="lm-field">
@@ -228,7 +240,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
               )}
             </AnimatePresence>
 
-            <button className="lm-submit" disabled={loading}>
+            <button className="lm-submit" disabled={loading || unavailable}>
               {loading ? (
                 <span className="lm-spinner" />
               ) : (
@@ -240,7 +252,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           {/* secondary actions */}
           <div className="lm-secondary-actions">
             {mode === "login" && (
-              <button className="lm-link" onClick={() => setMode("forgot")}>Quên mật khẩu?</button>
+              <button className="lm-link" disabled={unavailable || !authConfig.data?.passwordReset} onClick={() => setMode("forgot")}>Quên mật khẩu?</button>
             )}
             {mode === "verify" && (
               <button className="lm-link" disabled={loading} onClick={() => void run(async () => {

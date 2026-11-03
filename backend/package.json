@@ -7,6 +7,10 @@
     "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
+    "check:deploy": "node scripts/check-deploy-env.cjs",
+    "start:render": "npm run check:deploy && npm run migrate && npm run start:prod",
+    "test:deployment": "node --test --test-isolation=none test/deployment.test.cjs",
+    "test:auth": "npm run build && node --test --test-isolation=none test/auth.test.cjs",
     "migrate": "node scripts/migrate.cjs",
     "test:vocabulary": "npm run build && node --test --test-isolation=none test/vocabulary.test.cjs",
     "test:integration": "npm run build && node --test --test-isolation=none test/vocabulary.integration.cjs"

@@ -125,3 +125,33 @@ Frontend 4310 vẫn chạy; /vocabulary, /kanji và /kanji/食 HTTP 200; /api/he
 Chưa chạy migration/seed hoặc kiểm thử giao diện khi các điều kiện cần chưa có.
 T021/T023/T024/T025 giữ nguyên trạng thái mở. Không sửa source hoặc .env trong lượt này;
 không chạy lại unit/build để thay thế bằng chứng nghiệm thu thực tế.
+
+## Chuẩn bị deploy sau lỗi Vercel và chưa có dịch vụ — 2026-11-03
+
+Người dùng chốt phạm vi Kanji + Từ vựng + đăng nhập; chưa có Render/PostgreSQL/Resend/Google.
+
+- Sửa layout bỏ next/font/google gây lỗi internal Turbopack font trong ảnh; CSS Inter/Noto
+  Sans JP hiện có được giữ. Production build cuối PASS, không còn tải font trong bước build.
+  Lần chạy sandbox compile PASS rồi bị spawn EPERM; chạy ngoài sandbox hoàn tất build.
+- API base mặc định /api; development có rewrite mặc định local. Production vẫn cần
+  API_PROXY_TARGET thực tế trên Vercel để dùng backend.
+- Thêm auth/config chỉ trả boolean; tắt lựa chọn chưa có provider, báo lỗi backend rõ ràng;
+  đăng ký email bị từ chối trước khi ghi user nếu provider thiếu. Không bỏ xác minh email.
+- Render Blueprint tạo API + PostgreSQL Free để triển khai thử, tự nối DB/sinh JWT;
+  start:render kiểm tra môi trường, chạy migration rồi start. Chưa chạy Blueprint thật.
+- Migration/API thống nhất TLS. Mặc định xác minh chứng chỉ; Blueprint Render private
+  tự ký opt-in rejectUnauthorized=false, vẫn TLS; external provider giữ mặc định true.
+- Kiểm tra: frontend build PASS, backend build PASS, frontend type/lint phần sửa PASS;
+  4 nhóm vocabulary frontend PASS, 7 test backend PASS, 4 deployment tests PASS,
+  1 auth lifecycle test PASS (OTP/login/refresh/logout/reset/token một lần).
+- Test auth lifecycle dùng service/crypto thật với repository/mail giả lập, không gửi email;
+  không phải PostgreSQL/Resend/Google/browser E2E. Các task T021/T023/T024/T025 vẫn mở.
+- npm run lint toàn frontend: baseline 15 errors/18 warnings không đổi; không sửa Kanji.
+- Blueprint YAML được parse và kiểm tra liên kết DB/start/JWT; remote Render validation,
+  provisioning, migration DB thật, email thật, Google thật và deploy Vercel chưa thực hiện.
+- Không sửa các file .env thật hoặc in secret. Các giá trị local được khảo sát dưới dạng tên
+  biến/cờ có giá trị; không coi chúng là credential provider đã xác minh.
+
+Hướng dẫn mới: [DEPLOYMENT-START-HERE.md](../../DEPLOYMENT-START-HERE.md).
+Gói Free trong Blueprint chỉ phục vụ thử nghiệm; database hết hạn sau 30 ngày theo Render,
+cần chọn lưu trữ lâu dài trước production. Chưa tạo dịch vụ hoặc phát sinh deploy từ phiên này.

@@ -2,9 +2,11 @@ services:
   - type: web
     name: bu-kanji-api
     runtime: node
+    plan: free
+    region: singapore
     rootDir: backend
     buildCommand: npm ci && npm run build
-    startCommand: npm run start:prod
+    startCommand: npm run start:render
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
@@ -12,26 +14,32 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: bu-kanji-db
+          property: connectionString
       - key: DATABASE_SSL
         value: "true"
+      # Render private Postgres TLS uses self-signed certificates; encryption stays enabled.
+      - key: DATABASE_SSL_REJECT_UNAUTHORIZED
+        value: "false"
       - key: FRONTEND_URL
-        sync: false
+        value: https://bu-kanji.vercel.app
       - key: CORS_ORIGIN
-        sync: false
+        value: https://bu-kanji.vercel.app
       - key: COOKIE_SECURE
         value: "true"
       - key: JWT_ACCESS_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
         generateValue: true
-      - key: RESEND_API_KEY
-        sync: false
-      - key: RESEND_FROM_EMAIL
-        sync: false
-      - key: GOOGLE_CLIENT_ID
-        sync: false
-      - key: GOOGLE_CLIENT_SECRET
-        sync: false
-      - key: GOOGLE_CALLBACK_URL
-        sync: false
+    # Add RESEND_API_KEY + RESEND_FROM_EMAIL to enable email signup.
+    # Google OAuth is optional; see DEPLOYMENT-START-HERE.md.
+
+databases:
+  - name: bu-kanji-db
+    plan: free
+    region: singapore
+    databaseName: bu_kanji
+    user: bu_kanji
+    postgresMajorVersion: "16"
+    ipAllowList: []

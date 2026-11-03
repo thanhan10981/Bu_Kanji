@@ -1,20 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers/Providers";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const notoSansJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
-  variable: "--font-noto-jp",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Bú Kanji – Học Tiếng Nhật Toàn Diện",
@@ -46,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <body className={`${inter.variable} ${notoSansJP.variable}`}>
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>

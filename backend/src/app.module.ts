@@ -7,6 +7,8 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtCookieGuard } from './auth/auth.guard';
 import { VocabularyModule } from './vocabulary/vocabulary.module';
+// Shared with the migration CLI so both connections use the same TLS policy.
+const { databaseSsl }: { databaseSsl: (env: NodeJS.ProcessEnv) => { rejectUnauthorized: boolean } | undefined } = require('../scripts/database-ssl.cjs');
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { VocabularyModule } from './vocabulary/vocabulary.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         const databaseUrl = config.get<string>('DATABASE_URL');
-        const useSsl = config.get('DATABASE_SSL') === 'true';
+        const ssl = databaseSsl({ DATABASE_SSL: config.get<string>('DATABASE_SSL'), DATABASE_SSL_REJECT_UNAUTHORIZED: config.get<string>('DATABASE_SSL_REJECT_UNAUTHORIZED') });
         return {
           type: 'postgres' as const,
           ...(databaseUrl
@@ -28,7 +30,7 @@ import { VocabularyModule } from './vocabulary/vocabulary.module';
                 password: config.getOrThrow<string>('POSTGRES_PASSWORD'),
                 database: config.getOrThrow<string>('POSTGRES_DB'),
               }),
-          ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+          ...(ssl ? { ssl } : {}),
           autoLoadEntities: true,
           synchronize: config.get('NODE_ENV') !== 'production',
         };

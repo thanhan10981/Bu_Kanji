@@ -10,7 +10,7 @@ export class ApiError extends Error {
   constructor(message: string, public readonly status: number) { super(message); }
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api';
 let refreshRequest: Promise<Response> | null = null;
 
 async function request<T>(path: string, init: RequestInit = {}, retried = false): Promise<T> {
