@@ -11,6 +11,7 @@ import { LoginDto } from './dto/login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { EmailDto } from './dto/email.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { safeReturnPath } from './return-path';
 
 @Controller('auth')
 export class AuthController {
@@ -79,9 +80,10 @@ export class AuthController {
 
   @Public()
   @Get('google')
-  google(@Res() response: Response) {
+  google(@Query('returnTo') returnTo: string | undefined, @Res() response: Response) {
     const state = randomBytes(32).toString('base64url');
     response.cookie('oauth_state', state, { ...this.cookieOptions(), httpOnly: true, maxAge: 10 * 60 * 1000, path: '/api/auth/google/callback' });
+    response.cookie('oauth_return', safeReturnPath(returnTo), { ...this.cookieOptions(), maxAge: 10 * 60 * 1000, path: '/api/auth/google/callback' });
     const params = new URLSearchParams({
       client_id: this.config.getOrThrow<string>('GOOGLE_CLIENT_ID'),
       redirect_uri: this.config.getOrThrow<string>('GOOGLE_CALLBACK_URL'),
@@ -97,7 +99,9 @@ export class AuthController {
   @Get('google/callback')
   async googleCallback(@Query('code') code: string | undefined, @Query('state') state: string | undefined, @Req() request: Request, @Res() response: Response) {
     const expectedState = request.cookies?.oauth_state as string | undefined;
+    const returnTo = safeReturnPath(request.cookies?.oauth_return);
     response.clearCookie('oauth_state', { ...this.cookieOptions(), path: '/api/auth/google/callback' });
+    response.clearCookie('oauth_return', { ...this.cookieOptions(), path: '/api/auth/google/callback' });
     if (!code || !state || state !== expectedState) throw new UnauthorizedException('Google OAuth state không hợp lệ.');
 
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -122,7 +126,7 @@ export class AuthController {
 
     const session = await this.auth.findOrCreateGoogleUser({ id: profile.sub, email: profile.email, name: profile.name, picture: profile.picture });
     this.setSessionCookies(response, session.accessToken, session.refreshToken);
-    response.redirect(new URL('/kanji', this.config.getOrThrow<string>('FRONTEND_URL')).toString());
+    response.redirect(new URL(returnTo, this.config.getOrThrow<string>('FRONTEND_URL')).toString());
   }
 
   private cookieOptions() {

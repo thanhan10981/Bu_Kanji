@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtCookieGuard } from './auth/auth.guard';
+import { VocabularyModule } from './vocabulary/vocabulary.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { JwtCookieGuard } from './auth/auth.guard';
       },
     }),
     HealthModule,
+    VocabularyModule,
     AuthModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtCookieGuard }],

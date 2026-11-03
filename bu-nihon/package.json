@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:vocabulary": "node --experimental-strip-types --test --test-isolation=none src/lib/vocabulary/kana.test.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.0",

@@ -1,0 +1,19 @@
+# Generated output and local tooling
+node_modules/
+dist/
+build/
+coverage/
+.next/
+*.log
+*.tmp
+.tmp/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Credentials stay local; examples are reviewable configuration.
+.env
+.env.*
+!.env.example
+!.env.production.example
