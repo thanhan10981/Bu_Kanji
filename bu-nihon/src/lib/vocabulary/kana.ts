@@ -16,7 +16,9 @@ for (const [prefix, kana] of Object.entries({ ky: 'き', gy: 'ぎ', sy: 'し', s
 Object.assign(syllables, { shi: 'し', chi: 'ち', tsu: 'つ', fu: 'ふ', ji: 'じ', ya: 'や', yu: 'ゆ', yo: 'よ', ye: 'いぇ', wo: 'を',
   fa: 'ふぁ', fi: 'ふぃ', fe: 'ふぇ', fo: 'ふぉ', va: 'ゔぁ', vi: 'ゔぃ', vu: 'ゔ', ve: 'ゔぇ', vo: 'ゔぉ',
   xtsu: 'っ', ltsu: 'っ', xtu: 'っ', ltu: 'っ', xya: 'ゃ', xyu: 'ゅ', xyo: 'ょ', lya: 'ゃ', lyu: 'ゅ', lyo: 'ょ', '-': 'ー',
-  she: 'しぇ', che: 'ちぇ', je: 'じぇ', ti: 'ち', di: 'ぢ', du: 'づ', wi: 'うぃ', we: 'うぇ' });
+  she: 'しぇ', che: 'ちぇ', je: 'じぇ', ti: 'ち', di: 'ぢ', du: 'づ', wi: 'うぃ', we: 'うぇ',
+  thi: 'てぃ', dhi: 'でぃ', thu: 'てゅ', dhu: 'でゅ', twu: 'とぅ', dwu: 'どぅ',
+  tsa: 'つぁ', tsi: 'つぃ', tse: 'つぇ', tso: 'つぉ', fyu: 'ふゅ' });
 
 function convert(raw: string) {
   let value = ''; let nn = false;

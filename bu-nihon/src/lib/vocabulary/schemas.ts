@@ -9,6 +9,6 @@ export const cardSchema = z.object({
 export type CardInput = z.infer<typeof cardSchema>;
 export interface Folder { id: string; name: string; setCount: number; cardCount: number }
 export interface StudySet { id: string; folderId: string; name: string; cardCount: number }
-export interface Card extends CardInput { id: string; setId: string; createdAt: string; updatedAt: string }
+export interface Card extends CardInput { id: string; setId: string; createdAt: string; updatedAt: string; hanViet?: string }
 export interface FolderDetail extends Folder { sets: StudySet[] }
 export interface SetDetail extends StudySet { cards: Card[] }

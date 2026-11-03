@@ -7,6 +7,8 @@ import { useAppStore } from '@/lib/store';
 import { cardSchema, nameSchema, type CardInput } from '@/lib/vocabulary/schemas';
 import { useVocabularyData, vocabularyApi as api } from '@/lib/vocabulary/api';
 import { StudySession } from './StudySession';
+import { getLibrarySet } from '@/lib/vocabulary/library';
+import { LibraryEntry, VocabularyLibrary } from './VocabularyLibrary';
 import './vocabulary.css';
 
 interface Props { folderId?: string; setId?: string; mode?: 'flashcard' | 'written' }
@@ -62,6 +64,13 @@ function VocabularyDialog({ editor, pending, save, close }: { editor: Editor; pe
 }
 
 export function VocabularyApp(props: Props) {
+  const librarySet = props.setId ? getLibrarySet(props.setId) : undefined;
+  if (librarySet) return <VocabularyLibrary set={librarySet} mode={props.mode} />;
+  if (!props.setId && !props.folderId) return <><LibraryEntry /><PersonalVocabulary {...props} /></>;
+  return <PersonalVocabulary {...props} />;
+}
+
+function PersonalVocabulary(props: Props) {
   const user = useAppStore(s => s.user);
   const status = useAppStore(s => s.authStatus);
   const openLogin = useAppStore(s => s.setLoginModalOpen);

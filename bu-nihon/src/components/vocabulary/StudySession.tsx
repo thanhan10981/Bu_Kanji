@@ -1,8 +1,9 @@
 "use client";
 import Link from 'next/link';
 import { useRef, useState } from 'react';
+import { X, Check, RotateCcw } from 'lucide-react';
 import type { Card, SetDetail } from '@/lib/vocabulary/schemas';
-import { isCorrect, normalizeAnswer, summarize } from '@/lib/vocabulary/study';
+import { advanceWritten, gradeWritten, matchesCard, normalizeAnswer, startWritten, summarize } from '@/lib/vocabulary/study';
 import { finalizeKana } from '@/lib/vocabulary/kana';
 import { KanaInput } from './KanaInput';
 
@@ -11,60 +12,80 @@ export function StudySession({ set, mode }: { set: SetDetail; mode: 'flashcard' 
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [answer, setAnswer] = useState('');
-  const [results, setResults] = useState<boolean[]>([]);
-  const [graded, setGraded] = useState<boolean | null>(null);
-  const [finished, setFinished] = useState(false);
+  const [session, setSession] = useState(() => startWritten(set.cards.length));
+  const [prompt, setPrompt] = useState<'japanese' | 'meaning'>('japanese');
   const [error, setError] = useState('');
-  const gradedLock = useRef(false);
-  const card = cards[index];
-  const check = () => {
-    if (gradedLock.current || !card) return;
-    if (!normalizeAnswer(answer)) { setError('Vui lòng nhập câu trả lời.'); return; }
-    gradedLock.current = true;
-    const correct = isCorrect(answer, card.reading);
-    setAnswer(finalizeKana(answer)); setGraded(correct); setResults(old => [...old, correct]); setError('');
-  };
+  const [inputKey, setInputKey] = useState(0);
+  const lock = useRef(false);
+  const card = cards[mode === 'flashcard' ? index : session.queue[0]];
+  const back = `/vocabulary/sets/${set.id}`;
+  const feedback = session.feedback;
+  const ready = feedback === 'correct' || feedback === 'corrected';
+  const finished = session.queue.length === 0;
+  const wrong = session.missed.map(i => cards[i]);
+  const score = summarize(session.results.filter((result): result is boolean => result !== null));
   const next = () => {
-    if (!gradedLock.current) return;
-    if (index === cards.length - 1) { setFinished(true); return; }
-    gradedLock.current = false; setIndex(index + 1); setGraded(null); setAnswer(''); setError('');
+    if (!ready) return;
+    setSession(advanceWritten(session)); setAnswer(''); setError(''); setInputKey(key => key + 1);
+    lock.current = false;
   };
-  const wrong = cards.filter((_, i) => results[i] === false);
-  const retry = () => {
-    if (!wrong.length) return;
-    setCards(wrong); setResults([]); setIndex(0); setAnswer(''); setGraded(null);
-    gradedLock.current = false; setFinished(false); setError('');
+  const check = () => {
+    if (ready) { next(); return; }
+    if (lock.current || !card) return;
+    if (!normalizeAnswer(answer)) { setError('Vui lòng nhập câu trả lời.'); return; }
+    lock.current = true;
+    const correct = matchesCard(finalizeKana(answer), card);
+    setSession(gradeWritten(session, correct)); setError('');
+    if (correct) setAnswer(card.japanese || card.reading);
+    else { setAnswer(''); setInputKey(key => key + 1); }
+    lock.current = false;
   };
-  return <section className="vocab-study">
-    <Link href={`/vocabulary/sets/${set.id}`} className="vocab-back">← Về bộ {set.name}</Link>
-    <h1>{mode === 'flashcard' ? 'Flashcard' : 'Tự luận'}</h1>
-    {!cards.length ? <div className="card vocab-empty"><h2>Bộ chưa có thẻ</h2><p>Thêm thẻ để bắt đầu học.</p></div>
-      : finished ? <div className="card vocab-panel">
-        <h2>Kết quả lượt học</h2>
-        <p>Tổng {summarize(results).total} · Đúng {summarize(results).correct} · Sai {summarize(results).wrong}</p>
-        <p className="vocab-score">{summarize(results).percentage}%</p>
-        {wrong.length ? <><h3>Câu cần ôn lại</h3><ul>{wrong.map(item => <li key={item.id}>{item.meaning} — <span lang="ja">{item.reading}</span></li>)}</ul></> : <p>Bạn đã trả lời đúng tất cả câu hỏi!</p>}
-        <button className="btn-primary" disabled={!wrong.length} onClick={retry}>Làm lại câu sai</button>
+  const restart = (items: Card[]) => {
+    setCards(items); setSession(startWritten(items.length)); setAnswer(''); setError('');
+    setInputKey(key => key + 1); lock.current = false;
+  };
+  if (!cards.length) return <section className="vocab-study"><Link href={back} className="vocab-back">← Về bộ {set.name}</Link><div className="card vocab-empty"><h2>Bộ chưa có thẻ</h2><p>Thêm thẻ để bắt đầu học.</p></div></section>;
+  if (mode === 'flashcard') return <section className="vocab-study">
+    <Link href={back} className="vocab-back">← Về bộ {set.name}</Link><h1>Flashcard</h1>
+    <p aria-label="Tiến độ">{index + 1}/{cards.length}</p>
+    <button className="card vocab-flashcard" onClick={() => setFlipped(!flipped)} aria-label={flipped ? 'Lật về nghĩa tiếng Việt' : 'Lật xem đáp án'}>
+      <span className="vocab-eyebrow">{flipped ? 'Cách đọc · Chữ Nhật' : 'Nghĩa tiếng Việt'}</span>
+      <span className="vocab-flash-text" lang={flipped ? 'ja' : 'vi'}>{flipped ? card.reading : card.meaning}</span>
+      {flipped && card.japanese && <span className="vocab-japanese" lang="ja">{card.japanese}</span>}
+      {flipped && card.hanViet && <span className="vocab-hint">{card.hanViet}</span>}
+      <span className="vocab-hint">Chạm hoặc nhấn Enter để lật</span>
+    </button>
+    <div className="vocab-actions"><button className="btn-secondary" disabled={index === 0} onClick={() => { setIndex(index - 1); setFlipped(false); }}>← Trước</button>
+      <button className="btn-primary" disabled={index === cards.length - 1} onClick={() => { setIndex(index + 1); setFlipped(false); }}>Sau →</button></div>
+  </section>;
+  return <section className="written-stage" aria-label={`Tự luận — ${set.name}`}>
+    <div className="written-card">
+      <header className="written-top"><span className="written-count" aria-label="Số từ đã thuộc">{session.completed.length} / {cards.length}</span>
+        <progress max={cards.length} value={session.completed.length} aria-label="Tiến độ học" />
+        <Link className="written-close" href={back} aria-label="Thoát tự luận"><X size={22} /></Link></header>
+      {finished ? <div className="written-results">
+        <Check size={44} /><h1>Hoàn thành lượt học!</h1><p>Bạn đã nhớ lại đúng {cards.length}/{cards.length} từ.</p>
+        <p>Lần trả lời đầu: {score.correct} đúng · {score.wrong} sai · {score.percentage}%</p>
+        <p>{wrong.length} từ từng sai đã được sửa và ôn lại cuối lượt.</p>
+        <div className="vocab-actions"><button className="btn-primary" disabled={!wrong.length} onClick={() => restart(wrong)}><RotateCcw size={17} /> Làm lại câu sai</button>
+          <button className="btn-secondary" onClick={() => restart(set.cards)}>Học lại tất cả</button><Link className="btn-secondary" href={back}>Về bài học</Link></div>
       </div> : <>
-        <p aria-label="Tiến độ">{index + 1}/{cards.length}</p>
-        {mode === 'flashcard' ? <>
-          <button className="card vocab-flashcard" onClick={() => setFlipped(!flipped)} aria-label={flipped ? 'Lật về nghĩa tiếng Việt' : 'Lật xem đáp án'}>
-            <span className="vocab-eyebrow">{flipped ? 'Cách đọc · Chữ Nhật' : 'Nghĩa tiếng Việt'}</span>
-            <span className="vocab-flash-text" lang={flipped ? 'ja' : 'vi'}>{flipped ? card.reading : card.meaning}</span>
-            {flipped && card.japanese && <span className="vocab-japanese" lang="ja">{card.japanese}</span>}
-            <span className="vocab-hint">Chạm hoặc nhấn Enter để lật</span>
-          </button>
-          <div className="vocab-actions"><button className="btn-secondary" disabled={index === 0} onClick={() => { setIndex(index - 1); setFlipped(false); }}>← Trước</button>
-            <button className="btn-primary" disabled={index === cards.length - 1} onClick={() => { setIndex(index + 1); setFlipped(false); }}>Sau →</button></div>
-        </> : <div className="card vocab-panel">
-          <p className="vocab-eyebrow">Nhập cách đọc bằng hiragana</p><h2 className="vocab-question">{card.meaning}</h2>
-          <p className="vocab-hint">Dùng bàn phím tiếng Anh. Romaji tự chuyển khi bạn gõ.</p>
-          <KanaInput key={index} value={answer} onChange={setAnswer} onCheck={check} disabled={graded !== null} />
+        <div className="written-settings"><span>{set.name} · Tự luận</span><label>Câu hỏi <select aria-label="Kiểu câu hỏi" value={prompt} onChange={event => setPrompt(event.target.value as 'japanese' | 'meaning')}>
+          <option value="japanese">Chữ Nhật → cách đọc</option><option value="meaning">Nghĩa Việt → chữ Nhật</option></select></label></div>
+        <div className="written-prompt"><h1 lang={prompt === 'japanese' ? 'ja' : 'vi'}>{prompt === 'japanese' ? card.japanese || card.meaning : card.meaning}</h1>
+          {ready && <p className="written-meaning">{card.meaning}{card.hanViet ? ` · ${card.hanViet}` : ''}</p>}</div>
+        <div className={`written-input ${ready ? 'is-correct' : feedback === 'wrong' ? 'is-wrong' : ''}`}>
+          <KanaInput key={inputKey} value={answer} onChange={setAnswer} onCheck={check} readOnly={ready} />
+        </div>
+        <div className="written-feedback" aria-live="polite">
           {error && <p role="alert" className="vocab-error">{error}</p>}
-          <div aria-live="polite">{graded !== null && <p className={graded ? 'vocab-correct' : 'vocab-error'}>{graded ? 'Đúng!' : 'Chưa đúng.'} Đáp án: <span lang="ja">{card.reading}</span></p>}</div>
-          <div className="vocab-actions"><button className="btn-primary" disabled={graded !== null} onClick={check}>Kiểm tra</button>
-            {graded !== null && <button className="btn-secondary" onClick={next}>{index === cards.length - 1 ? 'Xem kết quả' : 'Câu tiếp theo'}</button>}</div>
-        </div>}
+          {feedback === 'wrong' && <><strong className="vocab-error">Chưa đúng. Nhập lại đáp án để tiếp tục.</strong><p lang="ja">{card.reading} — {card.japanese}</p><p>{card.meaning}</p></>}
+          {feedback === 'correct' && <><strong className="vocab-correct">Chính xác!</strong><p lang="ja">{card.reading}</p></>}
+          {feedback === 'corrected' && <><strong className="vocab-correct">Đã sửa đúng.</strong><p>Từ này chưa tính đã thuộc, sẽ xuất hiện lại cuối lượt.</p></>}
+          {!feedback && <p>Gõ romaji để chuyển ngay sang hiragana. Cũng chấp nhận cách viết tiếng Nhật của từ.</p>}
+        </div>
+        <button className="written-submit" onClick={check}>{ready ? 'Enter hoặc bấm để tiếp tục →' : feedback === 'wrong' ? 'Kiểm tra lại' : 'Nhấn Enter để kiểm tra'}</button>
       </>}
+    </div>
   </section>;
 }

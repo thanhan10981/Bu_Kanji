@@ -2,16 +2,16 @@
 import { useRef, useState } from 'react';
 import { editKana, type KanaState } from '@/lib/vocabulary/kana';
 
-export function KanaInput({ value, onChange, onCheck, disabled }: {
-  value: string; onChange: (value: string) => void; onCheck: () => void; disabled?: boolean;
+export function KanaInput({ value, onChange, onCheck, disabled, readOnly }: {
+  value: string; onChange: (value: string) => void; onCheck: () => void; disabled?: boolean; readOnly?: boolean;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const state = useRef<KanaState>({ value, caret: value.length });
   const composing = useRef(false);
   const compositionEnter = useRef(false);
   const [compositionValue, setCompositionValue] = useState<string | null>(null);
-  return <input ref={input} className="input-base vocab-answer" aria-label="Cách đọc hiragana"
-    value={compositionValue ?? value} disabled={disabled} autoComplete="off" autoCorrect="off"
+  return <input ref={input} className="input-base vocab-answer" aria-label="Cách đọc hiragana hoặc chữ Nhật" autoFocus
+    value={compositionValue ?? value} disabled={disabled} readOnly={readOnly} autoComplete="off" autoCorrect="off"
     autoCapitalize="off" spellCheck={false} placeholder="Gõ romaji, ví dụ taberu"
     onCompositionStart={() => { composing.current = true; state.current = { value, caret: input.current?.selectionStart ?? value.length }; }}
     onCompositionEnd={event => {
