@@ -8,7 +8,7 @@ import { api, ApiError, type AppUser } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { MonkeyMascot } from "./MonkeyMascot";
 
-type AuthMode = "login" | "signup" | "verify" | "forgot";
+type AuthMode = "login" | "signup" | "forgot";
 
 /* ─── Google colour SVG ─── */
 function GoogleIcon() {
@@ -26,7 +26,6 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -58,11 +57,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
       }
       if (mode === "signup") {
         const result = await api.post<{ message: string }>("/auth/register", { email, password });
-        setMessage(result.message); setMode("verify"); return;
-      }
-      if (mode === "verify") {
-        const result = await api.post<{ message: string }>("/auth/verify-email", { email, code });
-        setMessage(`${result.message} Bạn có thể đăng nhập ngay bây giờ.`); setMode("login"); return;
+        setMessage(result.message); setPassword(""); setMode("login"); return;
       }
       const result = await api.post<{ message: string }>("/auth/forgot-password", { email });
       setMessage(result.message);
@@ -71,19 +66,16 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
 
   const title =
     mode === "login" ? "Bú Kanji" :
-    mode === "signup" ? "Tạo tài khoản" :
-    mode === "verify" ? "Xác thực email" : "Quên mật khẩu";
+    mode === "signup" ? "Tạo tài khoản" : "Quên mật khẩu";
 
   const subtitle =
     mode === "login" ? "Đăng nhập để theo dõi tiến trình học ✨" :
     mode === "signup" ? "Tiếp tục hành trình học tiếng Nhật của bạn." :
-    mode === "verify" ? `Nhập mã 6 số đã gửi tới ${email}.` :
     "Nhập email để nhận liên kết đặt lại mật khẩu.";
 
   const submitLabel =
     mode === "login" ? "Đăng nhập" :
-    mode === "signup" ? "Gửi mã xác thực" :
-    mode === "verify" ? "Xác thực email" : "Gửi liên kết đặt lại";
+    mode === "signup" ? "Tạo tài khoản" : "Gửi liên kết đặt lại";
 
   const showMonkey = mode === "login" || mode === "signup";
 
@@ -163,7 +155,6 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           {authConfig.isPending && <p role="status">Đang kiểm tra dịch vụ đăng nhập…</p>}
           {authConfig.data && !authConfig.data.emailRegistration && <p className="lm-alert" role="status">Đăng ký tài khoản mới tạm thời chưa sẵn sàng.</p>}
           <form onSubmit={submit} className="lm-form">
-            {mode !== "verify" && (
               <label className="lm-field">
                 <Mail size={16} className="lm-field-icon" />
                 <input
@@ -176,20 +167,6 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
                   className="lm-input"
                 />
               </label>
-            )}
-            {mode === "verify" && (
-              <label className="lm-field">
-                <Mail size={16} className="lm-field-icon" />
-                <input
-                  inputMode="numeric"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  placeholder="Mã gồm 6 chữ số"
-                  required
-                  className="lm-input"
-                />
-              </label>
-            )}
             {(mode === "login" || mode === "signup") && (
               <label className="lm-field">
                 <Lock size={16} className="lm-field-icon" />
@@ -254,13 +231,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
             {mode === "login" && (
               <button className="lm-link" disabled={unavailable || !authConfig.data?.passwordReset} onClick={() => setMode("forgot")}>Quên mật khẩu?</button>
             )}
-            {mode === "verify" && (
-              <button className="lm-link" disabled={loading} onClick={() => void run(async () => {
-                const result = await api.post<{ message: string }>("/auth/resend-verification", { email });
-                setMessage(result.message);
-              })}>Gửi lại mã</button>
-            )}
-            {(mode === "forgot" || mode === "verify") && (
+            {mode === "forgot" && (
               <button className="lm-link" onClick={() => setMode("login")}>Quay lại đăng nhập</button>
             )}
             {(mode === "login" || mode === "signup") && (

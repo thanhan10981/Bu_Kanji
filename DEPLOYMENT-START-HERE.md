@@ -8,7 +8,7 @@ Phạm vi đợt này: Kanji + Từ vựng cá nhân + đăng nhập. Không đ�
 | --- | --- | --- |
 | Kanji danh sách/tìm/lọc/chi tiết | Đã có, giữ dữ liệu hiện tại | Frontend Vercel |
 | Thư mục/bộ/thẻ, Flashcard/Tự luận | Đã triển khai | Backend + PostgreSQL + tài khoản đăng nhập |
-| Đăng ký, OTP email, đăng nhập mật khẩu | Đã có API/UI | PostgreSQL, JWT, Resend và domain gửi đã xác minh |
+| Đăng ký không OTP, đăng nhập mật khẩu | Đã có API/UI | PostgreSQL và JWT; không cần Resend |
 | Gửi lại OTP, quên/đặt lại mật khẩu | Đã có API/UI | Dịch vụ email hoạt động |
 | Refresh/logout/cookie, owner checks | Đã có | /api proxy đúng domain; phải nghiệm thu full stack |
 | Google login | Đã có, tùy chọn | OAuth client/callback; ẩn khi chưa cấu hình |
@@ -29,7 +29,7 @@ Nếu browser không tải được Google Fonts, font dự phòng của CSS v�
 
 Repo đã có render.yaml tạo hai tài nguyên cùng region Singapore:
 
-- bu-kanji-api: Node 22, root backend, build npm ci && npm run build.
+- bu-kanji-api: Node 22, root backend, build npm ci --include=dev && npm run build.
 - bu-kanji-db: PostgreSQL 16, database/user riêng; DATABASE_URL tự nối bằng fromDatabase.
 - JWT_ACCESS_SECRET/JWT_REFRESH_SECRET được Render sinh riêng, không cần tự dán secret mẫu.
 - FRONTEND_URL/CORS_ORIGIN đặt sẵn https://bu-kanji.vercel.app; sửa nếu domain thực khác.
@@ -88,12 +88,17 @@ Redeploy sau khi đặt biến. Với bản deploy từng lỗi font, chọn red
 để loại artifact lỗi cũ. /api của frontend phải trả cùng health như API Render.
 Hai file .env.local/.env.production trên máy không thay cho các biến trong Vercel dashboard.
 
-## 4. Bật đăng ký email bằng Resend
+## 4. Đăng ký không OTP; Resend tùy chọn cho khôi phục mật khẩu
+
+Đăng ký email/mật khẩu hoạt động ngay, không yêu cầu Resend hay biến môi trường bổ sung.
+Tạo tài khoản xong, người dùng chuyển về đăng nhập. Email được giữ ở trạng thái chưa xác thực.
+Không tự ghép Google với tài khoản mật khẩu chưa xác thực chỉ vì trùng email.
+Phần Resend bên dưới chỉ cần khi muốn bật quên mật khẩu hoặc API xác thực email cũ.
 
 Bạn có thể chọn **Google login trước** (mục 5) nếu chưa có domain gửi email; Google login
 tự tạo tài khoản đã xác thực trong database và không cần Resend. Nếu muốn đăng ký bằng
-email/mật khẩu, thực hiện phần Resend dưới đây. Cần bật ít nhất một cách tạo tài khoản
-trước khi mời người dùng mới sử dụng Từ vựng.
+email/mật khẩu thì không cần bật thêm dịch vụ. Để khôi phục mật khẩu qua email, thực hiện
+phần Resend dưới đây.
 
 Tạo tài khoản Resend, thêm domain gửi thuộc quyền quản lý của bạn, thêm bản ghi DNS theo
 Resend và chờ Verified. Tạo API key rồi thêm **trên Render service → Environment**:
@@ -104,15 +109,15 @@ RESEND_FROM_EMAIL=Bu Kanji <auth@DOMAIN_DA_XAC_MINH>
 ```
 
 Save and deploy/restart backend. `/api/auth/config` chỉ trả các cờ boolean, không lộ secret;
-emailRegistration/passwordReset phải true khi cấu hình đủ. Sau đó thử đăng ký tài khoản thật,
-nhận OTP, xác minh, đăng nhập, quên mật khẩu và logout.
+emailRegistration luôn true; passwordReset chỉ true khi cấu hình email đủ. Sau đó thử đăng ký,
+đăng nhập, quên mật khẩu và logout.
 
 Không dùng auth@example.com hoặc onboarding@resend.dev để mở đăng ký công khai.
 Địa chỉ resend.dev chỉ dùng thử gửi tới chính tài khoản Resend; muốn gửi người khác cần domain
 đã xác minh. Nguồn: [Resend sender domain](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain).
 
-Nếu chưa có domain/Resend, backend vẫn có thể khởi động nhưng đăng ký/khôi phục email bị
-vô hiệu hóa rõ ràng. Không tự bỏ xác minh email hoặc tạo tài khoản production đã xác minh sẵn.
+Nếu chưa có domain/Resend, đăng ký và đăng nhập vẫn hoạt động; khôi phục mật khẩu qua email
+bị vô hiệu hóa. Tài khoản đăng ký bằng mật khẩu không bị đánh dấu đã xác thực email.
 
 ## 5. Google login — có thể làm sau
 
@@ -132,7 +137,7 @@ FRONTEND_URL, CORS_ORIGIN và callback. Thiếu cấu hình thì nút Google kh�
 
 1. Health API Render và health qua frontend đều trả database connected.
 2. /api/auth/config có đúng cờ theo các dịch vụ đã bật.
-3. Đăng ký A → nhận OTP → xác minh → login → refresh trang vẫn đăng nhập.
+3. Đăng ký A không OTP → login → refresh trang vẫn đăng nhập.
 4. A tạo N3, ba bộ, thẻ ăn/たべる/食べる; reload còn dữ liệu.
 5. Tự luận gõ taberu bằng bàn phím English, thấy たべる trước Enter, Enter chấm đúng.
 6. Thử IME Nhật, mobile, Flashcard, kết quả/retry và /kanji cũ.

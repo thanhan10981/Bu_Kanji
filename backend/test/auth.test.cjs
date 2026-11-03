@@ -13,6 +13,7 @@ function repository() {
     create: data => ({ id: randomUUID(), ...data }),
     save: async row => { if (!rows.some(x => x.id === row.id)) rows.push(row); return row; },
     findOneBy: async conditions => rows.find(row => Object.entries(conditions).every(([key,value]) => row[key] === value)),
+    findOne: async ({where}) => rows.find(row => Object.entries(where).every(([key,value]) => row[key] === value)),
     update: async (conditions, changes) => { for (const row of rows) if (Object.entries(conditions).every(([key,value]) => row[key] === value)) Object.assign(row, changes); },
     createQueryBuilder() {
       let params = {};
@@ -32,7 +33,7 @@ function repository() {
   };
 }
 
-test('auth lifecycle: OTP, password login, refresh rotation, logout, reset and one-time token', async () => {
+test('auth lifecycle: registration without email, password login, refresh rotation, logout, reset and one-time token', async () => {
   const users=repository(), identities=repository(), sessions=repository(), codes=repository(), resets=repository();
   const env={NODE_ENV:'production',RESEND_API_KEY:'re_unit_test_only',RESEND_FROM_EMAIL:'Auth <auth@verified.test>',
     JWT_ACCESS_SECRET:'a'.repeat(48),JWT_REFRESH_SECRET:'b'.repeat(48),FRONTEND_URL:'https://app.verified.test'};
@@ -41,13 +42,16 @@ test('auth lifecycle: OTP, password login, refresh rotation, logout, reset and o
   const service=new AuthService(users,identities,sessions,codes,resets,new JwtService(),
     {get:key=>env[key],getOrThrow:key=>env[key]},mail);
   const email='account@example.test';
-  await service.register(email,'OriginalTest!123');
-  assert.match(deliveredCode,/^\d{6}$/);
-  await assert.rejects(()=>service.login(email,'OriginalTest!123'),{status:401});
-  await assert.rejects(()=>service.verifyEmail(email,'invalid'),{status:401});
-  await service.verifyEmail(email,deliveredCode);
+  delete env.RESEND_API_KEY; delete env.RESEND_FROM_EMAIL;
+  await service.register(' ACCOUNT@example.test ','OriginalTest!123');
+  assert.equal(deliveredCode,'');
+  assert.equal(codes.rows.length,0);
+  await assert.rejects(()=>service.register(email,'Replacement!123'),{status:409});
+  await assert.rejects(()=>service.login(email,'WrongPassword!123'),{status:401});
+  await assert.rejects(()=>service.forgotPassword(email),{status:503});
+  await assert.rejects(()=>service.findOrCreateGoogleUser({id:'google-user',email}),{status:409});
   const first=await service.login(email,'OriginalTest!123');
-  assert.equal(first.user.emailVerified,true);
+  assert.equal(first.user.emailVerified,false);
   assert.equal(first.user.passwordHash,undefined);
   sessions.rows.forEach(row=>{row.user=users.rows.find(user=>user.id===row.userId);});
   const second=await service.refresh(first.refreshToken);
@@ -55,6 +59,7 @@ test('auth lifecycle: OTP, password login, refresh rotation, logout, reset and o
   await assert.rejects(()=>service.refresh(first.refreshToken),{status:401});
   await service.logout(second.refreshToken);
   await assert.rejects(()=>service.refresh(second.refreshToken),{status:401});
+  env.RESEND_API_KEY='re_unit_test_only'; env.RESEND_FROM_EMAIL='Auth <auth@verified.test>';
   await service.forgotPassword(email);
   const link=new URL(deliveredReset);
   assert.equal(link.origin,env.FRONTEND_URL);

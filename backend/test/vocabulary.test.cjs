@@ -9,26 +9,17 @@ const { safeReturnPath } = require('../dist/auth/return-path');
 const { JwtCookieGuard } = require('../dist/auth/auth.guard');
 const { JwtService } = require('@nestjs/jwt');
 const { authCapabilities } = require('../dist/auth/capabilities');
-const { AuthService } = require('../dist/auth/auth.service');
 
 test('auth capabilities expose booleans only and disable unavailable providers', () => {
-  assert.deepEqual(authCapabilities(() => undefined), {emailRegistration:false,passwordReset:false,googleLogin:false});
+  assert.deepEqual(authCapabilities(() => undefined), {emailRegistration:true,passwordReset:false,googleLogin:false});
   const env={NODE_ENV:'production',RESEND_API_KEY:'re_test_key',RESEND_FROM_EMAIL:'Bu Kanji <onboarding@resend.dev>'};
-  assert.equal(authCapabilities(k=>env[k]).emailRegistration,false);
+  assert.equal(authCapabilities(k=>env[k]).passwordReset,false);
   env.RESEND_FROM_EMAIL='Bu Kanji <auth@verified.test>';
   assert.equal(authCapabilities(k=>env[k]).emailRegistration,true);
   env.GOOGLE_CLIENT_ID='configured'; env.GOOGLE_CLIENT_SECRET='configured';
   assert.equal(authCapabilities(k=>env[k]).googleLogin,false);
   env.GOOGLE_CALLBACK_URL='https://app.verified.test/api/auth/google/callback';
   assert.equal(authCapabilities(k=>env[k]).googleLogin,true);
-});
-
-test('registration fails before creating a user when email provider is missing', async () => {
-  let writes=0;
-  const users={findOneBy:async()=>null,save:async()=>{writes++;}};
-  const service=new AuthService(users,{}, {}, {}, {}, {}, {get:()=>undefined}, {});
-  await assert.rejects(()=>service.register('a@example.test','TestOnly!123'),{status:503});
-  assert.equal(writes,0);
 });
 
 test('cookie guard rejects missing/tampered tokens and supplies authenticated identity', async () => {

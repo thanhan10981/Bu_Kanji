@@ -51,28 +51,24 @@ export class AuthService {
   }
 
   async register(email: string, password: string) {
-    this.requireEmailService();
     const normalizedEmail = this.normalizeEmail(email);
     const existing = await this.users.findOneBy({ email: normalizedEmail });
-    if (existing?.emailVerified) throw new ConflictException('Email này đã được đăng ký.');
+    if (existing) throw new ConflictException('Email này đã được đăng ký.');
 
-    const user = existing ?? (await this.users.save(this.users.create({
+    const user = await this.users.save(this.users.create({
       email: normalizedEmail,
       passwordHash: await argon2.hash(password),
       displayName: normalizedEmail.split('@')[0],
       avatarUrl: null,
       emailVerified: false,
-    })));
+    }));
 
-    if (!existing) {
-      await this.identities.save(this.identities.create({
-        userId: user.id,
-        provider: 'password',
-        providerAccountId: normalizedEmail,
-      }));
-    }
-    await this.createAndSendVerificationCode(user);
-    return { message: 'Đã gửi mã xác thực đến email của bạn.' };
+    await this.identities.save(this.identities.create({
+      userId: user.id,
+      provider: 'password',
+      providerAccountId: normalizedEmail,
+    }));
+    return { message: 'Tạo tài khoản thành công. Bạn có thể đăng nhập ngay.' };
   }
 
   async resendVerification(email: string) {
@@ -114,7 +110,6 @@ export class AuthService {
     if (!user?.passwordHash || !(await argon2.verify(user.passwordHash, password))) {
       throw new UnauthorizedException('Email hoặc mật khẩu không đúng.');
     }
-    if (!user.emailVerified) throw new UnauthorizedException('Vui lòng xác thực email trước khi đăng nhập.');
     return this.createSession(user);
   }
 
@@ -207,6 +202,8 @@ export class AuthService {
         passwordHash: null,
       }));
     } else {
+      // An unverified password account must not be linked solely by matching email.
+      if (!user.emailVerified) throw new ConflictException('Email này đã có tài khoản mật khẩu. Vui lòng đăng nhập bằng mật khẩu.');
       user.emailVerified = true;
       if (profile.name) user.displayName = profile.name;
       if (profile.picture) user.avatarUrl = profile.picture;
@@ -254,7 +251,7 @@ export class AuthService {
   }
 
   private requireEmailService() {
-    if (!authCapabilities(key => this.config.get<string>(key)).emailRegistration)
-      throw new ServiceUnavailableException('Đăng ký và khôi phục tài khoản tạm thời chưa sẵn sàng. Vui lòng thử lại sau.');
+    if (!authCapabilities(key => this.config.get<string>(key)).passwordReset)
+      throw new ServiceUnavailableException('Dịch vụ gửi email tạm thời chưa sẵn sàng. Vui lòng thử lại sau.');
   }
 }

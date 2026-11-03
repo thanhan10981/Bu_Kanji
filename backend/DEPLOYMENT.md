@@ -40,7 +40,7 @@ Có thể dùng blueprint `render.yaml` ở root repo hoặc tạo Node Web Serv
 | Setting | Value |
 | --- | --- |
 | Root Directory | `backend` |
-| Install + Build Command | `npm ci && npm run build` |
+| Install + Build Command | `npm ci --include=dev && npm run build` |
 | Start Command | `npm run start:render` |
 | Health Check Path | `/api/health` |
 | Node | 22 LTS |
