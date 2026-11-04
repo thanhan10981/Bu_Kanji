@@ -83,6 +83,7 @@ export function StudySession({ set, mode }: { set: SetDetail; mode: 'flashcard' 
           {feedback === 'correct' && <><strong className="vocab-correct">Chính xác!</strong><p lang="ja">{card.reading}</p></>}
           {feedback === 'corrected' && <><strong className="vocab-correct">Đã sửa đúng.</strong><p>Từ này chưa tính đã thuộc, sẽ xuất hiện lại cuối lượt.</p></>}
           {!feedback && <p>Gõ romaji để chuyển ngay sang hiragana. Cũng chấp nhận cách viết tiếng Nhật của từ.</p>}
+          {!feedback && card.readingNote && <p>{card.readingNote}</p>}
         </div>
         <button className="written-submit" onClick={check}>{ready ? 'Enter hoặc bấm để tiếp tục →' : feedback === 'wrong' ? 'Kiểm tra lại' : 'Nhấn Enter để kiểm tra'}</button>
       </>}

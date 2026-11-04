@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { editKana, finalizeKana, type KanaState } from './kana.ts';
 import { advanceWritten, gradeWritten, isCorrect, matchesCard, startWritten, summarize } from './study.ts';
-import { libraryCards, librarySets, getLibrarySet } from './library.ts';
+import { libraryCards, librarySets, getLibrarySet, quizletCards, quizletSets, quizletReview } from './library.ts';
 
 function type(text: string, initial: KanaState = { value: '', caret: 0 }) {
   let state = initial;
@@ -103,4 +103,40 @@ test('all 882 image entries are available across 15 lessons with kana readings',
   }
   for (const word of ['男性', '注文', 'アイデア/アイディア', 'もしかして', 'もしかしたら', 'もしかすると', 'タイトル', 'テーマ', 'つまり']) assert.ok(libraryCards.some(card => card.japanese === word), word);
   assert.equal(libraryCards.find(card => card.japanese === 'クラスメート')?.reading, 'くらすめーと');
+});
+
+test('all 707 PDF cards retain order, examples and unique IDs across 12 lessons', () => {
+  assert.equal(quizletCards.length, 707);
+  assert.equal(quizletSets.length, 12);
+  assert.equal(quizletSets.at(-1)?.cardCount, 47);
+  assert.equal(quizletReview.cardCount, 707);
+  assert.equal(quizletCards[0].japanese, '計算');
+  assert.equal(quizletCards.at(-1)?.japanese, '～より～ほうが');
+  assert.ok(quizletCards.at(-1)?.meaning.endsWith('Đặt nhanh hơn tốt hơn đặt quá chậm.'));
+  assert.equal(new Set([...libraryCards, ...quizletCards].map(card => card.id)).size, 1589);
+  assert.equal(quizletSets.flatMap(set => set.cards).length, 707);
+  assert.equal(new Set(quizletCards.map(card => card.sourcePage)).size, 36);
+  for (const card of quizletCards) {
+    assert.ok(card.japanese && card.reading && card.meaning && card.sourcePage);
+    assert.ok(card.acceptedReadings?.length, card.japanese);
+    for (const reading of card.acceptedReadings ?? []) {
+      assert.match(reading, /^[ぁ-ゖー]+$/u);
+      assert.ok(matchesCard(reading, card), card.japanese);
+    }
+    assert.ok(getLibrarySet(card.setId)?.cards.some(item => item.id === card.id));
+  }
+});
+
+test('PDF annotated readings remain typeable without placeholder symbols', () => {
+  const find = (japanese: string) => quizletCards.find(card => card.japanese === japanese)!;
+  assert.ok(matchesCard('な', find('名')));
+  assert.ok(matchesCard('めい', find('名')));
+  assert.ok(matchesCard('いい', find('良い')));
+  assert.ok(matchesCard('よい', find('良い')));
+  assert.ok(matchesCard('にてほしい', find('～にVてほしい')));
+  assert.ok(matchesCard('てから', find('Vてから + B')));
+  assert.ok(matchesCard('といい', find('Vる + といい')));
+  assert.ok(matchesCard('ているあいだに', find('～ている間に')));
+  assert.ok(matchesCard('～ているあいだに', find('～ている間に')));
+  assert.equal(matchesCard('ちがう', find('計算')), false);
 });

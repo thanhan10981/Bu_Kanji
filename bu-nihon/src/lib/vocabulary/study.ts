@@ -38,8 +38,8 @@ export function advanceWritten(state: WrittenState): WrittenState {
   return { ...state, queue: state.feedback === 'corrected' ? [...remaining, current] : remaining,
     needsCorrection: false, feedback: null };
 }
-export function matchesCard(answer: string, card: { reading: string; japanese: string }) {
-  const readings = card.reading.split('/');
+export function matchesCard(answer: string, card: { reading: string; japanese: string; acceptedReadings?: string[] }) {
+  const readings = card.acceptedReadings ? [...card.acceptedReadings, card.reading] : card.reading.split('/');
   const spellings = card.japanese.split(/[\/・]/u).filter(Boolean);
   return readings.some(reading => isCorrect(answer, reading))
     || spellings.some(spelling => normalizeAnswer(answer) === normalizeAnswer(spelling));
