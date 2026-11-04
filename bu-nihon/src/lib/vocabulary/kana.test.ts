@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { editKana, finalizeKana, type KanaState } from './kana.ts';
-import { advanceWritten, gradeWritten, isCorrect, matchesCard, startWritten, summarize } from './study.ts';
+import { advanceWritten, gradeWritten, isCorrect, matchesCard, startShuffledWritten, startWritten, summarize } from './study.ts';
 import { libraryCards, librarySets, getLibrarySet, quizletCards, quizletSets, quizletReview } from './library.ts';
 
 function type(text: string, initial: KanaState = { value: '', caret: 0 }) {
@@ -65,6 +65,24 @@ test('wrong answer requires correction, then requeues without awarding mastery',
   assert.deepEqual(session.queue, []);
   assert.deepEqual(session.completed, [1, 0]);
   assert.deepEqual(session.results, [false, true], 'first attempt scores remain accurate');
+});
+
+test('shuffled sessions keep every card once and use a fresh random order per start', () => {
+  const first = startShuffledWritten(60, () => 0);
+  const second = startShuffledWritten(60, () => 0.5);
+  assert.deepEqual([...first.queue].sort((a, b) => a - b), Array.from({ length: 60 }, (_, i) => i));
+  assert.notDeepEqual(first.queue, second.queue);
+  assert.equal(first.completed.length, 0);
+  const current = first.queue[0];
+  const corrected = advanceWritten(gradeWritten(gradeWritten(first, false), true));
+  assert.deepEqual(corrected.queue, [...first.queue.slice(1), current]);
+  assert.deepEqual(corrected.completed, []);
+  const graded = gradeWritten(second, true);
+  assert.equal(graded.results[second.queue[0]], true, 'grade remains attached to the actual card');
+  assert.deepEqual(graded.completed, [second.queue[0]]);
+  assert.deepEqual(startWritten(3).queue, [0, 1, 2], 'original source ordering is unchanged');
+  assert.deepEqual(startShuffledWritten(0).queue, []);
+  assert.deepEqual(startShuffledWritten(1).queue, [0]);
 });
 
 test('one-word correction still needs a fresh recall; repeated failure requeues again', () => {

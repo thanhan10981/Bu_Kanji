@@ -1,0 +1,50 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { getWordProgress, recordStudyAttempt, summarizeStudyProgress, type StudyProgress } from './progress.ts';
+import type { Card } from './schemas.ts';
+
+const card = (id: string): Card => ({ id, setId: 'lesson', japanese: '食べる', reading: 'たべる', meaning: 'ăn', createdAt: '', updatedAt: '' });
+test('mistakes accumulate, corrections do not award mastery, fresh recall does', () => {
+  const a = card('a'), b = card('b');
+  let progress: StudyProgress = {};
+  progress = recordStudyAttempt(progress, 'A', a, 'wrong', 1);
+  progress = recordStudyAttempt(progress, 'A', a, 'wrong', 2);
+  progress = recordStudyAttempt(progress, 'A', a, 'corrected', 3);
+  let report = summarizeStudyProgress(progress, 'A', [a, b]);
+  assert.equal(report.totalWrong, 2);
+  assert.equal(report.mastered, 0);
+  assert.equal(report.percentage, 0);
+  assert.equal(report.learning, 1);
+  assert.equal(report.unseen, 1);
+  progress = recordStudyAttempt(progress, 'A', a, 'correct', 4);
+  report = summarizeStudyProgress(progress, 'A', [a, b]);
+  assert.equal(report.percentage, 50);
+  assert.equal(report.totalWrong, 2);
+  progress = recordStudyAttempt(progress, 'A', a, 'wrong', 5);
+  assert.equal(summarizeStudyProgress(progress, 'A', [a, b]).mastered, 0);
+  assert.equal(getWordProgress(progress, 'A', a)?.wrongCount, 3);
+});
+test('report isolates users, guests, lessons and changed or removed cards', () => {
+  const a = card('a'), b = card('b');
+  let progress = recordStudyAttempt({}, 'user:A', a, 'correct');
+  progress = recordStudyAttempt(progress, 'user:B', a, 'wrong');
+  progress = recordStudyAttempt(progress, 'guest', a, 'wrong');
+  assert.equal(summarizeStudyProgress(progress, 'user:A', [a]).percentage, 100);
+  assert.equal(summarizeStudyProgress(progress, 'user:B', [a]).percentage, 0);
+  assert.equal(summarizeStudyProgress(progress, 'guest', [a]).totalWrong, 1);
+  assert.equal(summarizeStudyProgress(progress, 'user:A', [b]).studied, 0);
+  assert.equal(summarizeStudyProgress(progress, 'user:A', [{ ...a, reading: 'のむ' }]).studied, 0);
+  assert.equal(summarizeStudyProgress(progress, 'user:A', []).percentage, 0);
+});
+test('JSON persistence retains history and total review updates the same lesson cards', () => {
+  const cards = [card('a'), card('b'), card('c')];
+  let progress = recordStudyAttempt({}, 'A', cards[0], 'correct');
+  for (let i = 0; i < 3; i++) progress = recordStudyAttempt(progress, 'A', cards[1], 'wrong');
+  progress = recordStudyAttempt(progress, 'A', cards[2], 'wrong');
+  const restored = JSON.parse(JSON.stringify(progress)) as StudyProgress;
+  const report = summarizeStudyProgress(restored, 'A', cards);
+  assert.equal(report.percentage, 33.3);
+  assert.deepEqual(report.difficult.map(item => item.card.id), ['b', 'c']);
+  assert.equal(summarizeStudyProgress(restored, 'A', [cards[1]]).totalWrong, 3);
+  assert.equal(getWordProgress(restored, 'A', { ...cards[0], setId: 'total-review' })?.lastOutcome, 'correct');
+});

@@ -22,6 +22,15 @@ export function startWritten(count: number): WrittenState {
   return { queue: Array.from({ length: count }, (_, i) => i), completed: [], missed: [],
     results: Array.from({ length: count }, () => null), needsCorrection: false, feedback: null };
 }
+export function startShuffledWritten(count: number, random: () => number = Math.random): WrittenState {
+  const state = startWritten(count);
+  // Fisher–Yates: each card appears once, with no changes to the source set.
+  for (let i = state.queue.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [state.queue[i], state.queue[j]] = [state.queue[j], state.queue[i]];
+  }
+  return state;
+}
 export function gradeWritten(state: WrittenState, correct: boolean): WrittenState {
   const current = state.queue[0];
   if (current === undefined || state.feedback === 'correct' || state.feedback === 'corrected') return state;

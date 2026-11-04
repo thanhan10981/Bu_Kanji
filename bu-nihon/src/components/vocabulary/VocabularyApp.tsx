@@ -7,6 +7,7 @@ import { useAppStore } from '@/lib/store';
 import { cardSchema, nameSchema, type CardInput } from '@/lib/vocabulary/schemas';
 import { useVocabularyData, vocabularyApi as api } from '@/lib/vocabulary/api';
 import { StudySession } from './StudySession';
+import { StudyReport } from './StudyReport';
 import { getLibrarySet } from '@/lib/vocabulary/library';
 import { LibraryEntry, VocabularyLibrary } from './VocabularyLibrary';
 import './vocabulary.css';
@@ -136,6 +137,7 @@ function VocabularyContent({ userId, folderId, setId, mode }: Props & { userId: 
         <div className="vocab-actions">{setData.cardCount ? <><Link className="btn-secondary" href={`/vocabulary/sets/${setData.id}/flashcard`}>Flashcard</Link><Link className="btn-primary" href={`/vocabulary/sets/${setData.id}/written`}>Tự luận</Link></>
           : <><button className="btn-secondary" disabled>Flashcard</button><button className="btn-primary" disabled>Tự luận</button></>}</div>
       </div>
+      <StudyReport key={setData.id} set={setData} />
       {!setData.cards.length ? <div className="card vocab-empty"><Layers size={40} /><h2>Bộ chưa có thẻ</h2><p>Chọn “Thêm thẻ” để bắt đầu. Cần ít nhất một thẻ để luyện tập.</p></div>
         : <div className="vocab-card-list">{setData.cards.map((card, i) => <article className="card vocab-word" key={card.id}>
           <span className="vocab-number">{i + 1}</span><div className="vocab-word-main"><h2>{card.meaning}</h2><p lang="ja">{card.reading}</p>{card.japanese && <p className="vocab-hint" lang="ja">{card.japanese}</p>}</div>

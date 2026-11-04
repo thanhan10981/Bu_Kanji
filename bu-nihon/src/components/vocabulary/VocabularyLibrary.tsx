@@ -5,6 +5,7 @@ import { BookOpen, Layers, List, PencilLine, Search } from 'lucide-react';
 import { getLibraryCollection, libraryCollections } from '@/lib/vocabulary/library';
 import type { SetDetail } from '@/lib/vocabulary/schemas';
 import { StudySession } from './StudySession';
+import { StudyReport } from './StudyReport';
 import './vocabulary.css';
 
 export function LibraryEntry() {
@@ -37,6 +38,7 @@ export function VocabularyLibrary({ set, mode, collectionId }: { set?: SetDetail
       <Link href={`/vocabulary/sets/${set.id}/flashcard`}><Layers size={34} /><strong>FLASHCARD</strong></Link>
       <Link href={`/vocabulary/sets/${set.id}/written`}><PencilLine size={34} /><strong>TỰ LUẬN</strong></Link>
     </nav>
+    <StudyReport key={set.id} set={set} />
     {view === 'list' && <section className="library-list"><label className="library-search"><Search size={20} /><input className="input-base" aria-label="Tìm từ trong bài" placeholder="Tìm chữ Nhật, cách đọc, nghĩa…" value={search} onChange={event => setSearch(event.target.value)} /></label>
       <div className="library-table-wrap"><table><thead><tr><th>#</th><th>Chữ Nhật</th><th>Hán Việt</th><th>Cách đọc</th><th>Nghĩa</th></tr></thead><tbody>{filtered.map(card => <tr key={card.id}>
         <td>{set.cards.indexOf(card) + 1}</td><td lang="ja">{card.japanese}</td><td>{card.hanViet || '—'}</td><td><span lang="ja">{card.reading}</span>{card.readingNote && <p className="vocab-hint">{card.readingNote}</p>}</td><td>{card.meaning}</td></tr>)}</tbody></table></div>
