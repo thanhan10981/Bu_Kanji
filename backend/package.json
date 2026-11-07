@@ -15,7 +15,7 @@
     "test:import": "npm run build && node --test --test-isolation=none test/import.test.cjs",
     "test:http": "npm run build && node --test --test-isolation=none test/body-parsers.test.cjs",
     "migrate": "node scripts/migrate.cjs",
-    "test:vocabulary": "npm run build && node --test --test-isolation=none test/vocabulary.test.cjs",
+    "test:vocabulary": "npm run build && node --test --test-isolation=none test/vocabulary.test.cjs test/vocabulary-import.test.cjs",
     "test:integration": "npm run build && node --test --test-isolation=none test/vocabulary.integration.cjs"
   },
   "dependencies": {

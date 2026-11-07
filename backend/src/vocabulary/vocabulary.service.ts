@@ -101,7 +101,8 @@ export class VocabularyService {
       const placeholders = uniqueCards.map((card, index) => {
         const offset = index * 4;
         values.push(id, card.meaning, card.reading, card.japanese ?? '');
-        return `($${offset + 1},$${offset + 2},$${offset + 3},$${offset + 4})`;
+        // VALUES otherwise infers text, which cannot be compared with UUID set IDs.
+        return `($${offset + 1}::uuid,$${offset + 2},$${offset + 3},$${offset + 4})`;
       });
       const rows = await m.query(`INSERT INTO vocab_cards("setId",meaning,reading,japanese)
         SELECT i."setId",i.meaning,i.reading,i.japanese
