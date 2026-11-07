@@ -42,7 +42,7 @@ export class VocabularyService {
       const alias = kind === 'folder' ? 'f' : kind === 'set' ? 's' : 'c';
       const query = `SELECT f.id FROM vocab_folders f ${joins} WHERE f."ownerId"=$1 AND ${alias}.id=$2`;
       const folder = this.require<{ id: string }>(await m.query(query, [owner, id]));
-      await m.query('SELECT pg_advisory_xact_lock(hashtext($1))', [folder.id]);
+      await m.query('SELECT pg_advisory_xact_lock(hashtext($1::text))', [folder.id]);
       this.require(await m.query(query, [owner, id]));
       return action(m, folder.id);
     });
@@ -93,14 +93,23 @@ export class VocabularyService {
   }
   importCards(owner: string, id: string, cards: CardDto[]) {
     return this.locked(owner, id, 'set', async m => {
-      let imported = 0;
-      for (const card of cards) {
-        const rows = await m.query(`INSERT INTO vocab_cards("setId",meaning,reading,japanese)
-          SELECT $1,$2,$3,$4 WHERE NOT EXISTS (
-            SELECT 1 FROM vocab_cards WHERE "setId"=$1 AND meaning=$2 AND reading=$3 AND japanese=$4
-          ) RETURNING id`, [id, card.meaning, card.reading, card.japanese ?? '']);
-        imported += rows.length;
-      }
+      const values: unknown[] = [];
+      const placeholders = cards.map((card, index) => {
+        const offset = index * 4;
+        values.push(id, card.meaning, card.reading, card.japanese ?? '');
+        return `($${offset + 1},$${offset + 2},$${offset + 3},$${offset + 4})`;
+      });
+      const rows = await m.query(`INSERT INTO vocab_cards("setId",meaning,reading,japanese)
+        SELECT DISTINCT ON (i.meaning,i.reading,i.japanese)
+          i."setId",i.meaning,i.reading,i.japanese
+        FROM (VALUES ${placeholders.join(',')}) AS i("setId",meaning,reading,japanese)
+        WHERE NOT EXISTS (
+          SELECT 1 FROM vocab_cards c
+          WHERE c."setId"=i."setId" AND c.meaning=i.meaning
+            AND c.reading=i.reading AND c.japanese=i.japanese
+        )
+        RETURNING id`, values);
+      const imported = rows.length;
       return { imported, skipped: cards.length - imported };
     });
   }

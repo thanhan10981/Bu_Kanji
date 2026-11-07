@@ -88,9 +88,12 @@ test('batch import holds the folder transaction lock and skips duplicate rows', 
     if (sql.startsWith('INSERT')) {
       assert.equal(locked, true);
       assert.ok(sql.includes('WHERE NOT EXISTS'));
-      const key = JSON.stringify(params);
-      if (inserted.has(key)) return [];
-      inserted.add(key); return [{ id: 'created' }];
+      const created = new Set();
+      for (let index = 0; index < params.length; index += 4) {
+        const key = JSON.stringify(params.slice(index, index + 4));
+        if (!inserted.has(key)) { inserted.add(key); created.add(key); }
+      }
+      return [...created].map(() => ({ id: 'created' }));
     }
     return [{ id: 'folder' }];
   }};
