@@ -93,15 +93,18 @@ export class VocabularyService {
   }
   importCards(owner: string, id: string, cards: CardDto[]) {
     return this.locked(owner, id, 'set', async m => {
+      const uniqueCards = [...new Map(cards.map(card => [
+        `${card.meaning}\u0000${card.reading}\u0000${card.japanese ?? ''}`,
+        card,
+      ])).values()];
       const values: unknown[] = [];
-      const placeholders = cards.map((card, index) => {
+      const placeholders = uniqueCards.map((card, index) => {
         const offset = index * 4;
         values.push(id, card.meaning, card.reading, card.japanese ?? '');
         return `($${offset + 1},$${offset + 2},$${offset + 3},$${offset + 4})`;
       });
       const rows = await m.query(`INSERT INTO vocab_cards("setId",meaning,reading,japanese)
-        SELECT DISTINCT ON (i.meaning,i.reading,i.japanese)
-          i."setId",i.meaning,i.reading,i.japanese
+        SELECT i."setId",i.meaning,i.reading,i.japanese
         FROM (VALUES ${placeholders.join(',')}) AS i("setId",meaning,reading,japanese)
         WHERE NOT EXISTS (
           SELECT 1 FROM vocab_cards c
