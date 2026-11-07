@@ -62,7 +62,7 @@ Không cần dùng Render Shell để chạy migration cho lần deploy mới n�
 Chờ health `/api/health` trả database connected. Lưu URL API Render thực tế để dùng bước 3.
 Không tự nhập URL mẫu YOUR-BACKEND.onrender.com như một URL thật.
 
-## 3. Vercel frontend — chỉ hai biến
+## 3. Vercel frontend
 
 Project Settings → Environment Variables, chọn môi trường muốn triển khai:
 
@@ -70,6 +70,19 @@ Project Settings → Environment Variables, chọn môi trường muốn triển
 NEXT_PUBLIC_API_URL=/api
 API_PROXY_TARGET=https://TEN-API-THAT.onrender.com
 ```
+
+Để bật chat và nhập từ vựng bằng AI, thêm hai biến **server** trên Vercel:
+
+```dotenv
+CHATMOCK_BASE_URL=https://chatmock.vothanhan.dev/v1
+CHATMOCK_GATEWAY_SECRET=<nhập khóa thật trực tiếp trong Vercel>
+```
+
+Không dùng `NEXT_PUBLIC_` cho khóa. Deploy backend Render bản mới trước để migration
+`003_ai_usage.sql` tạo bảng hạn mức (start command `npm run start:render` tự chạy migration).
+Người dùng đăng nhập website để dùng AI; Vercel xác thực và trừ hạn mức qua Render trước
+khi gọi Chatmock. Không cần chạy local và không đặt khóa Chatmock trên Render.
+Hướng dẫn chi tiết: [bu-nihon/CHATMOCK.md](bu-nihon/CHATMOCK.md).
 
 API_PROXY_TARGET lấy từ service vừa tạo, chỉ origin, không có /api hoặc dấu query.
 Không đưa DATABASE_URL/JWT/Resend/Google secret lên frontend.

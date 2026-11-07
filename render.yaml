@@ -13,6 +13,12 @@ services:
         value: "22"
       - key: NODE_ENV
         value: production
+      - key: AI_REQUESTS_PER_MINUTE
+        value: "12"
+      - key: AI_REQUESTS_PER_DAY
+        value: "100"
+      - key: AI_GLOBAL_REQUESTS_PER_DAY
+        value: "1000"
       - key: DATABASE_URL
         fromDatabase:
           name: bu-kanji-db

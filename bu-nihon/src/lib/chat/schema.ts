@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { cardSchema } from '@/lib/vocabulary/schemas';
 
 export const models = ['gpt-5.6-terra', 'gpt-5.6-luna'] as const;
+// Leave room for multipart fields below Vercel's 4.5 MB request limit.
+export const maxFileBytes = 4 * 1024 * 1024;
 export const messageSchema = z.object({
   role: z.enum(['user', 'assistant']),
   content: z.string().trim().min(1).max(24000),

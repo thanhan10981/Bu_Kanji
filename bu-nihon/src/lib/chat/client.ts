@@ -2,8 +2,15 @@ import { useMutation } from '@tanstack/react-query';
 import type { CardInput } from '@/lib/vocabulary/schemas';
 import { contextMessages, type Message, type Model } from './schema';
 
-export async function chatFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, { ...init, signal: AbortSignal.timeout(110000) });
+let refresh: Promise<Response> | null = null;
+export async function chatFetch<T>(path: string, init?: RequestInit, retried = false): Promise<T> {
+  const response = await fetch(path, { ...init, credentials: 'same-origin', signal: AbortSignal.timeout(140000) });
+  if (response.status === 401 && !retried) {
+    refresh ??= fetch('/api/auth/refresh', { method: 'POST', credentials: 'same-origin', signal: AbortSignal.timeout(25000) }).finally(() => { refresh = null; });
+    const renewed = await refresh.catch(() => null);
+    if (renewed?.ok) return chatFetch<T>(path, init, true);
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('auth-expired'));
+  }
   const data = await response.json().catch(() => null);
   if (!response.ok) throw new Error(data?.error ?? 'Không thể kết nối server. Vui lòng thử lại.');
   if (!data) throw new Error('Server trả dữ liệu không hợp lệ.');

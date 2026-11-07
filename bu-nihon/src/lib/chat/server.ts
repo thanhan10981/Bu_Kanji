@@ -1,5 +1,6 @@
 import 'server-only';
 import { z } from 'zod';
+import { authorizeAI, AuthorizationError } from './authorize';
 
 export class ChatError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -9,21 +10,20 @@ let windowStart = 0;
 let requests = 0;
 let active = 0;
 
-// Local development only. Public use requires authentication and persistent quotas.
 export async function guarded(request: Request, action: () => Promise<unknown>) {
   try {
-    if (process.env.NODE_ENV !== 'development') throw new ChatError(403, 'AI hiện chỉ mở ở bản local. Cần xác thực và hạn mức trước khi mở công khai.');
     const url = new URL(request.url);
-    if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)) throw new ChatError(403, 'Chỉ cho phép truy cập AI từ localhost.');
     const origin = request.headers.get('origin');
     if (origin && origin !== url.origin) throw new ChatError(403, 'Nguồn yêu cầu không hợp lệ.');
+    const localDevelopment = process.env.NODE_ENV === 'development' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    if (!localDevelopment) await authorizeAI(request);
     if (Date.now() - windowStart > 60000) { windowStart = Date.now(); requests = 0; }
-    if (requests >= 12 || active >= 2) throw new ChatError(429, 'Đã đạt giới hạn local: 12 yêu cầu/phút, 2 yêu cầu đồng thời. Vui lòng chờ.');
+    if ((localDevelopment && requests >= 12) || active >= 2) throw new ChatError(429, 'AI đang xử lý nhiều yêu cầu. Vui lòng chờ rồi thử lại.');
     requests++; active++;
     try { return Response.json(await action(), { headers: { 'Cache-Control': 'no-store' } }); }
     finally { active--; }
   } catch (error) {
-    const known = error instanceof ChatError;
+    const known = error instanceof ChatError || error instanceof AuthorizationError;
     return Response.json({ error: known ? error.message : error instanceof z.ZodError ? 'Dữ liệu không hợp lệ: kiểm tra model, độ dài và số tin nhắn.' : 'Không thể xử lý yêu cầu. Vui lòng thử lại.' },
       { status: known ? error.status : error instanceof z.ZodError ? 400 : 500, headers: { 'Cache-Control': 'no-store' } });
   }
@@ -46,7 +46,7 @@ export async function readBody(request: Request, limit: number) {
 
 function config() {
   const secret = process.env.CHATMOCK_GATEWAY_SECRET?.trim();
-  if (!secret || secret.startsWith('<')) throw new ChatError(503, 'Chưa cấu hình CHATMOCK_GATEWAY_SECRET. Điền khóa trong bu-nihon/.env.local rồi khởi động lại server.');
+  if (!secret || secret.startsWith('<')) throw new ChatError(503, 'Chưa cấu hình CHATMOCK_GATEWAY_SECRET trên server. Thêm khóa vào Environment Variables của Vercel rồi redeploy (local: dùng .env.local).');
   const base = process.env.CHATMOCK_BASE_URL?.replace(/\/$/, '');
   if (!base) throw new ChatError(503, 'Chưa cấu hình CHATMOCK_BASE_URL ở server.');
   let url: URL;

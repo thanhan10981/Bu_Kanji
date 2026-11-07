@@ -4,6 +4,7 @@ import { importSchema, models } from '@/lib/chat/schema';
 import { ChatError, gateway, guarded, outputText, readBody } from '@/lib/chat/server';
 
 export const runtime = 'nodejs';
+export const maxDuration = 150;
 export async function POST(request: Request) {
   return guarded(request, async () => {
     const bytes = await readBody(request, maxFileBytes + 16000);

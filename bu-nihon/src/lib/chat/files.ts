@@ -1,9 +1,10 @@
 import 'server-only';
 import { ChatError } from './server';
+import { maxFileBytes } from './schema';
+export { maxFileBytes } from './schema';
 
-export const maxFileBytes = 5 * 1024 * 1024;
 export async function extractFile(file: File): Promise<string> {
-  if (!file.size || file.size > maxFileBytes) throw new ChatError(400, 'Chọn file có nội dung, tối đa 5 MB.');
+  if (!file.size || file.size > maxFileBytes) throw new ChatError(400, 'Chọn file có nội dung, tối đa 4 MB.');
   const extension = file.name.split('.').at(-1)?.toLowerCase();
   const buffer = Buffer.from(await file.arrayBuffer());
   let text: string;

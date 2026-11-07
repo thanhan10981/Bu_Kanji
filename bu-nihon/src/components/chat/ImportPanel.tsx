@@ -8,7 +8,7 @@ import { useFileImport } from '@/lib/chat/client';
 import { useChatStore } from '@/lib/chat/store';
 import { useAppStore } from '@/lib/store';
 import { vocabularyApi } from '@/lib/vocabulary/api';
-import { importSchema } from '@/lib/chat/schema';
+import { importSchema, maxFileBytes } from '@/lib/chat/schema';
 import type { CardInput } from '@/lib/vocabulary/schemas';
 
 export function ImportPanel() {
@@ -45,7 +45,7 @@ export function ImportPanel() {
   const runImport = async () => {
     if (!file || lock.current) return;
     setError(''); setNotice('');
-    if (!file.size || file.size > 5 * 1024 * 1024) { setError('File cần có nội dung và không vượt 5 MB.'); return; }
+    if (!file.size || file.size > maxFileBytes) { setError('File cần có nội dung và không vượt 4 MB.'); return; }
     lock.current = true;
     try {
       const result = await request.mutateAsync({ file, model });
@@ -83,7 +83,7 @@ export function ImportPanel() {
     <header className="ai-panel-header"><div><h2 id="ai-import-heading"><FileText size={22} /> Từ tài liệu đến bộ thẻ</h2><p>1. Tải file → 2. Kiểm tra từ → 3. Lưu và học</p></div></header>
     <div className="ai-upload"><Upload size={30} /><label htmlFor="ai-file">Chọn tài liệu từ vựng của bạn</label><p>TXT, CSV, TSV, MD, JSON, DOCX, PDF có chữ</p>
       <input id="ai-file" type="file" accept=".txt,.csv,.tsv,.md,.json,.docx,.pdf" disabled={busy} onChange={event => { setFile(event.target.files?.[0] ?? null); setError(''); }} />
-      <small>Tối đa 5 MB · 40.000 ký tự · PDF tối đa 30 trang · 200 thẻ/lần</small>
+      <small>Tối đa 4 MB · 40.000 ký tự · PDF tối đa 30 trang · 200 thẻ/lần</small>
       <button className="btn-primary" disabled={!file || busy} onClick={() => void runImport()}>{request.isPending ? <><span className="ai-spinner" /> AI đang đọc file…</> : <><Upload size={17} /> {request.isError ? 'Thử nhập lại' : 'Trích xuất bằng AI'}</>}</button>
     </div>
     <p className="ai-footnote">Nội dung file sẽ được gửi tới gateway AI khi bạn chọn trích xuất. PDF scan cần OCR trước. Bản xem trước chỉ giữ trong trang này.</p>

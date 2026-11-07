@@ -7,6 +7,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtCookieGuard } from './auth/auth.guard';
 import { VocabularyModule } from './vocabulary/vocabulary.module';
+import { AiModule } from './ai/ai.module';
 // Shared with the migration CLI so both connections use the same TLS policy.
 const { databaseSsl }: { databaseSsl: (env: NodeJS.ProcessEnv) => { rejectUnauthorized: boolean } | undefined } = require('../scripts/database-ssl.cjs');
 
@@ -39,6 +40,7 @@ const { databaseSsl }: { databaseSsl: (env: NodeJS.ProcessEnv) => { rejectUnauth
     HealthModule,
     VocabularyModule,
     AuthModule,
+    AiModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtCookieGuard }],
 })

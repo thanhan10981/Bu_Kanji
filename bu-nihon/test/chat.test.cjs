@@ -87,17 +87,62 @@ test('gateway uses server header, Responses endpoint, stream false and never for
   }
 });
 
-test('local guard rejects cross-origin and public hosts before running a request', async () => {
+test('guard rejects cross-origin and requires authentication outside local development', async () => {
   const previous = process.env.NODE_ENV;
   process.env.NODE_ENV = 'development';
   try {
-    for (const request of [new Request('http://localhost/api/chat', { headers: { Origin: 'https://evil.test' } }), new Request('http://public.test/api/chat')]) {
-      const result = await guarded(request, async () => { throw new Error('must not execute'); });
-      assert.equal(result.status, 403);
-    }
+    assert.equal((await guarded(new Request('http://localhost/api/chat', { headers: { Origin: 'https://evil.test' } }), async () => ({}))).status, 403);
+    assert.equal((await guarded(new Request('https://public.test/api/chat'), async () => ({}))).status, 401);
     process.env.NODE_ENV = 'production';
-    assert.equal((await guarded(new Request('http://localhost/api/chat'), async () => ({}))).status, 403);
+    assert.equal((await guarded(new Request('http://localhost/api/chat'), async () => ({}))).status, 401);
   } finally { if (previous === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previous; }
+});
+
+test('production chat authenticates with Render and calls gateway without forwarding session cookies', async () => {
+  const { POST } = load('src/app/api/chat/route.ts');
+  const previousFetch = global.fetch;
+  const names = ['NODE_ENV', 'API_PROXY_TARGET', 'CHATMOCK_BASE_URL', 'CHATMOCK_GATEWAY_SECRET'];
+  const previous = Object.fromEntries(names.map(key => [key, process.env[key]]));
+  Object.assign(process.env, { NODE_ENV: 'production', API_PROXY_TARGET: 'https://backend.test', CHATMOCK_BASE_URL: 'https://gateway.test/v1', CHATMOCK_GATEWAY_SECRET: 'test-fixture-secret' });
+  const request = () => new Request('https://app.test/api/chat', { method: 'POST', headers: {
+    Origin: 'https://app.test', Cookie: 'access_token=fixture-session; refresh_token=must-not-forward; prefs=private',
+  }, body: JSON.stringify({ model: 'gpt-5.6-luna', messages: [{ role: 'user', content: 'hello' }] }) });
+  try {
+    const calls = [];
+    global.fetch = async (url, init) => {
+      calls.push(url);
+      if (url === 'https://backend.test/api/ai/authorize') {
+        assert.equal(init.headers.Cookie, 'access_token=fixture-session');
+        assert.equal(init.headers['x-chatmock-key'], undefined);
+        assert.equal(init.method, 'POST');
+        return Response.json({ allowed: true });
+      }
+      assert.equal(url, 'https://gateway.test/v1/responses');
+      assert.equal(init.headers.Cookie, undefined);
+      assert.equal(init.headers.Origin, undefined);
+      assert.equal(init.headers['x-chatmock-key'], 'test-fixture-secret');
+      return Response.json({ output_text: 'production reply' });
+    };
+    const response = await POST(request());
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { text: 'production reply' });
+    assert.deepEqual(calls, ['https://backend.test/api/ai/authorize', 'https://gateway.test/v1/responses']);
+    for (const status of [401, 429, 404, 500]) {
+      global.fetch = async url => {
+        assert.equal(url, 'https://backend.test/api/ai/authorize', 'gateway must not be called after authorization failure');
+        return Response.json({ message: 'quota reached' }, { status });
+      };
+      assert.equal((await POST(request())).status, status === 401 || status === 429 ? status : 503);
+    }
+    global.fetch = async () => Response.json({ allowed: false });
+    assert.equal((await POST(request())).status, 503);
+    process.env.API_PROXY_TARGET = 'https://backend.test/path';
+    global.fetch = async () => { throw new Error('invalid configuration must not be fetched'); };
+    assert.equal((await POST(request())).status, 503);
+  } finally {
+    global.fetch = previousFetch;
+    for (const key of names) { if (previous[key] === undefined) delete process.env[key]; else process.env[key] = previous[key]; }
+  }
 });
 
 test('chat and file routes pass a fixed Responses payload and validate AI cards before preview', async () => {

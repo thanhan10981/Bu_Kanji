@@ -3,6 +3,7 @@ import { ChatError, gateway, guarded } from '@/lib/chat/server';
 import { z } from 'zod';
 
 export const runtime = 'nodejs';
+export const maxDuration = 150;
 export async function GET(request: Request) {
   return guarded(request, async () => {
     const parsed = z.object({ data: z.array(z.object({ id: z.string() })) }).safeParse(await gateway('/models'));
