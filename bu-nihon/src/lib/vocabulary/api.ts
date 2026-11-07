@@ -15,6 +15,7 @@ export const vocabularyApi = {
   renameSet: (id: string, name: string) => api.patch(`${base}/sets/${id}`, { name }),
   deleteSet: (set: StudySet) => api.delete(`${base}/sets/${set.id}`, { expectedSetCount: 1, expectedCardCount: set.cardCount }),
   createCard: (id: string, card: CardInput) => api.post(`${base}/sets/${id}/cards`, cardBody(card)),
+  importCards: (id: string, cards: CardInput[]) => api.post<{ imported: number; skipped: number }>(`${base}/sets/${id}/import`, { cards: cards.map(cardBody) }),
   updateCard: (id: string, card: CardInput) => api.patch(`${base}/cards/${id}`, cardBody(card)),
   deleteCard: (id: string) => api.delete(`${base}/cards/${id}`),
 };

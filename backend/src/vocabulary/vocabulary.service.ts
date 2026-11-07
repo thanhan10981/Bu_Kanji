@@ -91,6 +91,19 @@ export class VocabularyService {
       return row;
     });
   }
+  importCards(owner: string, id: string, cards: CardDto[]) {
+    return this.locked(owner, id, 'set', async m => {
+      let imported = 0;
+      for (const card of cards) {
+        const rows = await m.query(`INSERT INTO vocab_cards("setId",meaning,reading,japanese)
+          SELECT $1,$2,$3,$4 WHERE NOT EXISTS (
+            SELECT 1 FROM vocab_cards WHERE "setId"=$1 AND meaning=$2 AND reading=$3 AND japanese=$4
+          ) RETURNING id`, [id, card.meaning, card.reading, card.japanese ?? '']);
+        imported += rows.length;
+      }
+      return { imported, skipped: cards.length - imported };
+    });
+  }
   updateCard(owner: string, id: string, card: CardDto) {
     return this.locked(owner, id, 'card', async m => {
       const [row] = await m.query('UPDATE vocab_cards SET meaning=$1,reading=$2,japanese=$3,"updatedAt"=now() WHERE id=$4 RETURNING *', [card.meaning, card.reading, card.japanese ?? '', id]);

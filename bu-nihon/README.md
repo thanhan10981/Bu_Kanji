@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Tính năng nhập từ vựng từ file và chat Terra/Luna: xem [CHATMOCK.md](CHATMOCK.md) để cấu hình khóa server, chạy local và xem giới hạn.
+
 ## Getting Started
 
 First, run the development server:

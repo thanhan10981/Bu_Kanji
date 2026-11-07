@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { useState } from 'react';
-import { BookOpen, Layers, List, PencilLine, Search } from 'lucide-react';
+import { BookOpen, Layers, List, PencilLine, Search, Sparkles } from 'lucide-react';
 import { getLibraryCollection, libraryCollections } from '@/lib/vocabulary/library';
 import type { SetDetail } from '@/lib/vocabulary/schemas';
 import { StudySession } from './StudySession';
@@ -10,6 +10,7 @@ import './vocabulary.css';
 
 export function LibraryEntry() {
   return <section className="vocab-root library-home"><header className="library-title"><h1>TỪ VỰNG CÓ SẴN</h1><p>Chọn bộ từ vựng để học ngay</p></header>
+    <div className="vocab-actions" style={{ justifyContent: 'center', marginBottom: 24 }}><Link className="btn-primary" href="/vocabulary/import"><Sparkles size={18} /> Nhập từ vựng bằng AI</Link></div>
     <div className="library-books">{libraryCollections.map(collection => <Link key={collection.id} href={collection.href} className="library-book"><div className="library-book-icon"><BookOpen size={48} /><span>{collection.badge}</span></div>
       <div><h2>{collection.title}</h2><p>{collection.description}</p><strong>{collection.sets.length} bài · {collection.cards.length} thẻ</strong></div><span className="library-arrow">→</span></Link>)}</div>
     <p className="vocab-hint library-note">Danh sách có sẵn · Flashcard · Tự luận. Các bộ cá nhân của bạn ở bên dưới.</p>

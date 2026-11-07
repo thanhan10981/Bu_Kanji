@@ -3,7 +3,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { plainToInstance } = require('class-transformer');
 const { validate } = require('class-validator');
-const { CardDto, NameDto } = require('../dist/vocabulary/vocabulary.dto');
+const { CardDto, NameDto, ImportCardsDto } = require('../dist/vocabulary/vocabulary.dto');
 const { VocabularyService } = require('../dist/vocabulary/vocabulary.service');
 const { safeReturnPath } = require('../dist/auth/return-path');
 const { JwtCookieGuard } = require('../dist/auth/auth.guard');
@@ -63,10 +63,44 @@ test('foreign parent cannot be read or mutated; ownership bound as SQL parameter
     () => service.folder('B', 'foreign'), () => service.set('B', 'foreign'),
     () => service.renameFolder('B', 'foreign', 'x'), () => service.createSet('B', 'foreign', 'x'),
     () => service.renameSet('B', 'foreign', 'x'), () => service.createCard('B', 'foreign', card),
+    () => service.importCards('B', 'foreign', [card]),
     () => service.updateCard('B', 'foreign', card), () => service.deleteCard('B', 'foreign'),
     () => service.deleteFolder('B', 'foreign', counts), () => service.deleteSet('B', 'foreign', counts),
   ]) await assert.rejects(action, { status: 404 });
   assert.ok(seen.every(([sql, params]) => sql.includes('"ownerId"') && params.includes('B')));
+});
+
+test('batch import validates every card and limits count to 200', async () => {
+  const card = { meaning: 'học', reading: 'まなぶ', japanese: '学ぶ' };
+  assert.equal((await validate(plainToInstance(ImportCardsDto, { cards: [card] }))).length, 0);
+  for (const cards of [[], Array(201).fill(card), [{ ...card, reading: 'manabu' }], [{ ...card, meaning: '' }]]) {
+    assert.ok((await validate(plainToInstance(ImportCardsDto, { cards }))).length);
+  }
+});
+
+test('batch import holds the folder transaction lock and skips duplicate rows', async () => {
+  const seen = [];
+  const inserted = new Set();
+  let locked = false;
+  const manager = { query: async (sql, params) => {
+    seen.push(sql);
+    if (sql.includes('pg_advisory')) { locked = true; return []; }
+    if (sql.startsWith('INSERT')) {
+      assert.equal(locked, true);
+      assert.ok(sql.includes('WHERE NOT EXISTS'));
+      const key = JSON.stringify(params);
+      if (inserted.has(key)) return [];
+      inserted.add(key); return [{ id: 'created' }];
+    }
+    return [{ id: 'folder' }];
+  }};
+  let transactions = 0;
+  const service = new VocabularyService({ transaction: fn => { transactions++; return fn(manager); } });
+  const card = { meaning: 'học', reading: 'まなぶ', japanese: '学ぶ' };
+  assert.deepEqual(await service.importCards('A', 'set', [card, card]), { imported: 1, skipped: 1 });
+  assert.equal(transactions, 1);
+  assert.ok(seen[0].includes('"ownerId"'));
+  assert.deepEqual(await service.importCards('A', 'set', [card]), { imported: 0, skipped: 1 });
 });
 
 test('folder delete with stale counts rejects instead of cascading unconfirmed cards', async () => {

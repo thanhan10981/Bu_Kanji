@@ -113,6 +113,7 @@ function VocabularyContent({ userId, folderId, setId, mode }: Props & { userId: 
     <header className="vocab-heading"><div><p className="vocab-eyebrow">BỘ SƯU TẬP CÁ NHÂN</p><h1>{setData?.name ?? folderData?.name ?? 'Từ vựng của bạn'}</h1>
       <p className="vocab-hint">{setData ? `${setData.cardCount} thẻ từ vựng` : folderData ? `${folderData.setCount} bộ · ${folderData.cardCount} thẻ` : 'Gom từng bài học. Nhớ từng từ mới.'}</p></div>
       <div className="vocab-actions">
+        <Link className="btn-secondary" href="/vocabulary/import">Nhập từ file bằng AI</Link>
         {setData ? <>
           <button className="btn-primary" disabled={busy} onClick={() => setEditor({ title: 'Thêm thẻ', fields: 'card', submit: values => api.createCard(setData.id, values) })}><Plus size={17} /> Thêm thẻ</button>
           <button className="btn-secondary" disabled={busy} onClick={() => setEditor({ title: 'Đổi tên bộ', fields: 'name', initial: { name: setData.name }, submit: values => api.renameSet(setData.id, values.name) })}>Đổi tên bộ</button>
