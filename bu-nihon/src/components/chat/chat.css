@@ -24,6 +24,10 @@
 .ai-import-progress progress { width: 100%; height: 12px; accent-color: var(--color-brand-500); }
 .ai-pagination { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 18px; font-size: 13px; }
 .ai-upload input::file-selector-button { background: var(--color-card-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px; margin-right: 8px; cursor: pointer; }
+.ai-json-tools { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; width: 100%; font-size: 12px; }
+.ai-json-tools details { display: grid; gap: 8px; width: min(100%, 560px); text-align: left; }
+.ai-json-tools summary { color: var(--color-brand-600); cursor: pointer; text-align: center; }
+.ai-json-tools textarea { width: 100%; min-height: 190px; resize: vertical; padding: 10px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-card-bg); color: var(--color-text-primary); font: 12px/1.5 monospace; }
 .ai-footnote { color: var(--color-text-secondary); font-size: 11px; line-height: 1.8; margin: 16px 24px; }
 .ai-error, .ai-notice { border-radius: 10px; padding: 14px 16px; line-height: 1.7; font-size: 13px; overflow-wrap: anywhere; margin: 16px 0; }
 .ai-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; white-space: pre-line; }

@@ -1,0 +1,19 @@
+{
+  "cards": [
+    {
+      "japanese": "勉強",
+      "reading": "べんきょう",
+      "meaning": "học tập"
+    },
+    {
+      "japanese": "経験",
+      "reading": "けいけん",
+      "meaning": "kinh nghiệm"
+    },
+    {
+      "japanese": "必要",
+      "reading": "ひつよう",
+      "meaning": "cần thiết"
+    }
+  ]
+}

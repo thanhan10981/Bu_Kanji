@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Upload, FileText, Trash2, Save, Download } from 'lucide-react';
+import { Upload, FileText, Trash2, Save, Download, Copy } from 'lucide-react';
 import { useFileImport } from '@/lib/chat/import-client';
 import { useChatStore } from '@/lib/chat/store';
 import { useAppStore } from '@/lib/store';
 import { vocabularyApi } from '@/lib/vocabulary/api';
 import { importSchema, maxFileBytes } from '@/lib/chat/schema';
-import type { CardInput } from '@/lib/vocabulary/schemas';
+import { cardSchema, type CardInput } from '@/lib/vocabulary/schemas';
 
 export function ImportPanel() {
   const model = useChatStore(s => s.model);
@@ -27,6 +27,7 @@ export function ImportPanel() {
   const [newSet, setNewSet] = useState('');
   const [page, setPage] = useState(0);
   const [removing, setRemoving] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const lock = useRef(false);
   const request = useFileImport(user?.id);
   const client = useQueryClient();
@@ -53,11 +54,44 @@ export function ImportPanel() {
   }, retry: false });
   const busy = request.isPending || save.isPending || createDestination.isPending || removing;
   const pageIndex = Math.min(page, Math.max(0, Math.ceil(cards.length / 50) - 1));
+  const prompt = `Tạo file JSON học từ vựng tiếng Nhật. Chỉ trả về JSON hợp lệ, không markdown, không giải thích, theo đúng mẫu:
+{
+  "cards": [
+    { "japanese": "勉強", "reading": "べんきょう", "meaning": "học tập" }
+  ]
+}
+Yêu cầu:
+- Mỗi từ có japanese (chữ Nhật), reading (hiragana) và meaning (nghĩa tiếng Việt).
+- Không trùng từ, không thêm trường khác.
+- Xuất toàn bộ dữ liệu, có thể từ 1.000 từ trở lên.`;
+  const importJson = async (jsonFile: File) => {
+    let value: unknown;
+    try { value = JSON.parse(await jsonFile.text()); } catch { throw new Error('File JSON không hợp lệ. Hãy dùng file mẫu và chỉ xuất JSON, không thêm ```markdown.'); }
+    const rawCards = Array.isArray(value) ? value : value && typeof value === 'object' && 'cards' in value ? value.cards : null;
+    if (!Array.isArray(rawCards) || !rawCards.length) throw new Error('JSON cần có dạng { "cards": [...] } và phải chứa ít nhất 1 từ.');
+    if (rawCards.length > 10000) throw new Error('Mỗi file JSON tối đa 10.000 từ.');
+    const imported: CardInput[] = [];
+    const errors: string[] = [];
+    rawCards.forEach((card, index) => {
+      const parsed = cardSchema.safeParse(card);
+      if (parsed.success) imported.push(parsed.data);
+      else if (errors.length < 5) errors.push(`Thẻ ${index + 1}: ${parsed.error.issues[0]?.message ?? 'dữ liệu không hợp lệ'}`);
+    });
+    if (errors.length) throw new Error(`JSON có dữ liệu chưa đúng:\n${errors.join('\n')}${rawCards.length > errors.length ? '\nHãy sửa các thẻ lỗi rồi tải lại.' : ''}`);
+    setCards(imported); setSource(jsonFile.name); setSaved(false); setPage(0);
+    setNotice(`Đã nạp ${imported.length} thẻ từ JSON. Kiểm tra và lưu theo lô.`);
+  };
   const runImport = async () => {
     if ((!file && !request.bookmark) || lock.current) return;
-    if (!user) { openLogin(true); return; }
     setError(''); setNotice('');
     if (file && (!file.size || file.size > maxFileBytes)) { setError('File cần có nội dung và không vượt 100 MB.'); return; }
+    if (file?.name.toLowerCase().endsWith('.json')) {
+      lock.current = true;
+      try { await importJson(file); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể đọc file JSON.'); }
+      finally { lock.current = false; }
+      return;
+    }
+    if (!user) { openLogin(true); return; }
     lock.current = true;
     try {
       setSaved(false); setPage(0);
@@ -101,12 +135,13 @@ export function ImportPanel() {
     <div className="ai-upload"><Upload size={30} /><label htmlFor="ai-file">Chọn tài liệu từ vựng của bạn</label><p>TXT, CSV, TSV, MD, JSON, DOCX, PDF có chữ</p>
       <input id="ai-file" type="file" accept=".txt,.csv,.tsv,.md,.json,.docx,.pdf" disabled={busy} onChange={event => { setFile(event.target.files?.[0] ?? null); setError(''); }} />
       <small>Tối đa 100 MB · PDF tối đa 1.000 trang · Tự xử lý nhiều đợt</small>
-      <button className="btn-primary" disabled={(!file && !request.bookmark) || busy} onClick={() => void runImport()}>{request.isPending ? <><span className="ai-spinner" /> Đang xử lý…</> : <><Upload size={17} /> {request.bookmark ? 'Tiếp tục / khôi phục kết quả' : 'Trích xuất bằng AI'}</>}</button>
+      <button className="btn-primary" disabled={(!file && !request.bookmark) || busy} onClick={() => void runImport()}>{request.isPending ? <><span className="ai-spinner" /> Đang xử lý…</> : <><Upload size={17} /> {file?.name.toLowerCase().endsWith('.json') ? 'Nạp JSON trực tiếp' : request.bookmark ? 'Tiếp tục / khôi phục kết quả' : 'Trích xuất bằng AI'}</>}</button>
+      <div className="ai-json-tools"><a className="ai-link" href="/tu-vung-mau.json" download>Tải file JSON mẫu</a><details><summary>Prompt tạo JSON bằng AI</summary><textarea readOnly value={prompt} aria-label="Prompt tạo JSON" /><button className="btn-secondary" onClick={() => { void navigator.clipboard.writeText(prompt); setCopiedPrompt(true); setTimeout(() => setCopiedPrompt(false), 1800); }}><Copy size={15} /> {copiedPrompt ? 'Đã sao chép' : 'Sao chép prompt'}</button></details></div>
       {request.isPending && <button className="btn-secondary" onClick={request.pause}>Tạm dừng</button>}
       {request.progress && <div className="ai-import-progress" role="status"><progress max={request.progress.total || 1} value={request.progress.done} aria-label={request.progress.message} /><p>{request.progress.message}</p></div>}
       {request.bookmark && <><small>Lần nhập được giữ 24 giờ: {request.bookmark.name}. Nếu tải chưa xong, chọn lại đúng file gốc.</small><button className="btn-secondary" disabled={busy} onClick={async () => { setRemoving(true); try { await request.remove(); setNotice('Đã xóa dữ liệu nhập tạm trên server.'); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể xóa lần nhập.'); } finally { setRemoving(false); } }}>Xóa lần nhập tạm</button></>}
     </div>
-    <p className="ai-footnote">Cần đăng nhập. File được tải từng phần và giữ tạm tối đa 24 giờ; phần chữ được gửi tới AI theo từng đợt (tối đa 200 thẻ/đợt). Mỗi đợt dùng một lượt AI. PDF scan cần OCR trước. Giới hạn 2 triệu ký tự chữ/tài liệu.</p>
+    <p className="ai-footnote">JSON được kiểm tra và nạp trực tiếp, tối đa 10.000 từ; khi lưu, hệ thống tự chia lô 200 thẻ. Các file tài liệu khác cần đăng nhập và được gửi tới AI theo từng đợt. PDF scan cần OCR trước.</p>
     {error && <div className="ai-error" role="alert">{error}</div>}
     {notice && <p className="ai-notice" role="status">{notice}</p>}
     {!cards.length ? <p className="ai-empty">{source ? 'Bạn đã bỏ hết các thẻ. Chọn trích xuất lại để tạo bản xem trước mới.' : 'Chưa có thẻ xem trước. Chọn file để bắt đầu.'}</p> : <>
