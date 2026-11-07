@@ -102,7 +102,9 @@ Yêu cầu:
     finally { lock.current = false; }
   };
   const saveCards = async () => {
-    if (!user || !setId || lock.current || saved) return;
+    if (!user) { openLogin(true); return; }
+    if (!setId) { setError('Hãy chọn hoặc tạo một bộ thẻ trước khi lưu.'); return; }
+    if (lock.current || saved) return;
     setError(''); setNotice('');
     const validated: CardInput[] = [];
     for (let index = 0; index < cards.length; index += 200) {
@@ -161,7 +163,7 @@ Yêu cầu:
             {folder.isError && <p role="alert">Không tải được bộ thẻ. <button className="ai-link" onClick={() => void folder.refetch()}>Thử lại</button></p>}
             {folderId && !saved && <div className="ai-save-fields"><label>Tạo bộ thẻ mới<input className="input-base" aria-label="Tên bộ thẻ mới" maxLength={120} value={newSet} disabled={busy} onChange={event => setNewSet(event.target.value)} /></label><button className="btn-secondary" disabled={busy || !newSet.trim()} onClick={() => createDestination.mutate('set')}>Tạo bộ thẻ</button></div>}
             {folder.data && !folder.data.sets.length && <p>Thư mục chưa có bộ. Tạo bộ thẻ mới để lưu các từ đã trích xuất.</p>}
-            <button className="btn-primary" disabled={!setId || busy || saved} onClick={() => void saveCards()}><Save size={17} /> {save.isPending ? 'Đang lưu…' : saved ? 'Đã lưu' : `Lưu ${cards.length} thẻ`}</button>
+            <button className="btn-primary" disabled={busy || saved} onClick={() => void saveCards()}><Save size={17} /> {save.isPending ? 'Đang lưu…' : saved ? 'Đã lưu' : `Lưu ${cards.length} thẻ`}</button>
             {saved && <Link className="ai-link" href={`/vocabulary/sets/${setId}`}>Mở bộ thẻ để học →</Link>}
           </>}
         </>}
