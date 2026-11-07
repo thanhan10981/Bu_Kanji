@@ -21,6 +21,8 @@ Không cần chạy máy local. Browser gọi API cùng domain Vercel; server Ve
 
 Nếu 401: đăng nhập lại. Nếu 429: chờ hạn mức được đặt lại. Nếu báo chưa xác minh quyền dùng AI: kiểm tra Render đã deploy code mới, chạy migration và `API_PROXY_TARGET` đúng URL. Các route AI đã bỏ điều kiện chặn production/localhost. Không có bước tự deploy từ tác vụ sửa code này.
 
+Nếu tạo lần nhập báo `Bad Request` và Response liệt kê **tất cả** các trường `name`, `size`, `lastModified`, `model` đều thiếu/sai: đây là lỗi parser JSON ở bản cũ, không phải file quá 100 MB. Cần deploy bản sửa backend có `configureBodyParsers` trong `src/body-parsers.ts`: parser JSON chung được đăng ký rõ ràng bên cạnh parser theo route. Bản frontend mới hiển thị chi tiết validation và dừng trạng thái tiến độ khi request thất bại. Không cần thêm biến môi trường hoặc migration riêng cho bản sửa parser này.
+
 Route AI cấu hình `maxDuration = 150`; gateway chờ tối đa 90 giây, xác thực Render tối đa 20 giây. Bật Fluid Compute/cấu hình thời gian chạy tương ứng nếu project Vercel cũ đang giới hạn thấp hơn. File tối đa **100 MB**, được tải thành các phần **2 MB** qua proxy `/api/ai/imports` tới Render; mỗi request nằm dưới [giới hạn request 4,5 MB của Vercel](https://vercel.com/docs/functions/limitations#request-body-size). Không gửi nguyên file 100 MB trong một request.
 
 ## Nhập file 100 MB và tiếp tục khi gián đoạn
@@ -68,7 +70,7 @@ Luồng nhập 100 MB luôn cần đăng nhập và PostgreSQL/backend NestJS, k
 
 Frontend: `npm run typecheck`, `npm run test:chat`, `npm run lint`, `npm run build`.
 
-Backend: `npm run test:import`, `npm run test:ai`, `npm run test:vocabulary`. Test import dùng PostgreSQL nhúng PGlite (dependency chỉ dùng khi phát triển), không kết nối database của bạn. Có kiểm thử PDF đúng 100 MB tải 50 phần, đọc bằng worker thật, xóa dữ liệu file gốc sau khi đọc, khôi phục kết quả, kiểm tra quyền sở hữu, phần thiếu/sai kích thước, gửi lại và hết hạn. Kiểm tra AI tự động dùng gateway giả, không gọi hoặc tiêu thụ phiên ChatGPT thật. Nút kiểm tra kết nối và thao tác gửi chat/nhập file dùng gateway thật.
+Backend: `npm run test:http`, `npm run test:import`, `npm run test:ai`, `npm run test:vocabulary`. Test HTTP dùng parser và ValidationPipe thật để kiểm tra tạo lần nhập, JSON đăng nhập, phần nhị phân 2 MB và batch JSON trên 100 KB; route thường vẫn giữ giới hạn 100 KB. Test import dùng PostgreSQL nhúng PGlite (dependency chỉ dùng khi phát triển), không kết nối database của bạn. Có kiểm thử PDF đúng 100 MB tải 50 phần, đọc bằng worker thật, xóa dữ liệu file gốc sau khi đọc, khôi phục kết quả, kiểm tra quyền sở hữu, phần thiếu/sai kích thước, gửi lại và hết hạn. Kiểm tra AI tự động dùng gateway giả, không gọi hoặc tiêu thụ phiên ChatGPT thật. Nút kiểm tra kết nối và thao tác gửi chat/nhập file dùng gateway thật.
 
 Kiểm thử bao gồm production cho phép tài khoản hợp lệ, từ chối chưa đăng nhập/hết hạn/hết hạn mức, không gọi gateway khi backend lỗi, và kiểm tra cookie/khóa chỉ đến đúng server. Test quota kiểm tra giới hạn theo người dùng/toàn hệ thống và hoàn tác khi một hạn mức từ chối. Lint toàn dự án còn lỗi có sẵn ở Kanji/TTS. `npm audit --omit=dev` còn cảnh báo ở các dependency có sẵn (Next.js/Zod và dependency gián tiếp); chưa thực hiện nâng cấp ngoài phạm vi tính năng.
 

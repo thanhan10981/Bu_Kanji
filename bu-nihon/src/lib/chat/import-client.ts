@@ -30,7 +30,7 @@ export function useFileImport(userId?: string) {
     setBookmark(value);
     try { if (value) localStorage.setItem(key, JSON.stringify(value)); else localStorage.removeItem(key); } catch { /* The current page still retains the job ID. */ }
   };
-  const mutation = useMutation({ retry: false, mutationFn: async ({ file, model, onCards }: { file?: File; model: Model; onCards?: (cards: CardInput[], source: string) => void }) => {
+  const mutation = useMutation({ retry: false, onError: () => setProgress(null), mutationFn: async ({ file, model, onCards }: { file?: File; model: Model; onCards?: (cards: CardInput[], source: string) => void }) => {
     if (!userId) throw new Error('Vui lòng đăng nhập để nhập tài liệu 100 MB.');
     if (file && (!file.size || file.size > maxFileBytes)) throw new Error('File cần có nội dung và không vượt 100 MB.');
     const abort = new AbortController(); controller.current = abort;

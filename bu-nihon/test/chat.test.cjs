@@ -27,6 +27,15 @@ function load(file) {
 }
 const { chatSchema, contextMessages } = load('src/lib/chat/schema.ts');
 const { gateway, outputText, readBody, guarded } = load('src/lib/chat/server.ts');
+const { chatErrorMessage } = load('src/lib/chat/errors.ts');
+
+test('client errors prefer Nest validation details over generic Bad Request labels', () => {
+  assert.equal(chatErrorMessage({ message: ['name must be a string', 'size must be an integer'], error: 'Bad Request' }, 400), 'name must be a string\nsize must be an integer');
+  assert.equal(chatErrorMessage({ message: 'File quá lớn.', error: 'Bad Request' }, 400), 'File quá lớn.');
+  assert.equal(chatErrorMessage({ error: 'Gateway chưa kết nối.' }, 503), 'Gateway chưa kết nối.');
+  assert.match(chatErrorMessage({ error: 'Bad Request' }, 400), /Dữ liệu/);
+  assert.match(chatErrorMessage(null, 413), /vượt giới hạn/);
+});
 
 test('chat rejects arbitrary model, URL/header overrides, oversized histories and messages', () => {
   const valid = { model: 'gpt-5.6-luna', messages: [{ role: 'user', content: 'こんにちは' }] };

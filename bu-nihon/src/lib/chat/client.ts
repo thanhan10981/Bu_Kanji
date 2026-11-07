@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { contextMessages, type Message, type Model } from './schema';
+import { chatErrorMessage } from './errors';
 
 let refresh: Promise<Response> | null = null;
 export async function chatFetch<T>(path: string, init?: RequestInit, retried = false): Promise<T> {
@@ -12,7 +13,7 @@ export async function chatFetch<T>(path: string, init?: RequestInit, retried = f
     if (typeof window !== 'undefined') window.dispatchEvent(new Event('auth-expired'));
   }
   const data = await response.json().catch(() => null);
-  if (!response.ok) throw new Error(data?.error ?? (typeof data?.message === 'string' ? data.message : 'Không thể kết nối server. Vui lòng thử lại.'));
+  if (!response.ok) throw new Error(chatErrorMessage(data, response.status));
   if (!data) throw new Error('Server trả dữ liệu không hợp lệ.');
   return data as T;
 }
