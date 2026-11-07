@@ -6,3 +6,4 @@ dist
 !.env.production.example
 coverage
 *.log
+.npm-cache/

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Upload, FileText, Trash2, Save, Download } from 'lucide-react';
-import { useFileImport } from '@/lib/chat/client';
+import { useFileImport } from '@/lib/chat/import-client';
 import { useChatStore } from '@/lib/chat/store';
 import { useAppStore } from '@/lib/store';
 import { vocabularyApi } from '@/lib/vocabulary/api';
@@ -25,12 +25,22 @@ export function ImportPanel() {
   const [saved, setSaved] = useState(false);
   const [newFolder, setNewFolder] = useState('');
   const [newSet, setNewSet] = useState('');
+  const [page, setPage] = useState(0);
+  const [removing, setRemoving] = useState(false);
   const lock = useRef(false);
-  const request = useFileImport();
+  const request = useFileImport(user?.id);
   const client = useQueryClient();
   const folders = useQuery({ queryKey: ['vocabulary', user?.id, 'folders'], queryFn: vocabularyApi.folders, enabled: Boolean(user), retry: false });
   const folder = useQuery({ queryKey: ['vocabulary', user?.id, 'folder', folderId], queryFn: () => vocabularyApi.folder(folderId), enabled: Boolean(user && folderId), retry: false });
-  const save = useMutation({ mutationFn: ({ target, rows }: { target: string; rows: CardInput[] }) => vocabularyApi.importCards(target, rows), retry: false });
+  const save = useMutation({ mutationFn: async ({ target, rows }: { target: string; rows: CardInput[] }) => {
+    let imported = 0; let skipped = 0;
+    for (let index = 0; index < rows.length; index += 200) {
+      setNotice(`Đang lưu thẻ ${index + 1}–${Math.min(index + 200, rows.length)}/${rows.length}. Nếu gián đoạn, thử lại sẽ bỏ qua thẻ đã lưu.`);
+      const result = await vocabularyApi.importCards(target, rows.slice(index, index + 200));
+      imported += result.imported; skipped += result.skipped;
+    }
+    return { imported, skipped };
+  }, retry: false });
   const createDestination = useMutation({ mutationFn: async (kind: 'folder' | 'set') => {
     if (kind === 'folder') {
       const created = await vocabularyApi.createFolder(newFolder.trim());
@@ -41,31 +51,38 @@ export function ImportPanel() {
     }
     await client.invalidateQueries({ queryKey: ['vocabulary', user?.id] });
   }, retry: false });
-  const busy = request.isPending || save.isPending || createDestination.isPending;
+  const busy = request.isPending || save.isPending || createDestination.isPending || removing;
+  const pageIndex = Math.min(page, Math.max(0, Math.ceil(cards.length / 50) - 1));
   const runImport = async () => {
-    if (!file || lock.current) return;
+    if ((!file && !request.bookmark) || lock.current) return;
+    if (!user) { openLogin(true); return; }
     setError(''); setNotice('');
-    if (!file.size || file.size > maxFileBytes) { setError('File cần có nội dung và không vượt 4 MB.'); return; }
+    if (file && (!file.size || file.size > maxFileBytes)) { setError('File cần có nội dung và không vượt 100 MB.'); return; }
     lock.current = true;
     try {
-      const result = await request.mutateAsync({ file, model });
+      setSaved(false); setPage(0);
+      const result = await request.mutateAsync({ file: file ?? undefined, model, onCards: (rows, name) => { setCards(rows); setSource(name); } });
       setCards(result.cards); setSource(result.source); setSaved(false);
       setNotice(`Đã trích xuất ${result.cards.length} thẻ. Kiểm tra và sửa trước khi lưu.`);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể nhập file.'); }
+    } catch (cause) { setError(cause instanceof Error && cause.name === 'AbortError' ? 'Đã tạm dừng. Chọn tiếp tục để xử lý các phần còn lại.' : cause instanceof Error ? cause.message : 'Không thể nhập file.'); }
     finally { lock.current = false; }
   };
   const saveCards = async () => {
     if (!user || !setId || lock.current || saved) return;
     setError(''); setNotice('');
-    const parsed = importSchema.safeParse({ cards });
-    if (!parsed.success) {
-      const issue = parsed.error.issues[0];
-      const row = typeof issue.path[1] === 'number' ? `Thẻ ${issue.path[1] + 1}: ` : '';
-      setError(`${row}${issue.message}`); return;
+    const validated: CardInput[] = [];
+    for (let index = 0; index < cards.length; index += 200) {
+      const parsed = importSchema.safeParse({ cards: cards.slice(index, index + 200) });
+      if (!parsed.success) {
+        const issue = parsed.error.issues[0];
+        const row = typeof issue.path[1] === 'number' ? `Thẻ ${index + issue.path[1] + 1}: ` : '';
+        setError(`${row}${issue.message}`); return;
+      }
+      validated.push(...parsed.data.cards);
     }
     lock.current = true;
     try {
-      const result = await save.mutateAsync({ target: setId, rows: parsed.data.cards });
+      const result = await save.mutateAsync({ target: setId, rows: validated });
       setSaved(true); setNotice(`Đã lưu ${result.imported} thẻ, bỏ qua ${result.skipped} thẻ trùng.`);
       await client.invalidateQueries({ queryKey: ['vocabulary', user.id] });
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể lưu bộ thẻ.'); }
@@ -83,17 +100,21 @@ export function ImportPanel() {
     <header className="ai-panel-header"><div><h2 id="ai-import-heading"><FileText size={22} /> Từ tài liệu đến bộ thẻ</h2><p>1. Tải file → 2. Kiểm tra từ → 3. Lưu và học</p></div></header>
     <div className="ai-upload"><Upload size={30} /><label htmlFor="ai-file">Chọn tài liệu từ vựng của bạn</label><p>TXT, CSV, TSV, MD, JSON, DOCX, PDF có chữ</p>
       <input id="ai-file" type="file" accept=".txt,.csv,.tsv,.md,.json,.docx,.pdf" disabled={busy} onChange={event => { setFile(event.target.files?.[0] ?? null); setError(''); }} />
-      <small>Tối đa 4 MB · 40.000 ký tự · PDF tối đa 30 trang · 200 thẻ/lần</small>
-      <button className="btn-primary" disabled={!file || busy} onClick={() => void runImport()}>{request.isPending ? <><span className="ai-spinner" /> AI đang đọc file…</> : <><Upload size={17} /> {request.isError ? 'Thử nhập lại' : 'Trích xuất bằng AI'}</>}</button>
+      <small>Tối đa 100 MB · PDF tối đa 1.000 trang · Tự xử lý nhiều đợt</small>
+      <button className="btn-primary" disabled={(!file && !request.bookmark) || busy} onClick={() => void runImport()}>{request.isPending ? <><span className="ai-spinner" /> Đang xử lý…</> : <><Upload size={17} /> {request.bookmark ? 'Tiếp tục / khôi phục kết quả' : 'Trích xuất bằng AI'}</>}</button>
+      {request.isPending && <button className="btn-secondary" onClick={request.pause}>Tạm dừng</button>}
+      {request.progress && <div className="ai-import-progress" role="status"><progress max={request.progress.total || 1} value={request.progress.done} aria-label={request.progress.message} /><p>{request.progress.message}</p></div>}
+      {request.bookmark && <><small>Lần nhập được giữ 24 giờ: {request.bookmark.name}. Nếu tải chưa xong, chọn lại đúng file gốc.</small><button className="btn-secondary" disabled={busy} onClick={async () => { setRemoving(true); try { await request.remove(); setNotice('Đã xóa dữ liệu nhập tạm trên server.'); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể xóa lần nhập.'); } finally { setRemoving(false); } }}>Xóa lần nhập tạm</button></>}
     </div>
-    <p className="ai-footnote">Nội dung file sẽ được gửi tới gateway AI khi bạn chọn trích xuất. PDF scan cần OCR trước. Bản xem trước chỉ giữ trong trang này.</p>
+    <p className="ai-footnote">Cần đăng nhập. File được tải từng phần và giữ tạm tối đa 24 giờ; phần chữ được gửi tới AI theo từng đợt (tối đa 200 thẻ/đợt). Mỗi đợt dùng một lượt AI. PDF scan cần OCR trước. Giới hạn 2 triệu ký tự chữ/tài liệu.</p>
     {error && <div className="ai-error" role="alert">{error}</div>}
     {notice && <p className="ai-notice" role="status">{notice}</p>}
     {!cards.length ? <p className="ai-empty">{source ? 'Bạn đã bỏ hết các thẻ. Chọn trích xuất lại để tạo bản xem trước mới.' : 'Chưa có thẻ xem trước. Chọn file để bắt đầu.'}</p> : <>
       <div className="ai-preview-heading"><h3>{cards.length} thẻ · {source}</h3><button className="btn-secondary" disabled={busy} onClick={exportCards}><Download size={16} /> Tải JSON</button></div>
-      <div className="ai-table-wrap"><table className="ai-table"><thead><tr><th>#</th><th>Chữ Nhật</th><th>Hiragana</th><th>Nghĩa tiếng Việt</th><th><span className="sr-only">Thao tác</span></th></tr></thead><tbody>{cards.map((card, index) => <tr key={index}><td>{index + 1}</td>
+      <div className="ai-table-wrap"><table className="ai-table"><thead><tr><th>#</th><th>Chữ Nhật</th><th>Hiragana</th><th>Nghĩa tiếng Việt</th><th><span className="sr-only">Thao tác</span></th></tr></thead><tbody>{cards.slice(pageIndex * 50, (pageIndex + 1) * 50).map((card, offset) => { const index = pageIndex * 50 + offset; return <tr key={index}><td>{index + 1}</td>
         {(['japanese', 'reading', 'meaning'] as const).map(field => <td key={field}><input aria-label={`${field === 'japanese' ? 'Chữ Nhật' : field === 'reading' ? 'Hiragana' : 'Nghĩa'} thẻ ${index + 1}`} lang={field === 'meaning' ? 'vi' : 'ja'} value={card[field]} maxLength={field === 'meaning' ? 500 : 200} disabled={busy || saved} onChange={event => edit(index, field, event.target.value)} /></td>)}
-        <td><button className="ai-remove" aria-label={`Bỏ thẻ ${index + 1}`} disabled={busy || saved} onClick={() => setCards(old => old.filter((_, i) => i !== index))}><Trash2 size={17} /></button></td></tr>)}</tbody></table></div>
+        <td><button className="ai-remove" aria-label={`Bỏ thẻ ${index + 1}`} disabled={busy || saved} onClick={() => setCards(old => old.filter((_, i) => i !== index))}><Trash2 size={17} /></button></td></tr>; })}</tbody></table></div>
+      {cards.length > 50 && <nav className="ai-pagination" aria-label="Trang xem trước"><button className="btn-secondary" disabled={pageIndex === 0} onClick={() => setPage(pageIndex - 1)}>Trước</button><span>Trang {pageIndex + 1}/{Math.ceil(cards.length / 50)}</span><button className="btn-secondary" disabled={(pageIndex + 1) * 50 >= cards.length} onClick={() => setPage(pageIndex + 1)}>Sau</button></nav>}
       <div className="ai-save"><h3>Lưu vào bộ thẻ cá nhân</h3>
         {!user ? <p>Đăng nhập để lưu và luyện tập. Bạn vẫn có thể tải bản JSON. <button className="ai-link" onClick={() => openLogin(true)}>Đăng nhập</button></p> : <>
           {createDestination.isError && <p className="ai-error" role="alert">{createDestination.error.message}</p>}

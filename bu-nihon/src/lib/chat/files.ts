@@ -1,7 +1,7 @@
 import 'server-only';
 import { ChatError } from './server';
-import { maxFileBytes } from './schema';
-export { maxFileBytes } from './schema';
+import { singleRequestFileBytes as maxFileBytes } from './schema';
+export { singleRequestFileBytes as maxFileBytes } from './schema';
 
 export async function extractFile(file: File): Promise<string> {
   if (!file.size || file.size > maxFileBytes) throw new ChatError(400, 'Chọn file có nội dung, tối đa 4 MB.');

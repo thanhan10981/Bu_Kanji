@@ -183,3 +183,42 @@ test('chat and file routes pass a fixed Responses payload and validate AI cards 
     }
   }
 });
+
+test('large import processes only a bounded stored batch and persists results without accepting client text or URLs', async () => {
+  const { POST } = load('src/app/api/vocabulary/import/jobs/[jobId]/[index]/route.ts');
+  const previousFetch = global.fetch;
+  const names = ['NODE_ENV', 'API_PROXY_TARGET', 'CHATMOCK_BASE_URL', 'CHATMOCK_GATEWAY_SECRET'];
+  const previous = Object.fromEntries(names.map(key => [key, process.env[key]]));
+  Object.assign(process.env, { NODE_ENV: 'production', API_PROXY_TARGET: 'https://backend.test', CHATMOCK_BASE_URL: 'https://gateway.test/v1', CHATMOCK_GATEWAY_SECRET: 'test-fixture-secret' });
+  const id = '00000000-0000-4000-8000-000000000001';
+  const context = { params: Promise.resolve({ jobId: id, index: '0' }) };
+  const request = () => new Request(`https://app.test/api/vocabulary/import/jobs/${id}/0`, { method: 'POST', headers: { Cookie: 'access_token=session' }, body: JSON.stringify({ url: 'https://evil.test', text: 'client override' }) });
+  const cards = [{ japanese: '学校', reading: 'がっこう', meaning: 'trường học' }];
+  let stored = null; let gatewayCalls = 0;
+  try {
+    global.fetch = async (url, init) => {
+      if (url === 'https://backend.test/api/ai/authorize') return Response.json({ allowed: true });
+      if (url === `https://backend.test/api/ai/imports/${id}/batches/0`) {
+        assert.equal(init.headers.Cookie, 'access_token=session');
+        if (init.method === 'PUT') { stored = JSON.parse(init.body).cards; return Response.json({ saved: true, cards: stored }); }
+        return Response.json({ model: 'gpt-5.6-luna', text: '学校 がっこう trường học', cards: stored });
+      }
+      assert.equal(url, 'https://gateway.test/v1/responses');
+      const body = JSON.parse(init.body);
+      assert.equal(body.stream, false);
+      assert.ok(body.input[0].content.includes('学校'));
+      assert.ok(!body.input[0].content.includes('client override'));
+      assert.equal(init.headers.Cookie, undefined);
+      gatewayCalls++;
+      return Response.json({ output_text: JSON.stringify({ cards }) });
+    };
+    assert.equal((await POST(request(), context)).status, 200);
+    assert.deepEqual(stored, cards);
+    assert.equal((await POST(request(), context)).status, 200);
+    assert.equal(gatewayCalls, 1, 'completed batch is reused on retry');
+    assert.equal((await POST(request(), { params: Promise.resolve({ jobId: '../invalid', index: '0' }) })).status, 400);
+  } finally {
+    global.fetch = previousFetch;
+    for (const key of names) { if (previous[key] === undefined) delete process.env[key]; else process.env[key] = previous[key]; }
+  }
+});

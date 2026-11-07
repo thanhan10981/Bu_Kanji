@@ -79,7 +79,8 @@ CHATMOCK_GATEWAY_SECRET=<nhập khóa thật trực tiếp trong Vercel>
 ```
 
 Không dùng `NEXT_PUBLIC_` cho khóa. Deploy backend Render bản mới trước để migration
-`003_ai_usage.sql` tạo bảng hạn mức (start command `npm run start:render` tự chạy migration).
+`003_ai_usage.sql` tạo bảng hạn mức và `004_ai_imports.sql` lưu tiến độ nhập file 100 MB
+(start command `npm run start:render` tự chạy migration).
 Người dùng đăng nhập website để dùng AI; Vercel xác thực và trừ hạn mức qua Render trước
 khi gọi Chatmock. Không cần chạy local và không đặt khóa Chatmock trên Render.
 Hướng dẫn chi tiết: [bu-nihon/CHATMOCK.md](bu-nihon/CHATMOCK.md).

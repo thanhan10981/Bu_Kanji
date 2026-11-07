@@ -26,6 +26,6 @@ export function VocabularyAI() {
     {!user && authStatus !== 'loading' && <p className="ai-notice">Đăng nhập để chat và nhập từ vựng bằng AI trên website. <button className="ai-link" onClick={() => openLogin(true)}>Đăng nhập</button></p>}
     {connection.isError && <p className="ai-error" role="alert">{connection.error.message}</p>}
     {connection.isSuccess && <p className="ai-notice" role="status">{connection.data.models.length ? `Gateway đã kết nối. Model khả dụng: ${connection.data.models.join(', ')}.` : 'Gateway phản hồi nhưng chưa có Terra/Luna khả dụng.'}</p>}
-    <div className="ai-layout"><ImportPanel /><ChatPanel /></div>
+    <div className="ai-layout"><ImportPanel key={user?.id ?? 'guest'} /><ChatPanel /></div>
   </div>;
 }
