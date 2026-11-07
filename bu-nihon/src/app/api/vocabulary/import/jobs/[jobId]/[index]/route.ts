@@ -15,7 +15,7 @@ export async function POST(request: Request, context: { params: Promise<{ jobId:
     const index = z.coerce.number().int().min(0).max(400).parse(params.index);
     const path = `${id}/batches/${index}`;
     const batch = batchSchema.parse(await importBackend(request, path));
-    if (batch.cards !== null) return { cards: batch.cards };
+    if (batch.cards?.length) return { cards: batch.cards };
     const cards = await extractVocabulary(batch.text, batch.model);
     const stored = await importBackend<{ cards: unknown }>(request, path, { cards });
     return { cards: z.array(cardSchema).max(200).parse(stored.cards) };

@@ -138,7 +138,7 @@ export class ImportService implements OnModuleInit, OnModuleDestroy {
   async result(owner: string, id: string, index: number, body: ImportResultDto) {
     return this.locked(owner, id, async (m, job) => {
       if (!['ready', 'completed'].includes(job.status)) throw new ConflictException('Tài liệu chưa sẵn sàng.');
-      const rows = await m.query('UPDATE ai_import_batches SET cards=$3::jsonb WHERE "jobId"=$1 AND index=$2 AND cards IS NULL RETURNING index', [id, index, JSON.stringify(body.cards)]);
+      const rows = await m.query(`UPDATE ai_import_batches SET cards=$3::jsonb WHERE "jobId"=$1 AND index=$2 AND (cards IS NULL OR cards='[]'::jsonb) RETURNING index`, [id, index, JSON.stringify(body.cards)]);
       if (!rows.length) {
         const [existing] = await m.query('SELECT index FROM ai_import_batches WHERE "jobId"=$1 AND index=$2', [id, index]);
         if (!existing) throw new NotFoundException('Phần tài liệu không tồn tại.');

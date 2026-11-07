@@ -82,6 +82,24 @@ test('PostgreSQL resumable upload checks ownership, sizes, retries, missing part
   } finally { await f.close(); }
 });
 
+test('empty batch results can recover while nonempty results stay immutable', async () => {
+  const f = await setup();
+  try {
+    const { id } = await f.service.create(owner, { name: 'vocab.txt', size: 2, model: 'gpt-5.6-luna', lastModified: 1 });
+    await f.db.query("UPDATE ai_import_jobs SET status='ready' WHERE id=$1", [id]);
+    await f.db.query('INSERT INTO ai_import_batches("jobId",index,text) VALUES($1,0,$2)', [id, '学校']);
+    await f.service.result(owner, id, 0, { cards: [] });
+    assert.equal((await f.service.status(owner, id)).status, 'completed');
+    const cards = [{ japanese: '学校', reading: 'がっこう', meaning: 'trường học' }];
+    await assert.rejects(() => f.service.result(foreign, id, 0, { cards }), { status: 404 });
+    await f.service.result(owner, id, 0, { cards });
+    assert.deepEqual((await f.service.batch(owner, id, 0)).cards, cards);
+    await f.service.result(owner, id, 0, { cards: [] });
+    await f.service.result(owner, id, 0, { cards: [{ japanese: '別', reading: 'べつ', meaning: 'khác' }] });
+    assert.deepEqual((await f.service.batch(owner, id, 0)).cards, cards);
+  } finally { await f.close(); }
+});
+
 test('real 100 MB PDF uploads in 50 parts, extracts in worker and resumes stored results', { timeout: 180000 }, async () => {
   const f = await setup();
   try {

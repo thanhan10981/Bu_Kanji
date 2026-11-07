@@ -231,6 +231,7 @@ test('large import processes only a bounded stored batch and persists results wi
       const body = JSON.parse(init.body);
       assert.equal(body.stream, false);
       assert.ok(body.input[0].content.includes('学校'));
+      assert.ok(body.input[0].content.includes('không cần có sẵn nghĩa tiếng Việt hay furigana'));
       assert.ok(!body.input[0].content.includes('client override'));
       assert.equal(init.headers.Cookie, undefined);
       gatewayCalls++;
@@ -240,6 +241,10 @@ test('large import processes only a bounded stored batch and persists results wi
     assert.deepEqual(stored, cards);
     assert.equal((await POST(request(), context)).status, 200);
     assert.equal(gatewayCalls, 1, 'completed batch is reused on retry');
+    stored = [];
+    assert.equal((await POST(request(), context)).status, 200);
+    assert.deepEqual(stored, cards, 'an empty saved result can be extracted again');
+    assert.equal(gatewayCalls, 2);
     assert.equal((await POST(request(), { params: Promise.resolve({ jobId: '../invalid', index: '0' }) })).status, 400);
   } finally {
     global.fetch = previousFetch;

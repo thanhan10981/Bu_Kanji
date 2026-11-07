@@ -95,7 +95,7 @@ Yêu cầu:
     lock.current = true;
     try {
       setSaved(false); setPage(0);
-      const result = await request.mutateAsync({ file: file ?? undefined, model, onCards: (rows, name) => { setCards(rows); setSource(name); } });
+      const result = await request.mutateAsync({ file: file ?? undefined, model, onCards: (rows, name) => { if (rows.length) { setCards(rows); setSource(name); } } });
       setCards(result.cards); setSource(result.source); setSaved(false);
       setNotice(`Đã trích xuất ${result.cards.length} thẻ. Kiểm tra và sửa trước khi lưu.`);
     } catch (cause) { setError(cause instanceof Error && cause.name === 'AbortError' ? 'Đã tạm dừng. Chọn tiếp tục để xử lý các phần còn lại.' : cause instanceof Error ? cause.message : 'Không thể nhập file.'); }

@@ -82,7 +82,7 @@ export function useFileImport(userId?: string) {
       signal.throwIfAborted();
       setProgress({ done: index, total: status.total, message: `AI đang xử lý phần ${index + 1}/${status.total}…` });
       let batch = await call<{ cards: CardInput[] | null }>(`/${job.id}/batches/${index}`);
-      if (batch.cards === null) batch = await chatFetch<{ cards: CardInput[] }>(`/api/vocabulary/import/jobs/${job.id}/${index}`, { method: 'POST', signal });
+      if (!batch.cards?.length) batch = await chatFetch<{ cards: CardInput[] }>(`/api/vocabulary/import/jobs/${job.id}/${index}`, { method: 'POST', signal });
       const parsed = z.array(cardSchema).max(200).parse(batch.cards);
       for (const card of parsed) {
         const identity = JSON.stringify([card.japanese, card.reading, card.meaning]);
@@ -91,7 +91,7 @@ export function useFileImport(userId?: string) {
       onCards?.([...cards], job.name);
       setProgress({ done: index + 1, total: status.total, message: `Đã xử lý ${index + 1}/${status.total} phần · ${cards.length} thẻ` });
     }
-    if (!cards.length) throw new Error('AI không tìm thấy từ vựng phù hợp trong tài liệu.');
+    if (!cards.length) throw new Error('AI chưa tạo được thẻ từ nội dung đọc ra. Chọn Tiếp tục để thử lại các phần rỗng. Nếu vẫn không có kết quả, kiểm tra có sao chép được chữ Nhật trong PDF không; PDF scan hoặc chữ bị lỗi cần OCR trước.');
     return { cards, source: job.name };
   } });
   const remove = async () => {
