@@ -29,6 +29,21 @@ const { chatSchema, contextMessages } = load('src/lib/chat/schema.ts');
 const { gateway, outputText, readBody, guarded } = load('src/lib/chat/server.ts');
 const { chatErrorMessage } = load('src/lib/chat/errors.ts');
 
+test('backend proxy runs after dynamic Next AI routes and preserves backend API paths', async () => {
+  const config = load('next.config.ts').default;
+  const previous = process.env.API_PROXY_TARGET;
+  process.env.API_PROXY_TARGET = 'https://backend.test';
+  try {
+    const rewrites = await config.rewrites();
+    assert.ok(!Array.isArray(rewrites), 'array rewrites would intercept dynamic Next route handlers');
+    assert.equal(rewrites.beforeFiles?.length ?? 0, 0);
+    assert.equal(rewrites.afterFiles?.length ?? 0, 0);
+    assert.deepEqual(rewrites.fallback, [{ source: '/api/:path*', destination: 'https://backend.test/api/:path*' }]);
+  } finally {
+    if (previous === undefined) delete process.env.API_PROXY_TARGET; else process.env.API_PROXY_TARGET = previous;
+  }
+});
+
 test('client errors prefer Nest validation details over generic Bad Request labels', () => {
   assert.equal(chatErrorMessage({ message: ['name must be a string', 'size must be an integer'], error: 'Bad Request' }, 400), 'name must be a string\nsize must be an integer');
   assert.equal(chatErrorMessage({ message: 'File quá lớn.', error: 'Bad Request' }, 400), 'File quá lớn.');

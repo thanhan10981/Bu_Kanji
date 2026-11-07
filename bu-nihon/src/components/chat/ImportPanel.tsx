@@ -121,7 +121,7 @@ Yêu cầu:
       const result = await save.mutateAsync({ target: setId, rows: validated });
       setSaved(true); setNotice(`Đã lưu ${result.imported} thẻ, bỏ qua ${result.skipped} thẻ trùng.`);
       await client.invalidateQueries({ queryKey: ['vocabulary', user.id] });
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Không thể lưu bộ thẻ.'); }
+    } catch (cause) { setNotice(''); setError(cause instanceof Error ? cause.message : 'Không thể lưu bộ thẻ.'); }
     finally { lock.current = false; }
   };
   const exportCards = () => {

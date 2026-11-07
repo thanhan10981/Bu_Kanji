@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
     if (!['http:', 'https:'].includes(origin.protocol) || origin.pathname !== '/' || origin.search || origin.hash || origin.username || origin.password) {
       throw new Error('API_PROXY_TARGET must be an http(s) origin without a path');
     }
-    return [{ source: '/api/:path*', destination: `${origin.origin}/api/:path*` }];
+    // Dynamic AI handlers must resolve in Next before forwarding backend APIs.
+    return { fallback: [{ source: '/api/:path*', destination: `${origin.origin}/api/:path*` }] };
   },
 };
 
