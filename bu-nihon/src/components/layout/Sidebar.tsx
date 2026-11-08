@@ -15,12 +15,14 @@ import {
   FileText,
   Sparkles,
   Settings,
+  ClipboardCheck,
 } from "lucide-react";
 
 const navItems = [
   { href: "/kanji", icon: "漢字", label: "Hán tự", isEmoji: true },
   { href: "/vocabulary", icon: <Crown size={20} />, label: "Từ vựng" },
   { href: "/grammar", icon: <Puzzle size={20} />, label: "Ngữ pháp" },
+  { href: "/exams", icon: <ClipboardCheck size={20} />, label: "Luyện đề" },
   { href: "/roadmap", icon: <Map size={20} />, label: "Lộ trình" },
   { href: "/self-study", icon: <Brain size={20} />, label: "Chủ động" },
   { href: "/shadowing", icon: <Mic size={20} />, label: "Shadowing" },
@@ -116,19 +118,20 @@ export function Sidebar() {
           borderTop: "1px solid var(--color-border)",
           display: "none",
           alignItems: "center",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
+          overflowX: "auto",
           paddingInline: 8,
           zIndex: 50,
         }}
       >
-        {navItems.slice(0, 5).map((item) => {
+        {navItems.slice(0, 6).map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
               href={item.href}
               className={`sidebar-item ${isActive ? "active" : ""}`}
-              style={{ width: 48, height: 48 }}
+              style={{ width: 48, height: 48, flexShrink: 0 }}
               title={item.label}
             >
               {item.isEmoji ? (
@@ -145,7 +148,7 @@ export function Sidebar() {
         <button
           className="sidebar-item"
           onClick={() => setSettingsOpen(true)}
-          style={{ width: 48, height: 48 }}
+          style={{ width: 48, height: 48, flexShrink: 0 }}
         >
           <Settings size={18} />
           <span style={{ fontSize: 9 }}>Thêm</span>

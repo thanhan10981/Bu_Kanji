@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test:chat": "node --test --test-isolation=none test/chat.test.cjs",
+    "test:exams": "node --experimental-strip-types --test --test-isolation=none src/lib/exams/model.test.ts",
     "test:vocabulary": "node --experimental-strip-types --test --test-isolation=none src/lib/vocabulary/kana.test.ts src/lib/vocabulary/progress.test.ts"
   },
   "dependencies": {

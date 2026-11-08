@@ -1,0 +1,3118 @@
+{
+  "examId": "exam-2025-07",
+  "title": "JLPT N3 2025/07",
+  "level": "N3",
+  "durationMinutes": null,
+  "sections": [
+    {
+      "sectionId": "s01",
+      "title": "文字・語彙 問題1",
+      "instructions": "問題1            のことばの読み方として最もよいものを、１・２・３・４から一つ選\nび\nなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s01-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": "急に涙が出てしまいました。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "なみだ"
+            },
+            {
+              "choiceId": "2",
+              "text": "あせ"
+            },
+            {
+              "choiceId": "3",
+              "text": "せき"
+            },
+            {
+              "choiceId": "4",
+              "text": "くしゃみ"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": "けがは完全に治りました。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "かんぜん"
+            },
+            {
+              "choiceId": "2",
+              "text": "かんたん"
+            },
+            {
+              "choiceId": "3",
+              "text": "けんぜん"
+            },
+            {
+              "choiceId": "4",
+              "text": "けんたん"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": "雨で地面がぬれている。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ちめい"
+            },
+            {
+              "choiceId": "2",
+              "text": "ちめん"
+            },
+            {
+              "choiceId": "3",
+              "text": "じめい"
+            },
+            {
+              "choiceId": "4",
+              "text": "じめん"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": "お金はあの箱に移したほうがいいですか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "もどした"
+            },
+            {
+              "choiceId": "2",
+              "text": "かくした"
+            },
+            {
+              "choiceId": "3",
+              "text": "このした"
+            },
+            {
+              "choiceId": "4",
+              "text": "うつした"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q005",
+          "originalNumber": "5",
+          "type": "single_choice",
+          "stem": "ゆっくり呼吸をしてください。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "こきょう"
+            },
+            {
+              "choiceId": "2",
+              "text": "こきゅう"
+            },
+            {
+              "choiceId": "3",
+              "text": "こうきゅう"
+            },
+            {
+              "choiceId": "4",
+              "text": "こうきょう"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q006",
+          "originalNumber": "6",
+          "type": "single_choice",
+          "stem": "ここに身長を書いてください。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "せんちょう"
+            },
+            {
+              "choiceId": "2",
+              "text": "しんちょう"
+            },
+            {
+              "choiceId": "3",
+              "text": "じんちょう"
+            },
+            {
+              "choiceId": "4",
+              "text": "ぜんちょう"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q007",
+          "originalNumber": "7",
+          "type": "single_choice",
+          "stem": "前田さんは困っているようだ。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "まよって"
+            },
+            {
+              "choiceId": "2",
+              "text": "おこって"
+            },
+            {
+              "choiceId": "3",
+              "text": "こまって"
+            },
+            {
+              "choiceId": "4",
+              "text": "だまって"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s01-q008",
+          "originalNumber": "8",
+          "type": "single_choice",
+          "stem": "近くに薬局はありますか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "やっきょ"
+            },
+            {
+              "choiceId": "2",
+              "text": "やきょく"
+            },
+            {
+              "choiceId": "3",
+              "text": "やっきょく"
+            },
+            {
+              "choiceId": "4",
+              "text": "やきょ"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 1",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s02",
+      "title": "文字・語彙 問題2",
+      "instructions": "問題2            のことばを漢字で書くとき、最もよいものを、１・２・３・４から一つ選\nび\nなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s02-q009",
+          "originalNumber": "9",
+          "type": "single_choice",
+          "stem": "この町で子どもをそだてたいと思っている。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "産てたい"
+            },
+            {
+              "choiceId": "2",
+              "text": "育てたい"
+            },
+            {
+              "choiceId": "3",
+              "text": "愛てたい"
+            },
+            {
+              "choiceId": "4",
+              "text": "幸てたい"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s02-q010",
+          "originalNumber": "10",
+          "type": "single_choice",
+          "stem": "物が燃えるときに、けむりが出ます。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "煙"
+            },
+            {
+              "choiceId": "2",
+              "text": "燥"
+            },
+            {
+              "choiceId": "3",
+              "text": "焼"
+            },
+            {
+              "choiceId": "4",
+              "text": "爆"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s02-q011",
+          "originalNumber": "11",
+          "type": "single_choice",
+          "stem": "ここからしんりんが見えます。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "森村"
+            },
+            {
+              "choiceId": "2",
+              "text": "森林"
+            },
+            {
+              "choiceId": "3",
+              "text": "山林"
+            },
+            {
+              "choiceId": "4",
+              "text": "山村"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s02-q012",
+          "originalNumber": "12",
+          "type": "single_choice",
+          "stem": "朝、シャワーをあびました。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "流びました"
+            },
+            {
+              "choiceId": "2",
+              "text": "洗びました"
+            },
+            {
+              "choiceId": "3",
+              "text": "清びました"
+            },
+            {
+              "choiceId": "4",
+              "text": "浴びました"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s02-q013",
+          "originalNumber": "13",
+          "type": "single_choice",
+          "stem": "文字の色を変えることはかのうでしょうか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "可能"
+            },
+            {
+              "choiceId": "2",
+              "text": "可態"
+            },
+            {
+              "choiceId": "3",
+              "text": "化能"
+            },
+            {
+              "choiceId": "4",
+              "text": "化態"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s02-q014",
+          "originalNumber": "14",
+          "type": "single_choice",
+          "stem": "今からメールをそうしんします。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "返信"
+            },
+            {
+              "choiceId": "2",
+              "text": "送真"
+            },
+            {
+              "choiceId": "3",
+              "text": "送信"
+            },
+            {
+              "choiceId": "4",
+              "text": "返真"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 2",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s03",
+      "title": "文字・語彙 問題3",
+      "instructions": "問題３ (   )に入れるのに最もよいものを、1・2・3・4 から一つえらびなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s03-q015",
+          "originalNumber": "15",
+          "type": "single_choice",
+          "stem": "山の上から見た景色が素晴らしくて、とても(   )した。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "拝見"
+            },
+            {
+              "choiceId": "2",
+              "text": "歓迎"
+            },
+            {
+              "choiceId": "3",
+              "text": "応答"
+            },
+            {
+              "choiceId": "4",
+              "text": "感動"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q016",
+          "originalNumber": "16",
+          "type": "single_choice",
+          "stem": "この店では、以前誰かが使っていた(   )の車を売っている。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "後半"
+            },
+            {
+              "choiceId": "2",
+              "text": "中年"
+            },
+            {
+              "choiceId": "3",
+              "text": "中古"
+            },
+            {
+              "choiceId": "4",
+              "text": "後期"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q017",
+          "originalNumber": "17",
+          "type": "single_choice",
+          "stem": "来週の旅行に持っていく物の(   )を作った。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "スケジュール"
+            },
+            {
+              "choiceId": "2",
+              "text": "リスト"
+            },
+            {
+              "choiceId": "3",
+              "text": "カタログ"
+            },
+            {
+              "choiceId": "4",
+              "text": "プログラム"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q018",
+          "originalNumber": "18",
+          "type": "single_choice",
+          "stem": "この前は試合に負けて(   )が、今回は勝てたので、本当にうれしい。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "くやしかった"
+            },
+            {
+              "choiceId": "2",
+              "text": "まずしかった"
+            },
+            {
+              "choiceId": "3",
+              "text": "ゆるかった"
+            },
+            {
+              "choiceId": "4",
+              "text": "ずるかった"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q019",
+          "originalNumber": "19",
+          "type": "single_choice",
+          "stem": "ここから市役所までの(   )はどのくらいですか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "途中"
+            },
+            {
+              "choiceId": "2",
+              "text": "徒歩"
+            },
+            {
+              "choiceId": "3",
+              "text": "方向"
+            },
+            {
+              "choiceId": "4",
+              "text": "距離"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q020",
+          "originalNumber": "20",
+          "type": "single_choice",
+          "stem": "シャワーの後は、このタオルで体を(   )ください。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ほして"
+            },
+            {
+              "choiceId": "2",
+              "text": "ふいて"
+            },
+            {
+              "choiceId": "3",
+              "text": "張って"
+            },
+            {
+              "choiceId": "4",
+              "text": "直して"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q021",
+          "originalNumber": "21",
+          "type": "single_choice",
+          "stem": "配達が遅れたせいで、お客さんから(   )を言われてしまった。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "失礼"
+            },
+            {
+              "choiceId": "2",
+              "text": "命令"
+            },
+            {
+              "choiceId": "3",
+              "text": "否定"
+            },
+            {
+              "choiceId": "4",
+              "text": "文句"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q022",
+          "originalNumber": "22",
+          "type": "single_choice",
+          "stem": "この問題を解決するために、何かよい方法を(   )人はいませんか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "思いついた"
+            },
+            {
+              "choiceId": "2",
+              "text": "引き受けた"
+            },
+            {
+              "choiceId": "3",
+              "text": "知り合った"
+            },
+            {
+              "choiceId": "4",
+              "text": "取り替えた"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q023",
+          "originalNumber": "23",
+          "type": "single_choice",
+          "stem": "私の家から駅までは(   )なので、駅まで歩くと疲れます。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "坂道"
+            },
+            {
+              "choiceId": "2",
+              "text": "通り道"
+            },
+            {
+              "choiceId": "3",
+              "text": "片道"
+            },
+            {
+              "choiceId": "4",
+              "text": "近道"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q024",
+          "originalNumber": "24",
+          "type": "single_choice",
+          "stem": "この店はとても人気があり、店の前にはいつも、開店を待つ人の長い(   )\nができている。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "帯"
+            },
+            {
+              "choiceId": "2",
+              "text": "線"
+            },
+            {
+              "choiceId": "3",
+              "text": "列"
+            },
+            {
+              "choiceId": "4",
+              "text": "壁"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s03-q025",
+          "originalNumber": "25",
+          "type": "single_choice",
+          "stem": "後でレポートを書くために、実験の結果をノートに(   )した。\nえら\n問題4            に意味が最も近いものを、１・２・３・４から一つ選\nびなさい。\n26   あの仕事は本当に苦労した。\n2 大変だった\n4 やりたくなかった\n27   本田さんと佐藤さんは、部屋からそっと出ていった。\n2 にぎやかに\n3 急いで\n4 二人で\n28   昨日、田中さんは早退したそうです。\n2 早く来た\n4 早く帰った\n29   ここに来てから1 週間くらいたちました。\n2 続けました\n3 休みました\n4 過ぎました\n30   この店ではさまざまな料理が食べられます。\n2 有名な\n3 いろいろな\n4 特別な",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "申請"
+            },
+            {
+              "choiceId": "2",
+              "text": "記録"
+            },
+            {
+              "choiceId": "3",
+              "text": "予報"
+            },
+            {
+              "choiceId": "4",
+              "text": "通知\n1 危険だった\n3 つまらない\n1 静かに\n1 早く起きた\n3 早く寝た\n1 待ちました\n1 きれいな"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s04",
+      "title": "文字・語彙 問題4",
+      "instructions": "問題4            に意味が最も近いものを、１・２・３・４から一つ選\nびなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s04-q026",
+          "originalNumber": "26",
+          "type": "single_choice",
+          "stem": "あの仕事は本当に苦労した。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "危険だった"
+            },
+            {
+              "choiceId": "2",
+              "text": "大変だった"
+            },
+            {
+              "choiceId": "3",
+              "text": "つまらない"
+            },
+            {
+              "choiceId": "4",
+              "text": "やりたくなかった"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s04-q027",
+          "originalNumber": "27",
+          "type": "single_choice",
+          "stem": "本田さんと佐藤さんは、部屋からそっと出ていった。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "静かに"
+            },
+            {
+              "choiceId": "2",
+              "text": "にぎやかに"
+            },
+            {
+              "choiceId": "3",
+              "text": "急いで"
+            },
+            {
+              "choiceId": "4",
+              "text": "二人で"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s04-q028",
+          "originalNumber": "28",
+          "type": "single_choice",
+          "stem": "昨日、田中さんは早退したそうです。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "早く起きた"
+            },
+            {
+              "choiceId": "2",
+              "text": "早く来た"
+            },
+            {
+              "choiceId": "3",
+              "text": "早く寝た"
+            },
+            {
+              "choiceId": "4",
+              "text": "早く帰った"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s04-q029",
+          "originalNumber": "29",
+          "type": "single_choice",
+          "stem": "ここに来てから1 週間くらいたちました。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "待ちました"
+            },
+            {
+              "choiceId": "2",
+              "text": "続けました"
+            },
+            {
+              "choiceId": "3",
+              "text": "休みました"
+            },
+            {
+              "choiceId": "4",
+              "text": "過ぎました"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s04-q030",
+          "originalNumber": "30",
+          "type": "single_choice",
+          "stem": "この店ではさまざまな料理が食べられます。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "きれいな"
+            },
+            {
+              "choiceId": "2",
+              "text": "有名な"
+            },
+            {
+              "choiceId": "3",
+              "text": "いろいろな"
+            },
+            {
+              "choiceId": "4",
+              "text": "特別な"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s05",
+      "title": "文字・語彙 問題5",
+      "instructions": "問題5 次の言\nびなさい。\n葉\nの使い方として最も近いものを、１・２・３・４から一つ選",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s05-q031",
+          "originalNumber": "31",
+          "type": "single_choice",
+          "stem": "減少",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "弟はサッカーの試合に負けてから、元気が減少している。"
+            },
+            {
+              "choiceId": "2",
+              "text": "気温が減少しているので、今夜は雪が降ると思う。"
+            },
+            {
+              "choiceId": "3",
+              "text": "調査によると、この国の人口は今後減少するそうだ。"
+            },
+            {
+              "choiceId": "4",
+              "text": "今年はりんごの値段が去年より減少したらしい。"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s05-q032",
+          "originalNumber": "32",
+          "type": "single_choice",
+          "stem": "重大",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "子どもたちは重大な顔して、先生の話を聞いていた。"
+            },
+            {
+              "choiceId": "2",
+              "text": "これは祖母からもらった重大な指輪だ。"
+            },
+            {
+              "choiceId": "3",
+              "text": "外国での一人暮らしは、重大な経験になると思う。"
+            },
+            {
+              "choiceId": "4",
+              "text": "明日、社長から重大な発表があるそうだ。"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s05-q033",
+          "originalNumber": "33",
+          "type": "single_choice",
+          "stem": "ばらばら",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "冷凍庫に入れるのを忘れて、アイスクリームがばらばらになってしまった。"
+            },
+            {
+              "choiceId": "2",
+              "text": "床に落としてしまい、資料がばらばらになってしまった。"
+            },
+            {
+              "choiceId": "3",
+              "text": "ドアを開けたので、部屋の暖かい空気がばらばらになってしまった。"
+            },
+            {
+              "choiceId": "4",
+              "text": "コップが倒れて、中のジュースがばらばらになってしまった。"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s05-q034",
+          "originalNumber": "34",
+          "type": "single_choice",
+          "stem": "皮",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "じゃがいもは皮をむかないで、そのままゆでます。"
+            },
+            {
+              "choiceId": "2",
+              "text": "机にぶつけて、パソコンの皮に傷がついてしまった。"
+            },
+            {
+              "choiceId": "3",
+              "text": "割った卵の皮はここに捨ててください。"
+            },
+            {
+              "choiceId": "4",
+              "text": "テキストの皮に名前が書いてあるので、誰の物か分かります。"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s05-q035",
+          "originalNumber": "35",
+          "type": "single_choice",
+          "stem": "オーダー",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "健康のため、毎日運動をするように医者からオーダーされた。"
+            },
+            {
+              "choiceId": "2",
+              "text": "母は妹に部屋の掃除をオーダーした。"
+            },
+            {
+              "choiceId": "3",
+              "text": "レストランで食事の後にデザートをオーダーした。"
+            },
+            {
+              "choiceId": "4",
+              "text": "次の大会で必ず優勝してほしいと選手たちにオーダーした。"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s06",
+      "title": "文法 問題1",
+      "instructions": "問題１ つぎの文の(   )に入れるのに最もよいものを、１・２・３・４から一つ\nえら\n選\nびなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s06-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": "先月東京で行われたサッカーの国際大会には、世界中(  )多くのサッカー\nファンが集まった。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "に"
+            },
+            {
+              "choiceId": "2",
+              "text": "で"
+            },
+            {
+              "choiceId": "3",
+              "text": "から"
+            },
+            {
+              "choiceId": "4",
+              "text": "まで"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": "食事のマナーは国(  )違うので、私は旅行に行く前に、気をつけたほうが\nいいことはないか調べるようにしている。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "によって"
+            },
+            {
+              "choiceId": "2",
+              "text": "に対して"
+            },
+            {
+              "choiceId": "3",
+              "text": "にとって"
+            },
+            {
+              "choiceId": "4",
+              "text": "において"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": "A「もうすぐ(  )この前言ってたけど、準備は進んでる?」\nB「うん。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "引っ越す"
+            },
+            {
+              "choiceId": "2",
+              "text": "引っ越すか"
+            },
+            {
+              "choiceId": "3",
+              "text": "引っ越すって"
+            },
+            {
+              "choiceId": "4",
+              "text": "引っ越すのを"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": "田中「山下さん、映画をよく見るそうですね。映画館で見るんですか。」\n山下「映画館にも行きますが、(   )、家でDVD を見ることが多いですね。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "確かに"
+            },
+            {
+              "choiceId": "2",
+              "text": "まるで"
+            },
+            {
+              "choiceId": "3",
+              "text": "必ずしも"
+            },
+            {
+              "choiceId": "4",
+              "text": "どちらかというと"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q005",
+          "originalNumber": "5",
+          "type": "single_choice",
+          "stem": "(料理番組で)\n「じゃがいもは、ゆでてから皮をむいたほうが、きれいに皮がむけます。ゆでた\n後、熱い（  ）に皮をむきましょう。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "のに"
+            },
+            {
+              "choiceId": "2",
+              "text": "うちに"
+            },
+            {
+              "choiceId": "3",
+              "text": "ことで"
+            },
+            {
+              "choiceId": "4",
+              "text": "とすると"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q006",
+          "originalNumber": "6",
+          "type": "single_choice",
+          "stem": "少し前にご飯を食べた(  )なのに、もうおなかがすいてきた。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "せい"
+            },
+            {
+              "choiceId": "2",
+              "text": "とき"
+            },
+            {
+              "choiceId": "3",
+              "text": "よう"
+            },
+            {
+              "choiceId": "4",
+              "text": "ばかり"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 6",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q007",
+          "originalNumber": "7",
+          "type": "single_choice",
+          "stem": "私は小学生のころ、ゲームが大好きだった。早く家でゲームが(  )、毎日\n学校から走って帰っていた。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "したくて"
+            },
+            {
+              "choiceId": "2",
+              "text": "したくても"
+            },
+            {
+              "choiceId": "3",
+              "text": "するためで"
+            },
+            {
+              "choiceId": "4",
+              "text": "するためでも"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q008",
+          "originalNumber": "8",
+          "type": "single_choice",
+          "stem": "弟の誕生日プレゼントを何にするか考えている。何を(  )、喜ぶだろうか。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "くれたら"
+            },
+            {
+              "choiceId": "2",
+              "text": "あげたら"
+            },
+            {
+              "choiceId": "3",
+              "text": "くれるから"
+            },
+            {
+              "choiceId": "4",
+              "text": "あげるから"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q009",
+          "originalNumber": "9",
+          "type": "single_choice",
+          "stem": "(電話で)\nA「この前借りた小説、もう１回貸してもらえない？」\nB「うん、いいよ。あした、学校に（  ）ね。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "持っとく"
+            },
+            {
+              "choiceId": "2",
+              "text": "持ってる"
+            },
+            {
+              "choiceId": "3",
+              "text": "持ってく"
+            },
+            {
+              "choiceId": "4",
+              "text": "持っちゃう"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q010",
+          "originalNumber": "10",
+          "type": "single_choice",
+          "stem": "A「再来週の登山、楽しみだね。」\nB「うん、（  ）ね。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "晴れてきた"
+            },
+            {
+              "choiceId": "2",
+              "text": "晴れるといい"
+            },
+            {
+              "choiceId": "3",
+              "text": "晴れるんだ"
+            },
+            {
+              "choiceId": "4",
+              "text": "晴れてよかった"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q011",
+          "originalNumber": "11",
+          "type": "single_choice",
+          "stem": "(市のホームページで)\n9 月30 日に絵本作家の坂木みどりさんによる講演会が開かれます。市民の方で\nあれば、どなたでも無料で（  ）。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ご参加になれます"
+            },
+            {
+              "choiceId": "2",
+              "text": "参加いたします"
+            },
+            {
+              "choiceId": "3",
+              "text": "ご参加になっています"
+            },
+            {
+              "choiceId": "4",
+              "text": "参加できております"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q012",
+          "originalNumber": "12",
+          "type": "single_choice",
+          "stem": "以前は、会社の窓から海を見ることができたが、隣に高いビルができて、\n(   )。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "見えなくてもよくなった"
+            },
+            {
+              "choiceId": "2",
+              "text": "見られたかもしれない"
+            },
+            {
+              "choiceId": "3",
+              "text": "見えなくなってしまった"
+            },
+            {
+              "choiceId": "4",
+              "text": "見られるようにならない"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s06-q013",
+          "originalNumber": "13",
+          "type": "single_choice",
+          "stem": "(病院で)\n医者「この薬を五日間飲んでください。」\n患者「わかりました。熱が下がっても（  ）。」\n医者「はい。五日間必ず飲んでください。」\n14   今年の夏も暑いが、          ★                     ずっと涼しく感じる。\n2  比べると\n4   去年の夏に\n15   初めてアルバイトをして、お金を稼ぐ          ★                     わかった。\n2 大変な\n4  どれだけ\n16   今日、昼食の後、図書館へ行って本を読んでいたら          ★                   。\n2  外が暗くなっていた\n4 いつのまにか\n17  このチーズケーキの          ★                    、誰でも簡単に作れると\n思う。\n２ 作り方は\n４ 材料を混ぜて冷やす\n18  A「あさってのサッカーの試合、応援に行くね。天気予報では曇りと言っていた\nけど、雨だったら中止になる?」\nB「ありがとう。もし           ★                   応援には無理して来なくても\nいいよ。」\n２ 試合は\n４ 中止にならないんだけど",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "飲んではいけませんか"
+            },
+            {
+              "choiceId": "2",
+              "text": "飲んでいないんでしょうか"
+            },
+            {
+              "choiceId": "3",
+              "text": "飲んでみようと思いますか"
+            },
+            {
+              "choiceId": "4",
+              "text": "飲んだほうがいいでしょうか\n1 異常な\n3 暑さだった\n1 ことか\n3 ことが\n1 ので\n3 驚いた\n１ だから\n３ だけ\n１ 雨が降ったら\n３ 雨が降ったとしても"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 7",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s07",
+      "title": "文法 問題2",
+      "instructions": "問題2  つぎの文の入る最もよいものを、1・2・3・4 から一つえらびなさい。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s07-q014",
+          "originalNumber": "14",
+          "type": "single_choice",
+          "stem": "今年の夏も暑いが、          ★                     ずっと涼しく感じる。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "異常な"
+            },
+            {
+              "choiceId": "2",
+              "text": "比べると"
+            },
+            {
+              "choiceId": "3",
+              "text": "暑さだった"
+            },
+            {
+              "choiceId": "4",
+              "text": "去年の夏に"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 8",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s07-q015",
+          "originalNumber": "15",
+          "type": "single_choice",
+          "stem": "初めてアルバイトをして、お金を稼ぐ          ★                     わかった。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ことか"
+            },
+            {
+              "choiceId": "2",
+              "text": "大変な"
+            },
+            {
+              "choiceId": "3",
+              "text": "ことが"
+            },
+            {
+              "choiceId": "4",
+              "text": "どれだけ"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 8",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s07-q016",
+          "originalNumber": "16",
+          "type": "single_choice",
+          "stem": "今日、昼食の後、図書館へ行って本を読んでいたら          ★                   。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ので"
+            },
+            {
+              "choiceId": "2",
+              "text": "外が暗くなっていた"
+            },
+            {
+              "choiceId": "3",
+              "text": "驚いた"
+            },
+            {
+              "choiceId": "4",
+              "text": "いつのまにか"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 8",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s07-q017",
+          "originalNumber": "17",
+          "type": "single_choice",
+          "stem": "このチーズケーキの          ★                    、誰でも簡単に作れると\n思う。",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "だから"
+            },
+            {
+              "choiceId": "2",
+              "text": "作り方は"
+            },
+            {
+              "choiceId": "3",
+              "text": "だけ"
+            },
+            {
+              "choiceId": "4",
+              "text": "材料を混ぜて冷やす"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 8",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s07-q018",
+          "originalNumber": "18",
+          "type": "single_choice",
+          "stem": "A「あさってのサッカーの試合、応援に行くね。天気予報では曇りと言っていた\nけど、雨だったら中止になる?」\nB「ありがとう。もし           ★                   応援には無理して来なくても\nいいよ。」",
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "雨が降ったら"
+            },
+            {
+              "choiceId": "2",
+              "text": "試合は"
+            },
+            {
+              "choiceId": "3",
+              "text": "雨が降ったとしても"
+            },
+            {
+              "choiceId": "4",
+              "text": "中止にならないんだけど"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 8",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s08",
+      "title": "文法 問題3",
+      "instructions": "問題3 つぎの文\n章\nを読んで、文\n章\n全体の内容を考えて、 19 から 22 の中に入る最も\nよいものを、1・2・3・4 から一つえらびなさい。\n以下は、留学生の作文である。\nスキー旅行\nチュラノン ソムチャイ\n冬になると、駅の広告や旅行会社のちらしでスキー旅行の案内をよく見ます。去年の\n冬、私はスキーが上手な友達からスキー旅行に誘われました。私は寒いのが苦手だし、ス\nキーもしたことがなかったので迷いました。でも、友達と旅行には行きたかったので、\nスキーにチャレンジしてみることにしました。\n私たちはバスでスキー旅行に行きました。その日は晴れていましたが、バスを降りたら\nとても寒くて、私は暖かいところにいたいと思いました。「19」せっかく来たのだからと\n思って、スキーの練習を始めました。スキーの練習をしていると、すぐに寒さを感じなく\nなりました。スキーは難しかったですが、面白かったです。半日で、あまり転ばずに\n「20」 。山の上から滑って降りるときのスピードにどきどきしました。\n今は駅でスキーの広告を見るたびに、 「21」 スキー旅行を思い出します。一度スキー\nの面白さを知ってしまうと、また行きたくなります。自分でもスキーをしてみて、日本で\nスキーが冬の代表的なスポーツになっている理由がよく 「22」。",
+      "materials": [],
+      "questions": [
+        {
+          "questionId": "s08-q019",
+          "originalNumber": "19",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "例えば"
+            },
+            {
+              "choiceId": "2",
+              "text": "それでも"
+            },
+            {
+              "choiceId": "3",
+              "text": "実は"
+            },
+            {
+              "choiceId": "4",
+              "text": "また"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s08-q020",
+          "originalNumber": "20",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "滑れるようになりました"
+            },
+            {
+              "choiceId": "2",
+              "text": "滑れるようにしてあげました"
+            },
+            {
+              "choiceId": "3",
+              "text": "滑ってくれました"
+            },
+            {
+              "choiceId": "4",
+              "text": "滑ってもらえました"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s08-q021",
+          "originalNumber": "21",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "あの広告の"
+            },
+            {
+              "choiceId": "2",
+              "text": "ああいう"
+            },
+            {
+              "choiceId": "3",
+              "text": "ある"
+            },
+            {
+              "choiceId": "4",
+              "text": "あの"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s08-q022",
+          "originalNumber": "22",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "わかっていきます"
+            },
+            {
+              "choiceId": "2",
+              "text": "わかるのでしょう"
+            },
+            {
+              "choiceId": "3",
+              "text": "わかりました"
+            },
+            {
+              "choiceId": "4",
+              "text": "わかったそうです"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s09",
+      "title": "読解 問題4",
+      "instructions": "問題4 つぎの(1)から(4)の文章\nを読んで、質問に答えなさい。答えは、1・2・3・4\nから最もよいものを一つえらびなさい。\n（１）\nこれは、同じ会社の木村さんからジョンさんに届いたメールである。\nジョンさん\n先週は、製品発表会の英語資料のチェックをしてくれて、ありがとうございました。\nチェックしてもらったあと、少し文章を書き加えました。それから、直したほうがいいと\nアドバイスをもらったグラフも作り直しました。\n直した資料をこのメールと一緒に送りますので、もう一度見てもらえませんか。新しく\n書き加えた部分は、赤い字になっています。\nすみませんが、今週中にご返信をお願いいたします。\n木村",
+      "materials": [
+        {
+          "materialId": "s09-m01",
+          "type": "text",
+          "text": "読解\nぶんしょう\n問題4 つぎの(1)から(4)の文章\nを読んで、質問に答えなさい。答えは、1・2・3・4\nから最もよいものを一つえらびなさい。",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 10–10"
+        },
+        {
+          "materialId": "s09-m02",
+          "type": "text",
+          "text": "（１）\nこれは、同じ会社の木村さんからジョンさんに届いたメールである。\nジョンさん\n先週は、製品発表会の英語資料のチェックをしてくれて、ありがとうございました。\nチェックしてもらったあと、少し文章を書き加えました。それから、直したほうがいいと\nアドバイスをもらったグラフも作り直しました。\n直した資料をこのメールと一緒に送りますので、もう一度見てもらえませんか。新しく\n書き加えた部分は、赤い字になっています。\nすみませんが、今週中にご返信をお願いいたします。\n木村",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 10–10"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s09-q023",
+          "originalNumber": "23",
+          "type": "single_choice",
+          "stem": "ジョンさんがこのメールで頼まれていることはどれか。\n（２）\nこれは、ある図書館のホームページに載っているお知らせである。\n緑図書館\n1 月25 日\n図書館の休館と特別窓口のお知らせ\n緑図書館は、4 月1 日から9 月30 日まで、工事のため休館することになりました。\nこの期間は、水森駅の駅ビル「グラン」3 階に特別窓口を開きます。\n特別窓口では、予約した本を借りることと本を返すことができます。本や新聞を読む\n場所はありません。なお、本の予約は、インターネットでの予約が便利ですが、特別\n窓口でも可能です。\nご利用可能時間は、決まりましたら、ホームページでお知らせします。\nご不便をおかけしますが、よろしくお願いいたします。",
+          "materialIds": [
+            "s09-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "今週中にもう一度、資料のチェックをすること"
+            },
+            {
+              "choiceId": "2",
+              "text": "今週中に資料のチェックをするために木村さんと会うこと"
+            },
+            {
+              "choiceId": "3",
+              "text": "今週中に日本語の資料を英語に直すこと"
+            },
+            {
+              "choiceId": "4",
+              "text": "今週中に新しい資料を作ること"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 10",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s09-q024",
+          "originalNumber": "24",
+          "type": "single_choice",
+          "stem": "駅ビルの特別窓口でできることは何か。\n（３）\n昨日、雑誌で「紙から作られた靴下」という記事を読んだ。そのタイトルを見たとき、\n私は、紙コップのように、一度使ったら捨ててしまう物なのだろうと思った。しかし、\n記事によると、その靴下は、特別な紙で作った丈夫な糸でできているそうだ。紙なのに水に\n強く、洗濯をして何度も使えると書かれていた。予想と違っていて、意外だった。よく汗を\n吸ってすぐ乾くので、長い時間靴をはく人にいいそうだ。今度、買ってみようと思う。",
+          "materialIds": [
+            "s09-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "予約した本を借りることと、本を返すことと、本を読むことと、本の予約をすること"
+            },
+            {
+              "choiceId": "2",
+              "text": "予約した本を借りることと、本を返すこととと、本を読むこと"
+            },
+            {
+              "choiceId": "3",
+              "text": "予約した本を借りることと、本を返すことと、本の予約をすること"
+            },
+            {
+              "choiceId": "4",
+              "text": "予約した本を借りることと、本を返すことだけ"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 11",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s09-q025",
+          "originalNumber": "25",
+          "type": "single_choice",
+          "stem": "予想と違っていて、意外だったとあるが、何が意外だったのか。\n（４）\n体が痛くて病院に通っている患者が、悪いところが治ってきたときに、「別のところが\n痛くなってきた。今度はそっちが悪いみたいだ。」と言うことがある。このような場合、\n実は、その人には最初から悪いところがいくつかあった可能性がある。人の体は、同じ\nときに一つの痛みしか感じない。そのときにいちばん強い痛みだけを感じるのである。\nこの患者は、最も悪かったところが治ってきたので、次の痛みを感じるようになってきた\nと考えられる。",
+          "materialIds": [
+            "s09-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "紙コップのように、一度使ったら捨てる紙の靴下があること"
+            },
+            {
+              "choiceId": "2",
+              "text": "記事で紹介されていた靴下は、洗濯ができて、繰り返して使えること"
+            },
+            {
+              "choiceId": "3",
+              "text": "記事で紹介されていた靴下は、よく汗を吸ってすぐに乾くこと"
+            },
+            {
+              "choiceId": "4",
+              "text": "長い時間靴をはく人のための靴下があること"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 12",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s09-q026",
+          "originalNumber": "26",
+          "type": "single_choice",
+          "stem": "この文章では、患者が「別のところが痛くなってきた。今度はそっちが悪いみたいだ。」\nと言うのは、なぜだと言っているか。",
+          "materialIds": [
+            "s09-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "悪いところが治ってきたときに、複数の痛みを感じるようになることがあるから"
+            },
+            {
+              "choiceId": "2",
+              "text": "悪いところが一つ治ると、次に悪かったところがもっと悪くなることがあるから"
+            },
+            {
+              "choiceId": "3",
+              "text": "痛いところがいくつかあっても、患者は一つずつしか伝えないことがあるから"
+            },
+            {
+              "choiceId": "4",
+              "text": "痛かったところがよくなると、別のところの痛みを感じるようになることがあるから"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 12",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s10",
+      "title": "読解 問題5",
+      "instructions": "問題5  つぎの(1)と(2)の文章\nを読んで、質問に答えなさい。答えは、1・2・3・4\nから最もよいものを一つえらびなさい。\n（１）\n私と妹は、顔はとても似ていると言われますが、嫌いな物や嫌なことに対する姿勢は\n逆です。例えば、食事で苦手な物があったとき、私は最後に食べますが、妹は最初に食べて\nしまいます。\nもう一つ①例があります。私たちが通っていた小学校では、毎年夏休みに宿題がたくさん\n出ました。妹はいつもすぐに終わらせましたが、私は夏休みが終わる数日前になって慌てて\nやり始めました。それで、毎年、私だけ両親にしかられました。\nしかし、ある年、②妹もしかられたことがありました。その年も、妹は夏休みが始まって\nすぐに、すべての宿題をやってしまいました。そのときは、両親は妹を褒めていました。\nでも、両親は、その中に「今年の夏休みの思い出」という作文の宿題があったことに、気が\nついていなかったのです。夏休みの最後の日、母は作文の内容がうそであることに気づいて、\n書き直させました。\nその日は、私も妹も、しかられながら机に向かいました。",
+      "materials": [
+        {
+          "materialId": "s10-m01",
+          "type": "text",
+          "text": "ぶんしょう\n問題5  つぎの(1)と(2)の文章\nを読んで、質問に答えなさい。答えは、1・2・3・4\nから最もよいものを一つえらびなさい。",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13–13"
+        },
+        {
+          "materialId": "s10-m02",
+          "type": "text",
+          "text": "（１）\n私と妹は、顔はとても似ていると言われますが、嫌いな物や嫌なことに対する姿勢は\n逆です。例えば、食事で苦手な物があったとき、私は最後に食べますが、妹は最初に食べて\nしまいます。\nもう一つ①例があります。私たちが通っていた小学校では、毎年夏休みに宿題がたくさん\n出ました。妹はいつもすぐに終わらせましたが、私は夏休みが終わる数日前になって慌てて\nやり始めました。それで、毎年、私だけ両親にしかられました。\nしかし、ある年、②妹もしかられたことがありました。その年も、妹は夏休みが始まって\nすぐに、すべての宿題をやってしまいました。そのときは、両親は妹を褒めていました。\nでも、両親は、その中に「今年の夏休みの思い出」という作文の宿題があったことに、気が\nついていなかったのです。夏休みの最後の日、母は作文の内容がうそであることに気づいて、\n書き直させました。\nその日は、私も妹も、しかられながら机に向かいました。",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13–13"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s10-q027",
+          "originalNumber": "27",
+          "type": "single_choice",
+          "stem": "1例とあるが、何についての例か。",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "「私」と妹は、顔だけでなく、性格も似ているということ"
+            },
+            {
+              "choiceId": "2",
+              "text": "「私」と妹は、嫌いな物や嫌なことに対する姿勢が逆だということ"
+            },
+            {
+              "choiceId": "3",
+              "text": "「私」と妹は、協力し合って夏休みの宿題をしていたということ"
+            },
+            {
+              "choiceId": "4",
+              "text": "「私」と妹は、毎年夏休みに必ず両親にしかられていたこと"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s10-q028",
+          "originalNumber": "28",
+          "type": "single_choice",
+          "stem": "「私」と妹は、毎年の夏休みの宿題をどう思っていたか。",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "「私」も妹も好きだった。"
+            },
+            {
+              "choiceId": "2",
+              "text": "「私」も妹も嫌だった。"
+            },
+            {
+              "choiceId": "3",
+              "text": "「私」は好きだったが、妹は嫌だった。"
+            },
+            {
+              "choiceId": "4",
+              "text": "「私」は嫌だったが、妹は好きだった。"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s10-q029",
+          "originalNumber": "29",
+          "type": "single_choice",
+          "stem": "2妹もしかられたとあるが、妹はなぜしかられたのか。\n（２）\nカラスは、人間の食べ物をうばったりするので、嫌われることが多い鳥だ。そのカラスに\nついて、ある問題を解決した人のニュースを見た。\nある大学の研究所の建物に、倉庫として使っている場所がある。そこに、カラスが入って\nきて物を壊したり汚したりするので、研究所の人は困っていた。それで、カラスの研究者に\n相談したら、「カラス侵入禁止（注)」と書いた紙をはったらどうかと言われた。最初は\n①冗談だと思ったが、実際にやってみると、②本当に来なくなったそうだ。\nカラスに文字が読めるはずがないのに、なぜこの紙に効果があったのだろうか。この\n研究者によると、まず、そこを通って紙を見た人が不思議に思って、近くにいるカラスを\nよく見る。すると、カラスは危険を感じて来なくなる。カラスは人間に見られるのを嫌うの\nだそうだ。\nニュースを見て、私は、この研究者がカラスの行動だけでなく、人間の行動についても、\nしっかり③予想できていたのだろうと感心した。\n（注）侵入禁止：立ち入り禁止",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "夏休みが終わる数日前になって宿題をやり始めたから"
+            },
+            {
+              "choiceId": "2",
+              "text": "「私」の作文と同じことを「今年の夏休みの思い出」に書いたから"
+            },
+            {
+              "choiceId": "3",
+              "text": "「今年の夏休みの思い出」に、実際にはしていないことを書いたから"
+            },
+            {
+              "choiceId": "4",
+              "text": "「今年の夏休みの思い出」を、夏休みの最後の日まで書かなかったから"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 14",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s10-q030",
+          "originalNumber": "30",
+          "type": "single_choice",
+          "stem": "1冗談だと思ったとあるが、なぜそう思ったのか。",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "カラスが文字を読めないと意味がない方法だから"
+            },
+            {
+              "choiceId": "2",
+              "text": "カラスの研究者でなくても思いつくような方法だから"
+            },
+            {
+              "choiceId": "3",
+              "text": "カラスの研究者でないと実行できないような方法だから"
+            },
+            {
+              "choiceId": "4",
+              "text": "カラスがいなくならず、逆に、集まってしまいそうな方法だから"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s10-q031",
+          "originalNumber": "31",
+          "type": "single_choice",
+          "stem": "2本当に来なくなったとあるが、なぜか。",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "倉庫が汚くなって、カラスが好きな場所ではなくなったから"
+            },
+            {
+              "choiceId": "2",
+              "text": "カラスが今までなかった紙を見て、危険な場所になったと感じたから"
+            },
+            {
+              "choiceId": "3",
+              "text": "研究者が観察しに来るようになったことを、カラスが嫌ったから"
+            },
+            {
+              "choiceId": "4",
+              "text": "カラスをよく見る人が増えて、カラスが危険を感じたから"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s10-q032",
+          "originalNumber": "32",
+          "type": "single_choice",
+          "stem": "3予想できていたとあるが、人間の行動について、研究者はどのように予想していた\nと考えられるか。\nぶんしょう\n問題6  つぎの文章\nを読んで、質問に答えなさい。答えは、1・2・3・4 から最もよい",
+          "materialIds": [
+            "s10-m02"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "ニュースで取り上げられて有名になった場所には、行ってみたくなる。"
+            },
+            {
+              "choiceId": "2",
+              "text": "カラスに入ってほしくない場所には、カラスが入らないような工夫をする。"
+            },
+            {
+              "choiceId": "3",
+              "text": "カラスがいる場所では、危険を感じてカラスの近くに行かないようにする。"
+            },
+            {
+              "choiceId": "4",
+              "text": "「カラス侵入禁止」と書かれた紙を見たら、近くにいるカラスを観察したくなる。"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s11",
+      "title": "読解 問題6",
+      "instructions": null,
+      "materials": [
+        {
+          "materialId": "s11-m01",
+          "type": "text",
+          "text": "ものを一つえらびなさい。\n先週、実家に帰ったとき、両親が、近所に新しくできた魚料理のレストランに連れて行っ\nてくれた。両親はもう何回か行ったのだそうだ。\nメニューには、よく知られた魚を使った料理はほとんどなく、聞いたことのない魚の料理\nが並んでいた。いろいろな料理を食べたが、どれもおいしかった。両親は、この店では日本で\n今まで一般的に売られていなかった種類の魚を扱っているのだと教えてくれた。最近、そのよ\nうな魚は「未利用魚」と呼ばれ、関心を持つ人が増えているそうだ。\n食事のあと、店長がテーブルに来て、いろいろ説明してくれた。日本では、魚がとれる\n量が減り続けていて、多いときの半分以下になっている。日本人がよく食べている魚は80\n種類ぐらいだが、実は、日本の近くの海では3,000 種類以上の魚がとれる。そこで、未利用魚\nを食べる人を増やそうという動きが広がってきた。食べる人が増えれば、今まで商品としての\n価値がなかった魚が売れるようになるので、 漁業(注)を応援することになるそうだ。\n未利用魚のことを知らない人は多い。それで、この店では、未利用魚のおいしさや、食べ\nることの意味を知ってもらうことが重要だと考えているそうだ。私もなるほどと思ったし、\n実は、両親も同じように感じて私を誘ったらしい。\nこの話を聞いたあと、私は自分でも買いたいと思って近所のスーパーを見てみたが、未利\n用魚は売っていなかった。レストランの店長は、最近は未利用魚を缶詰などにしたものがイン\nターネットで買えると言っていた。せっかく興味を持ったのだから、どういうものが買えるの\nか調べてみようと思う。\n（注）漁業：魚をとる仕事",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 16–16"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s11-q033",
+          "originalNumber": "33",
+          "type": "single_choice",
+          "stem": "先週、「私」が行ったレストランは、どのようなレストランか。",
+          "materialIds": [
+            "s11-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "普通の魚を使った料理も珍しい魚を使った料理も多い。"
+            },
+            {
+              "choiceId": "2",
+              "text": "普通の魚を使った料理がとても多く、珍しい魚を使った料理が少ない。"
+            },
+            {
+              "choiceId": "3",
+              "text": "普通の魚を使った料理がとても少なく、珍しい魚を使った料理が多い。"
+            },
+            {
+              "choiceId": "4",
+              "text": "珍しい魚を使った料理しかない。"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 16",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s11-q034",
+          "originalNumber": "34",
+          "type": "single_choice",
+          "stem": "説明してくれたとあるが、説明の内容として合っているのはどれか。",
+          "materialIds": [
+            "s11-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "日本でとれる魚の量が減ったことで、未利用魚を食べる人を増やす動きが進んだ。"
+            },
+            {
+              "choiceId": "2",
+              "text": "日本ではたくさんの種類の魚がとれるが、日本人の食べる魚の種類は減っている。"
+            },
+            {
+              "choiceId": "3",
+              "text": "未利用魚を食べる人が増えると、未利用魚以外の魚が売れなくなる。"
+            },
+            {
+              "choiceId": "4",
+              "text": "今までと同じ種類の魚を食べ続けることが、魚をとる仕事を応援することになる。"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s11-q035",
+          "originalNumber": "35",
+          "type": "single_choice",
+          "stem": "両親が「私」をレストランに連れて行ったのはなぜか。",
+          "materialIds": [
+            "s11-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "未利用魚のおいしさや食べることの意味を、「私」にも知ってほしかったから"
+            },
+            {
+              "choiceId": "2",
+              "text": "未利用魚を食べながら、「私」から未利用魚についての話を聞きたかったから"
+            },
+            {
+              "choiceId": "3",
+              "text": "未利用魚以外にもおいしい魚がたくさんあると、「私」に教えたかったから"
+            },
+            {
+              "choiceId": "4",
+              "text": "「私」が未利用魚に関心を持っていることを知っていたから"
+            }
+          ],
+          "correctChoiceIds": [
+            "1"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s11-q036",
+          "originalNumber": "36",
+          "type": "single_choice",
+          "stem": "「私」は、これからどうしようと思っているか。",
+          "materialIds": [
+            "s11-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "自分の家の近所にも、未利用魚の料理を扱うレストランがないか調べてみよう。"
+            },
+            {
+              "choiceId": "2",
+              "text": "自分の家の近所のスーパーで、未利用魚を売っていないか見てみよう。"
+            },
+            {
+              "choiceId": "3",
+              "text": "自分でも買うことができる未利用魚をインターネットで探してみよう。"
+            },
+            {
+              "choiceId": "4",
+              "text": "インターネットで買える未利用魚にどういうものがあるのか、店長に聞いてみよう。"
+            }
+          ],
+          "correctChoiceIds": [
+            "3"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s12",
+      "title": "読解 問題7",
+      "instructions": "問題7  右のページは、ある公園の掲\n示\n板\nにはってあるポスターである。これを読んで、下の\n質問に答えなさい。答えは、1・2・3・4 から最もよいものを一つえらびなさい。",
+      "materials": [
+        {
+          "materialId": "s12-m01",
+          "type": "text",
+          "text": "けい\nじ\nばん\n問題7  右のページは、ある公園の掲\n示\n板\nにはってあるポスターである。これを読んで、下の\n質問に答えなさい。答えは、1・2・3・4 から最もよいものを一つえらびなさい。",
+          "assetFile": null,
+          "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18–18"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s12-q037",
+          "originalNumber": "37",
+          "type": "single_choice",
+          "stem": "高校生の石田さんは、小学生の妹と一緒に卓球室を利用したいと思っている。\n木曜日に1 時間利用する場合、石田さんたちの料金はいくらになるか。",
+          "materialIds": [
+            "s12-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "石田さんも妹も無料"
+            },
+            {
+              "choiceId": "2",
+              "text": "石田さんは150 円、妹は無料"
+            },
+            {
+              "choiceId": "3",
+              "text": "石田さんは150 円、妹は100 円"
+            },
+            {
+              "choiceId": "4",
+              "text": "石田さんは190 円、妹は130 円"
+            }
+          ],
+          "correctChoiceIds": [
+            "2"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s12-q038",
+          "originalNumber": "38",
+          "type": "single_choice",
+          "stem": "大学生のグエンさんは、9 月に体育館でバスケットボールの練習をしようと\n思っている。16 時から20 時の間で、1 時間練習したい。グエンさんが練習できるのは\nどの曜日か。\n青葉市 市民スポーツセンター\n利用のご案内\n【営業時間と休館日】\n営業時間 10:00〜20:00(利用受付は19:30 まで)／休館日 毎週月曜日\n【利用方法】\n・券売機で利用券を買って、窓口へお出しください。\n・利用するには、室内用の靴が必要です。\n・8 時以降、小学生と中学生は、18 歳以上の大人の方と一緒にご利用ください。\n・1 枚の利用券で利用できる時間は、2 時間までです。2 時間以上利用する場合は、必要な\n時間分の利用券を買ってください。\n料金表(一人2 時間までの利用料金)\n一般(大人)\n高校生\n小学生・中学生※\n体育館\n380 円\n190 円\n130 円\n卓球室\n200 円\n150 円\n100 円\n※火、木曜日は、小学生と中学生の体育館と卓球室の料金が無料になります。\n【体育館の利用について】\n火曜日から金曜日の14 時から20 時までの間、決められたスポーツができます。\n毎月の体育館のスケジュール表をご確認ください。\n【卓球室の利用について】\n開館日(火曜日〜日曜日)の10 時から20 時まで利用できます。\n9 月の体育館のスケジュール表\n14 時~16 時\n16 時~18 時\n18 時~20 時\nバレーボール\n火\n★バスケットボール\n×\n水\n×\nバドミントン\nバドミントン\n木\n×\n★バドミントン\nバスケットボール\n金\nバスケットボール\nバレーボール\nバレーボール\n・×の時間は決まった団体等が利用する時間のため、利用はできません。\n・★の時間は小学生と中学生だけが利用可能です。",
+          "materialIds": [
+            "s12-m01"
+          ],
+          "choices": [
+            {
+              "choiceId": "1",
+              "text": "火曜日か木曜日か金曜日"
+            },
+            {
+              "choiceId": "2",
+              "text": "火曜日か木曜日"
+            },
+            {
+              "choiceId": "3",
+              "text": "木曜日か金曜日"
+            },
+            {
+              "choiceId": "4",
+              "text": "木曜日"
+            }
+          ],
+          "correctChoiceIds": [
+            "4"
+          ],
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s13",
+      "title": "聴解 問題1",
+      "instructions": null,
+      "materials": [
+        {
+          "materialId": "s13-m01",
+          "type": "audio",
+          "text": null,
+          "assetFile": "16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "source": "/mnt/data/16. N3 7-2025-20261108T143739Z-1-001.zip / 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s13-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s13-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s13-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s13-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s13-q005",
+          "originalNumber": "5",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s13-q006",
+          "originalNumber": "6",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s13-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s14",
+      "title": "聴解 問題2",
+      "instructions": "問題\nもんだい\n2 では、まず質問\nしつもん\nを聞\nき\nいてください。そのあと、問題用紙\nもんだいようし\nを見\nみ\nてください。読\nよ\nむ時間\nじかん\nが\nあります。それから話\nはなし\nを聞\nき\nいて、 問題用紙\nもんだいようし\nの1 から4 の中\nなか\nから、最\nもっと\nもよい \nものを一\nひと\nつえらんでください。",
+      "materials": [
+        {
+          "materialId": "s14-m01",
+          "type": "audio",
+          "text": null,
+          "assetFile": "16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "source": "/mnt/data/16. N3 7-2025-20261108T143739Z-1-001.zip / 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s14-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s14-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s14-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s14-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s14-q005",
+          "originalNumber": "5",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s14-q006",
+          "originalNumber": "6",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s14-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s15",
+      "title": "聴解 問題3",
+      "instructions": "問題\nもんだい\n3 では、問題用紙\nもんだいようし\nに何\nなに\nもいんさつされていません。この問題\nもんだい\nは、ぜんたいとしてどんな\nないようかを聞\nき\nく問題\nもんだい\nです。話\nはなし\nの前\nまえ\nに質問\nしつもん\nはありません。まず話\nはなし\nを聞\nき\nいてください。それ\nから、質問\nしつもん\nとせんたくしを聞\nき\nいて、1 から4 の中\nなか\nから、最\nもっと\nもよいものを一\nひと\nつえらんでくだ\nさい。 \n―メモー",
+      "materials": [
+        {
+          "materialId": "s15-m01",
+          "type": "audio",
+          "text": null,
+          "assetFile": "16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "source": "/mnt/data/16. N3 7-2025-20261108T143739Z-1-001.zip / 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s15-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s15-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s15-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s15-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s15-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s15-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s16",
+      "title": "聴解 問題4",
+      "instructions": "問題\nもんだい\n4 では、えを見\nみ\nながら質問\nしつもん\nを聞\nき\nいてください。やじるし(➞)の人\nひと\nは何\nなん\nと言\nい\nいますか。1\nから3 の中\nなか\nから、最\nもっと\nもよいものを一\nひと\nつえらんでください。",
+      "materials": [
+        {
+          "materialId": "s16-m01",
+          "type": "audio",
+          "text": null,
+          "assetFile": "16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "source": "/mnt/data/16. N3 7-2025-20261108T143739Z-1-001.zip / 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s16-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s16-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s16-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s16-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s16-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s16-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s16-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s16-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    },
+    {
+      "sectionId": "s17",
+      "title": "聴解 問題5",
+      "instructions": "問題\nもんだい\n5 では、問題用紙\nもんだいようし\nに何\nなに\nもいんさつされていません。まず文\nぶん\nを聞\nき\nいてください。 \nそれから、そのへんじを聞\nき\nいて、1 から3 の中\nなか\nから、最\nもっと\nもよいものを一\nひと\nつえらんで \nください。 \n―メモー",
+      "materials": [
+        {
+          "materialId": "s17-m01",
+          "type": "audio",
+          "text": null,
+          "assetFile": "16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "source": "/mnt/data/16. N3 7-2025-20261108T143739Z-1-001.zip / 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+        }
+      ],
+      "questions": [
+        {
+          "questionId": "s17-q001",
+          "originalNumber": "1",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q002",
+          "originalNumber": "2",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q003",
+          "originalNumber": "3",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q004",
+          "originalNumber": "4",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q005",
+          "originalNumber": "5",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q006",
+          "originalNumber": "6",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q007",
+          "originalNumber": "7",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q008",
+          "originalNumber": "8",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        },
+        {
+          "questionId": "s17-q009",
+          "originalNumber": "9",
+          "type": "single_choice",
+          "stem": null,
+          "materialIds": [
+            "s17-m01"
+          ],
+          "choices": [],
+          "correctChoiceIds": null,
+          "questionSource": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3",
+          "answerSource": "ĐÁP ÁN JLPT N3 (update 27.10.2026).pdf, trang 30"
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "questionId": "s08-q019",
+      "problem": "Nội dung câu hỏi chưa xác định",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9"
+    },
+    {
+      "questionId": "s08-q020",
+      "problem": "Nội dung câu hỏi chưa xác định",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9"
+    },
+    {
+      "questionId": "s08-q021",
+      "problem": "Nội dung câu hỏi chưa xác định",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9"
+    },
+    {
+      "questionId": "s08-q022",
+      "problem": "Nội dung câu hỏi chưa xác định",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 9"
+    },
+    {
+      "questionId": "s13-q001",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s13-q002",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s13-q003",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s13-q004",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s13-q005",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s13-q006",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q001",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q002",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q003",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q004",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q005",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s14-q006",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s15-q001",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s15-q002",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s15-q003",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s16-q001",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s16-q002",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s16-q003",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s16-q004",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q001",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q002",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q003",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q004",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q005",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q006",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q007",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q008",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s17-q009",
+      "problem": "Câu nghe yêu cầu trích câu hỏi/lựa chọn từ đề và audio/script; chưa đối chiếu đủ, đáp án để null",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; 16. N3 7-2025/16. N3-7-2025(script).pdf"
+    },
+    {
+      "questionId": "s03-q025",
+      "problem": "Furigana bị tách thành dòng độc lập; cần đối chiếu và ghép lại đúng ký tự gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 4"
+    },
+    {
+      "questionId": "s05-q033",
+      "problem": "Furigana bị tách thành dòng độc lập; cần đối chiếu và ghép lại đúng ký tự gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 5"
+    },
+    {
+      "questionId": "s09-q023",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 10"
+    },
+    {
+      "questionId": "s09-q024",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 11"
+    },
+    {
+      "questionId": "s09-q025",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 12"
+    },
+    {
+      "questionId": "s09-q026",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 12"
+    },
+    {
+      "questionId": "s10-q027",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13"
+    },
+    {
+      "questionId": "s10-q028",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 13"
+    },
+    {
+      "questionId": "s10-q029",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 14"
+    },
+    {
+      "questionId": "s10-q030",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15"
+    },
+    {
+      "questionId": "s10-q031",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15"
+    },
+    {
+      "questionId": "s10-q032",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15"
+    },
+    {
+      "questionId": "s10-q032",
+      "problem": "Furigana bị tách thành dòng độc lập; cần đối chiếu và ghép lại đúng ký tự gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 15"
+    },
+    {
+      "questionId": "s11-q033",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 16"
+    },
+    {
+      "questionId": "s11-q034",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17"
+    },
+    {
+      "questionId": "s11-q035",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17"
+    },
+    {
+      "questionId": "s11-q036",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 17"
+    },
+    {
+      "questionId": "s12-q037",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18"
+    },
+    {
+      "questionId": "s12-q038",
+      "problem": "Cần đối chiếu thủ công độ đầy đủ và liên kết materials của đoạn đọc; bản trích xuất chưa được kiểm chứng với bố cục gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18"
+    },
+    {
+      "questionId": "s12-q038",
+      "problem": "Furigana bị tách thành dòng độc lập; cần đối chiếu và ghép lại đúng ký tự gốc",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 18"
+    },
+    {
+      "questionId": "s13-q001",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s13-q002",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s13-q003",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s13-q004",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s13-q005",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s13-q006",
+      "problem": "Hướng dẫn phần nghe chưa trích xuất chính xác",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    },
+    {
+      "questionId": "s11-q033",
+      "problem": "Hướng dẫn của phần chưa được trích xuất đầy đủ",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 16"
+    },
+    {
+      "questionId": "s13-q001",
+      "problem": "Hướng dẫn của phần chưa được trích xuất đầy đủ",
+      "source": "16. N3 7-2025/16. N3 7-2025.pdf, trang 19–26; audio 16. N3 7-2025/N3 07.2025 Choukai [New].mp3"
+    }
+  ]
+}
