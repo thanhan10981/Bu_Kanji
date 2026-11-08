@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { AuthIdentity } from './auth-identity.entity';
 import { RefreshSession } from './refresh-session.entity';
 
 @Entity('users')
+@Index('UQ_users_email_normalized', { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

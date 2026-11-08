@@ -7,7 +7,7 @@ test('database TLS policy is shared: verify by default, explicit Render private 
   assert.deepEqual(databaseSsl({DATABASE_SSL:'true'}),{rejectUnauthorized:true});
   assert.deepEqual(databaseSsl({DATABASE_SSL:'true',DATABASE_SSL_REJECT_UNAUTHORIZED:'false'}),{rejectUnauthorized:false});
 });
-const good = { NODE_ENV:'production', DATABASE_URL:'postgresql://test:test@localhost:55432/example_test', FRONTEND_URL:'https://bu-kanji.vercel.app', JWT_ACCESS_SECRET:'a'.repeat(48), JWT_REFRESH_SECRET:'b'.repeat(48), DATABASE_SSL:'false' };
+const good = { NODE_ENV:'production', DATABASE_URL:'postgresql://test:test@localhost:55432/example_test', FRONTEND_URL:'https://bu-kanji.vercel.app', JWT_ACCESS_SECRET:'a'.repeat(48), JWT_REFRESH_SECRET:'b'.repeat(48), AUTH_RATE_LIMIT_SECRET:'c'.repeat(48), DATABASE_SSL:'false' };
 test('deployment preflight identifies missing values without disclosing secrets', () => {
   const errors = validateDeployEnv({ NODE_ENV:'production' });
   assert.ok(errors.some(e => e.includes('DATABASE_URL')));

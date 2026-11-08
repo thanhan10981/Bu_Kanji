@@ -1,0 +1,61 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { NestFactory, Reflector } = require('@nestjs/core');
+const { Module } = require('@nestjs/common');
+const { JwtService } = require('@nestjs/jwt');
+const { ConfigService } = require('@nestjs/config');
+const {configureHttp}=require('../dist/bootstrap');
+const { AuthController } = require('../dist/auth/auth.controller');
+const { AuthService } = require('../dist/auth/auth.service');
+const { JwtCookieGuard } = require('../dist/auth/auth.guard');
+const { embeddedDatabase, authService } = require('./helpers/auth-harness.cjs');
+
+test('HTTP registration auto signs in without mail; cookies, validation, conflict and logout',async()=>{
+  const f=await embeddedDatabase(); const {service,config,values}=authService(f.db);
+  class TestModule {}
+  Module({controllers:[AuthController],providers:[{provide:AuthService,useValue:service},{provide:ConfigService,useValue:config}]})(TestModule);
+  let app;
+  try {
+    app=await NestFactory.create(TestModule,{logger:false});configureHttp(app,{FRONTEND_URL:'http://localhost:3000'});
+    app.useGlobalGuards(new JwtCookieGuard(new Reflector(),new JwtService(),config,service));
+    await app.listen(0,'127.0.0.1');
+    const base=await app.getUrl();
+    const post=(path,body,cookie)=>fetch(base+'/api/auth/'+path,{method:'POST',headers:{'Content-Type':'application/json',...(cookie?{cookie}:{})},body:JSON.stringify(body)});
+    const rejectedOrigin=await fetch(base+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://untrusted.example'},body:JSON.stringify({email:'origin@example.test',password:'Password!123'})});
+    assert.equal(rejectedOrigin.status,403);
+    const cors=await fetch(base+'/api/auth/config',{headers:{Origin:'http://localhost:3000'}});
+    assert.equal(cors.headers.get('Access-Control-Allow-Origin'),'http://localhost:3000');
+    assert.equal(cors.headers.get('Access-Control-Expose-Headers'),'Retry-After');
+    assert.equal((await post('register',{email:'bad',password:'short'})).status,400);
+    const registered=await post('register',{email:' Web@Example.test ',password:'Password!123'});
+    assert.equal(registered.status,201);const body=await registered.json();assert.ok(body.user.id);assert.equal(body.user.emailVerified,false);
+    assert.equal(body.user.passwordHash,undefined);assert.equal(body.accessToken,undefined);
+    const cookies=registered.headers.getSetCookie();assert.equal(cookies.length,2);
+    assert.ok(cookies.every(c=>/HttpOnly/i.test(c)&&/SameSite=Lax/i.test(c)));
+    assert.match(cookies.find(c=>c.startsWith('access_token=')),/Max-Age=900;/);
+    assert.match(cookies.find(c=>c.startsWith('refresh_token=')),/Max-Age=2592000;/);
+    assert.match(cookies.find(c=>c.startsWith('refresh_token=')),/Path=\/api\/auth/);
+    const jar=cookies.map(c=>c.split(';')[0]).join('; ');
+    assert.equal((await fetch(base+'/api/auth/me',{headers:{cookie:jar}})).status,200);
+    assert.equal((await post('register',{email:'web@example.test',password:'OtherPassword!'})).status,409);
+    const logout=await post('logout',{},jar);assert.equal(logout.status,201);
+    assert.equal((await post('refresh',{},jar)).status,401);
+    assert.equal((await fetch(base+'/api/auth/me')).status,401);
+    values.NODE_ENV='production';
+    const secure=await post('register',{email:'secure@example.test',password:'Password!123'});
+    assert.equal(secure.status,201);assert.ok(secure.headers.getSetCookie().every(cookie=>/; Secure;/i.test(cookie)));
+    delete values.NODE_ENV;
+    const correct=await post('login',{email:' WEB@Example.test ',password:'Password!123'});
+    assert.equal(correct.status,201); assert.equal((await correct.json()).user.id,body.user.id);
+    for(let i=0;i<4;i++)assert.equal((await post('login',{email:'web@example.test',password:'wrong'})).status,401);
+    const blocked=await post('login',{email:'web@example.test',password:'Password!123'});
+    assert.equal(blocked.status,429);assert.ok(Number(blocked.headers.get('Retry-After'))>0);assert.equal(blocked.headers.getSetCookie().length,0);
+    await f.db.query('UPDATE auth_login_limits SET "expiresAt"=now()-interval \'1 second\'');
+    assert.equal((await post('login',{email:'web@example.test',password:'Password!123'})).status,201);
+    await f.db.query('UPDATE auth_login_limits SET "expiresAt"=now()-interval \'1 second\'');
+    for(let i=0;i<30;i++)assert.equal((await post('login',{email:`spray${i}@example.test`,password:'wrong'})).status,401);
+    assert.equal((await post('login',{email:'spray31@example.test',password:'wrong'})).status,429);
+    await f.db.query('DROP TABLE auth_login_limits');
+    assert.equal((await post('login',{email:'web@example.test',password:'Password!123'})).status,503);
+  } finally {if(app)await app.close();await f.close();}
+});

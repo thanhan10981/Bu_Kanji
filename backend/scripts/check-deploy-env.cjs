@@ -10,10 +10,14 @@ function validateDeployEnv(env) {
   }
   if (env.DATABASE_SSL && !['true', 'false'].includes(env.DATABASE_SSL)) errors.push('DATABASE_SSL must be true or false');
   if (env.DATABASE_SSL_REJECT_UNAUTHORIZED && !['true', 'false'].includes(env.DATABASE_SSL_REJECT_UNAUTHORIZED)) errors.push('DATABASE_SSL_REJECT_UNAUTHORIZED must be true or false');
-  for (const key of ['JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET']) {
+  for (const key of ['JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET', 'AUTH_RATE_LIMIT_SECRET']) {
     if (example(env[key]) || env[key].length < 32) errors.push(`${key} must be a non-example secret of at least 32 characters`);
   }
   if (env.JWT_ACCESS_SECRET && env.JWT_ACCESS_SECRET === env.JWT_REFRESH_SECRET) errors.push('JWT_ACCESS_SECRET and JWT_REFRESH_SECRET must be different');
+  if (env.AUTH_RATE_LIMIT_SECRET && [env.JWT_ACCESS_SECRET,env.JWT_REFRESH_SECRET].includes(env.AUTH_RATE_LIMIT_SECRET)) errors.push('AUTH_RATE_LIMIT_SECRET must be separate from JWT secrets');
+  for (const [key,maximum] of [['AUTH_LOGIN_EMAIL_LIMIT',1000],['AUTH_LOGIN_IP_LIMIT',10000],['AUTH_LOGIN_WINDOW_SECONDS',86400]]) {
+    if (env[key] !== undefined && (!Number.isSafeInteger(Number(env[key])) || Number(env[key]) < 1 || Number(env[key]) > maximum)) errors.push(`${key} must be a positive integer within its supported range`);
+  }
   const origin = value => {
     try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) && url.origin === value
       && (url.protocol === 'https:' || ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)); }

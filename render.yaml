@@ -38,7 +38,16 @@ services:
         generateValue: true
       - key: JWT_REFRESH_SECRET
         generateValue: true
-    # Add RESEND_API_KEY + RESEND_FROM_EMAIL to enable email signup.
+      - key: AUTH_RATE_LIMIT_SECRET
+        generateValue: true
+      - key: AUTH_LOGIN_EMAIL_LIMIT
+        value: "5"
+      - key: AUTH_LOGIN_IP_LIMIT
+        value: "30"
+      - key: AUTH_LOGIN_WINDOW_SECONDS
+        value: "900"
+    # Email signup does not require Resend. Configure Resend only for password recovery.
+    # AUTH_TRUSTED_PROXY_CIDRS must match verified proxy topology; never trust all proxies.
     # Google OAuth is optional; see DEPLOYMENT-START-HERE.md.
 
 databases:

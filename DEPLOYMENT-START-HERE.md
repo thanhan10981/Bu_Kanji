@@ -104,8 +104,21 @@ Hai file .env.local/.env.production trên máy không thay cho các biến trong
 
 ## 4. Đăng ký không OTP; Resend tùy chọn cho khôi phục mật khẩu
 
-Đăng ký email/mật khẩu hoạt động ngay, không yêu cầu Resend hay biến môi trường bổ sung.
-Tạo tài khoản xong, người dùng chuyển về đăng nhập. Email được giữ ở trạng thái chưa xác thực.
+Đăng ký email/mật khẩu không yêu cầu Resend. Backend cần `AUTH_RATE_LIMIT_SECRET` riêng,
+ít nhất 32 ký tự, ngoài hai JWT secret; Render blueprint mới tự sinh giá trị này.
+Tạo tài khoản xong, người dùng tự đăng nhập ngay. Email được giữ ở trạng thái chưa xác thực.
+Đăng ký trả `{ user }` kèm cookie sau khi lưu tài khoản và phiên trong cùng transaction.
+Chạy migration 005 trước backend mới; nếu có email trùng sau chuẩn hóa thì dừng để xử lý dữ liệu
+riêng, không tự gộp tài khoản. Phát hành frontend/backend phối hợp; rollback ứng dụng giữ nguyên
+bảng/index bổ sung và dữ liệu tài khoản, không sửa migration cũ.
+
+Hạn mức mặc định: `AUTH_LOGIN_EMAIL_LIMIT=5`, `AUTH_LOGIN_IP_LIMIT=30`,
+`AUTH_LOGIN_WINDOW_SECONDS=900`, tính cả đăng nhập thành công. Vượt hạn mức trả 429 và
+`Retry-After`; không truy cập được kho hạn mức trả 503. Bộ đếm dùng chung PostgreSQL, khóa HMAC
+dùng cùng `AUTH_RATE_LIMIT_SECRET` giữa các instance. Không đổi secret tùy tiện để reset hạn mức.
+Chỉ đặt `AUTH_TRUSTED_PROXY_CIDRS` sau khi xác minh proxy thật trên cả đường Vercel → Render
+và truy cập API trực tiếp. Để trống dùng socket IP; nếu mọi khách bị gom cùng IP thì chưa đạt
+kiểm tra phát hành. Không tin toàn bộ proxy hoặc header do khách tự gửi.
 Không tự ghép Google với tài khoản mật khẩu chưa xác thực chỉ vì trùng email.
 Phần Resend bên dưới chỉ cần khi muốn bật quên mật khẩu hoặc API xác thực email cũ.
 
@@ -126,7 +139,7 @@ Save and deploy/restart backend. `/api/auth/config` chỉ trả các cờ boolea
 emailRegistration luôn true; passwordReset chỉ true khi cấu hình email đủ. Sau đó thử đăng ký,
 đăng nhập, quên mật khẩu và logout.
 
-Không dùng auth@example.com hoặc onboarding@resend.dev để mở đăng ký công khai.
+Không dùng auth@example.com hoặc onboarding@resend.dev làm người gửi thư khôi phục công khai.
 Địa chỉ resend.dev chỉ dùng thử gửi tới chính tài khoản Resend; muốn gửi người khác cần domain
 đã xác minh. Nguồn: [Resend sender domain](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain).
 

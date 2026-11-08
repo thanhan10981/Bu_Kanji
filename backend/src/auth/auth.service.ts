@@ -1,9 +1,10 @@
+import { LoginLimitService } from './login-limit.service';
 import { ConflictException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { randomBytes, randomInt } from 'crypto';
-import { Repository } from 'typeorm';
+import { randomBytes, randomInt, randomUUID } from 'crypto';
+import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthenticatedUser, RefreshTokenPayload } from './auth.types';
 import { User } from './entities/user.entity';
@@ -19,6 +20,7 @@ const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 @Injectable()
 export class AuthService {
+  private dummyHash?: Promise<string>;
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(AuthIdentity) private readonly identities: Repository<AuthIdentity>,
@@ -28,6 +30,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
+    private readonly loginLimits: LoginLimitService,
   ) {}
 
   private normalizeEmail(email: string) {
@@ -52,23 +55,32 @@ export class AuthService {
 
   async register(email: string, password: string) {
     const normalizedEmail = this.normalizeEmail(email);
-    const existing = await this.users.findOneBy({ email: normalizedEmail });
+    const existing = await this.users.createQueryBuilder('user')
+      .where('lower(btrim(user.email)) = :email', { email: normalizedEmail }).getOne();
     if (existing) throw new ConflictException('Email này đã được đăng ký.');
-
-    const user = await this.users.save(this.users.create({
-      email: normalizedEmail,
-      passwordHash: await argon2.hash(password),
-      displayName: normalizedEmail.split('@')[0],
-      avatarUrl: null,
-      emailVerified: false,
-    }));
-
-    await this.identities.save(this.identities.create({
-      userId: user.id,
-      provider: 'password',
-      providerAccountId: normalizedEmail,
-    }));
-    return { message: 'Tạo tài khoản thành công. Bạn có thể đăng nhập ngay.' };
+    const passwordHash = await argon2.hash(password, { type: argon2.argon2id, memoryCost: 65536, timeCost: 3, parallelism: 4 });
+    try {
+      return await this.users.manager.transaction(async manager => {
+        const users = manager.getRepository(User);
+        const identities = manager.getRepository(AuthIdentity);
+        const user = await users.save(users.create({
+          email: normalizedEmail, passwordHash, displayName: normalizedEmail.split('@')[0],
+          avatarUrl: null, emailVerified: false,
+        }));
+        await identities.save(identities.create({ userId: user.id, provider: 'password', providerAccountId: normalizedEmail }));
+        return this.createSession(user, manager);
+      });
+    } catch (error) {
+      const failure = error as { code?: string; constraint?: string };
+      // Only unique constraints concerning email/password identity mean a duplicate account.
+      if (failure.code === '23505' && (failure.constraint === 'UQ_users_email_normalized'
+        || failure.constraint === 'users_email_key'
+        || this.users.metadata?.uniques.some(unique => unique.name === failure.constraint && unique.columns.length === 1 && unique.columns[0].propertyName === 'email') || failure.constraint === 'UQ_auth_identities_provider_account')) {
+        throw new ConflictException('Email này đã được đăng ký.');
+      }
+      // Do not pass database query/parameters or token signing details to the HTTP logger.
+      throw new ServiceUnavailableException('Không thể tạo tài khoản. Vui lòng thử lại sau.');
+    }
   }
 
   async resendVerification(email: string) {
@@ -101,13 +113,16 @@ export class AuthService {
     return { message: 'Xác thực email thành công.' };
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string, ip: string) {
+    await this.loginLimits.reserve(this.normalizeEmail(email), ip);
     const user = await this.users
       .createQueryBuilder('user')
       .addSelect('user.passwordHash')
-      .where('user.email = :email', { email: this.normalizeEmail(email) })
+      .where('lower(btrim(user.email)) = :email', { email: this.normalizeEmail(email) })
       .getOne();
-    if (!user?.passwordHash || !(await argon2.verify(user.passwordHash, password))) {
+    const hash = user?.passwordHash ?? await (this.dummyHash ??= argon2.hash(randomBytes(32), { type: argon2.argon2id, memoryCost: 65536, timeCost: 3, parallelism: 4 }));
+    const valid = await argon2.verify(hash, password);
+    if (!user?.passwordHash || !valid) {
       throw new UnauthorizedException('Email hoặc mật khẩu không đúng.');
     }
     return this.createSession(user);
@@ -225,23 +240,19 @@ export class AuthService {
     await this.mail.sendVerificationCode(user.email, code);
   }
 
-  private async createSession(user: User) {
-    const session = await this.refreshSessions.save(this.refreshSessions.create({
-      userId: user.id,
-      tokenHash: '',
-      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_SECONDS * 1000),
-      revokedAt: null,
-    }));
+  private async createSession(user: User, manager?: EntityManager) {
+    const sessions = manager ? manager.getRepository(RefreshSession) : this.refreshSessions;
+    const id = randomUUID();
     const accessToken = await this.jwt.signAsync({ sub: user.id, email: user.email, type: 'access' }, {
-      secret: this.config.getOrThrow<string>('JWT_ACCESS_SECRET'),
-      expiresIn: ACCESS_TOKEN_TTL_SECONDS,
+      secret: this.config.getOrThrow<string>('JWT_ACCESS_SECRET'), expiresIn: ACCESS_TOKEN_TTL_SECONDS,
     });
-    const refreshToken = await this.jwt.signAsync({ sub: user.id, sid: session.id, type: 'refresh' }, {
-      secret: this.config.getOrThrow<string>('JWT_REFRESH_SECRET'),
-      expiresIn: REFRESH_TOKEN_TTL_SECONDS,
+    const refreshToken = await this.jwt.signAsync({ sub: user.id, sid: id, type: 'refresh' }, {
+      secret: this.config.getOrThrow<string>('JWT_REFRESH_SECRET'), expiresIn: REFRESH_TOKEN_TTL_SECONDS,
     });
-    session.tokenHash = await argon2.hash(refreshToken);
-    await this.refreshSessions.save(session);
+    await sessions.save(sessions.create({ id, userId: user.id,
+      tokenHash: await argon2.hash(refreshToken),
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_SECONDS * 1000), revokedAt: null,
+    }));
     return { user: this.asUser(user), accessToken, refreshToken };
   }
 

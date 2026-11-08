@@ -40,7 +40,13 @@ test('auth lifecycle: registration without email, password login, refresh rotati
   let deliveredCode='', deliveredReset='';
   const mail={sendVerificationCode:async (_email,code)=>{deliveredCode=code;},sendPasswordReset:async (_email,url)=>{deliveredReset=url;}};
   const service=new AuthService(users,identities,sessions,codes,resets,new JwtService(),
-    {get:key=>env[key],getOrThrow:key=>env[key]},mail);
+    {get:key=>env[key],getOrThrow:key=>env[key]},mail,{reserve:async()=>{}});
+  const repos = { User:users, AuthIdentity:identities, RefreshSession:sessions };
+  users.manager = { transaction: async action => {
+    const snapshots=Object.values(repos).map(r=>[r,[...r.rows]]);
+    try {return await action({getRepository:Type=>repos[Type.name]});}
+    catch(error){for(const [repo,rows] of snapshots)repo.rows.splice(0,repo.rows.length,...rows);throw error;}
+  } };
   const email='account@example.test';
   delete env.RESEND_API_KEY; delete env.RESEND_FROM_EMAIL;
   await service.register(' ACCOUNT@example.test ','OriginalTest!123');

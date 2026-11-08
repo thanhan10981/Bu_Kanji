@@ -10,7 +10,7 @@
     "check:deploy": "node scripts/check-deploy-env.cjs",
     "start:render": "npm run check:deploy && npm run migrate && npm run start:prod",
     "test:deployment": "node --test --test-isolation=none test/deployment.test.cjs",
-    "test:auth": "npm run build && node --test --test-isolation=none test/auth.test.cjs",
+    "test:auth": "npm run build && node --test --test-isolation=none test/auth.test.cjs test/auth.validation.test.cjs test/auth.migration.test.cjs test/auth.http.test.cjs test/auth.integration.cjs test/auth.limit.test.cjs",
     "test:ai": "npm run build && node --test --test-isolation=none test/ai.test.cjs",
     "test:import": "npm run build && node --test --test-isolation=none test/import.test.cjs",
     "test:http": "npm run build && node --test --test-isolation=none test/body-parsers.test.cjs",

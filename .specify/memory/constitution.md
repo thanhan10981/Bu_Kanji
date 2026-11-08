@@ -1,12 +1,9 @@
 <!--
 Sync Impact Report
-- Version change: chưa ban hành (mẫu trống) → 1.0.0
-- Modified principles: thay năm vị trí nguyên tắc trong mẫu bằng:
-  I. Sửa đúng phạm vi yêu cầu; II. Kiểm tra sau mỗi thay đổi;
-  III. Bảo toàn hành vi ngoài phạm vi; IV. Giải pháp đơn giản, phù hợp dự án;
-  V. Báo cáo dựa trên bằng chứng.
-- Added sections: Ràng buộc thay đổi; Quy trình thực hiện và rà soát; Governance.
-- Removed sections: không có nội dung quản trị đã ban hành bị loại bỏ.
+- Version change: 1.0.0 → 1.0.1
+- Modified principles: II. Kiểm tra sau mỗi thay đổi (làm rõ bằng chứng xác minh).
+- Added sections: không có.
+- Removed sections: không có.
 - Follow-up TODOs: không có.
 - Đây là ghi chú rà soát tạm thời; loại bỏ trước khi commit hiến chương.
 -->
@@ -29,6 +26,8 @@ chuyển sang thay đổi tiếp theo. Các tệp cùng cần thiết để tạ
 được sửa thành một nhóm; nhóm đó PHẢI được kiểm tra ngay sau khi hoàn tất.
 Với lỗi có thể tái hiện, PHẢI ghi nhận cách tái hiện trước khi sửa và kiểm tra lại sau khi sửa.
 Kiểm tra PHẢI bao phủ hành vi được yêu cầu và đường đi liên quan có nguy cơ bị ảnh hưởng.
+Kết quả kiểm tra PHẢI được đối chiếu với tiêu chí hoàn thành đã xác định trước khi sửa;
+việc lưu tệp thành công không được xem là bằng chứng hành vi đã đúng.
 Nếu kiểm tra thất bại, PHẢI xác định nguyên nhân và xử lý lỗi do thay đổi trước khi tiếp tục.
 Nếu môi trường ngăn kiểm tra, PHẢI ghi rõ lệnh hoặc thao tác chưa chạy được, lý do và giới hạn
 xác minh; KHÔNG ĐƯỢC báo rằng kết quả đã được kiểm chứng đầy đủ.
@@ -91,4 +90,4 @@ không tương thích; tăng MINOR khi thêm nguyên tắc hoặc mở rộng đ
 tăng PATCH khi làm rõ câu chữ mà không thay đổi nghĩa vụ. Mỗi lần sửa PHẢI cập nhật ngày
 Last Amended; giữ nguyên ngày Ratified của lần ban hành đầu tiên.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-03 | **Last Amended**: 2026-11-03
+**Version**: 1.0.1 | **Ratified**: 2026-11-03 | **Last Amended**: 2026-11-08

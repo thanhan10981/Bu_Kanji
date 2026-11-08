@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Query, Req, Res, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { LoginQuotaException } from './login-limit.service';
+import { Body, Controller, Get, HttpException, Post, Query, Req, Res, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request, Response } from 'express';
 import { randomBytes } from 'crypto';
@@ -24,8 +25,13 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async register(@Body() body: RegisterDto) {
-    return this.auth.register(body.email, body.password);
+  async register(@Body() body: RegisterDto, @Res({ passthrough: true }) response: Response) {
+    const session = await this.auth.register(body.email, body.password).catch((error: unknown) => {
+      if (error instanceof HttpException) throw error;
+      throw new ServiceUnavailableException('Không thể tạo tài khoản. Vui lòng thử lại sau.');
+    });
+    this.setSessionCookies(response, session.accessToken, session.refreshToken);
+    return { user: session.user };
   }
 
   @Public()
@@ -42,8 +48,12 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  async login(@Body() body: LoginDto, @Res({ passthrough: true }) response: Response) {
-    const session = await this.auth.login(body.email, body.password);
+  async login(@Body() body: LoginDto, @Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    const session = await this.auth.login(body.email, body.password, request.ip ?? request.socket.remoteAddress ?? '').catch((error: unknown) => {
+      if (error instanceof LoginQuotaException) response.setHeader('Retry-After', error.retryAfterSeconds);
+      if (error instanceof HttpException) throw error;
+      throw new ServiceUnavailableException('Dịch vụ đăng nhập tạm thời chưa sẵn sàng. Vui lòng thử lại sau.');
+    });
     this.setSessionCookies(response, session.accessToken, session.refreshToken);
     return { user: session.user };
   }

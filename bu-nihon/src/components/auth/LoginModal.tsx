@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Lock, LogIn, Mail, UserPlus, X } from "lucide-react";
-import { api, ApiError, type AppUser } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
+import { authenticate } from '@/lib/auth/service';
+import { ZodError } from 'zod';
 import { MonkeyMascot } from "./MonkeyMascot";
 
 type AuthMode = "login" | "signup" | "forgot";
@@ -23,43 +25,75 @@ function GoogleIcon() {
 }
 
 export function LoginModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return open ? <AuthDialog onClose={onClose} /> : null;
+}
+
+function AuthDialog({ onClose }: { onClose: () => void }) {
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const mutation = useMutation({ mutationFn: (action: () => Promise<void>) => action(), retry: false });
+  const loading = mutation.isPending;
+  const busy = useRef(false);
+  const dialog = useRef<HTMLDivElement>(null);
+  const [waitUntil, setWaitUntil] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+  const remaining = Math.max(0, Math.ceil((waitUntil - now) / 1000));
+  const close = () => { if (!busy.current) onClose(); };
+  useEffect(() => {
+    if (!waitUntil) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [waitUntil]);
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    const root = dialog.current;
+    root?.querySelector<HTMLInputElement>('input')?.focus();
+    const keys = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !busy.current) onClose();
+      if (event.key !== 'Tab' || !root) return;
+      const controls = Array.from(root.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), a[href]'));
+      const first = controls[0]; const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', keys);
+    return () => { document.removeEventListener('keydown', keys); previous?.focus(); };
+  }, [onClose]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const setUser = useAppStore((state) => state.setUser);
   const authConfig = useQuery({
     queryKey: ['auth-capabilities'],
     queryFn: () => api.get<{ emailRegistration: boolean; passwordReset: boolean; googleLogin: boolean }>('/auth/config'),
-    enabled: open, retry: false, staleTime: 60_000,
+    retry: false, staleTime: 60_000,
   });
   const unavailable = authConfig.isPending || authConfig.isError;
 
-  if (!open) return null;
-
   const run = async (action: () => Promise<void>) => {
-    setError(null); setMessage(null); setLoading(true);
-    try { await action(); } catch (cause) {
-      setError(cause instanceof ApiError ? cause.message : "Đã xảy ra lỗi. Vui lòng thử lại.");
-    } finally { setLoading(false); }
+    if (busy.current) return;
+    busy.current = true;
+    setError(null); setMessage(null);
+    try { await mutation.mutateAsync(action); } catch (cause) {
+      if (cause instanceof ApiError && cause.status === 429 && cause.retryAfterSeconds) {
+        const current = Date.now(); setNow(current); setWaitUntil(current + cause.retryAfterSeconds * 1000);
+      }
+      setError(cause instanceof ZodError ? cause.issues[0].message : cause instanceof ApiError ? cause.message : 'Đã xảy ra lỗi. Vui lòng thử lại.');
+      dialog.current?.querySelector<HTMLInputElement>('input')?.focus();
+    } finally { busy.current = false; }
   };
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
+    if (mode === 'login' && remaining > 0) return;
     void run(async () => {
-      if (unavailable) throw new Error('Đăng nhập tạm thời chưa sẵn sàng.');
-      if (mode === "login") {
-        const { user } = await api.post<{ user: AppUser }>("/auth/login", { email, password });
-        setUser(user); onClose(); return;
+      if (unavailable) throw new ApiError('Đăng nhập tạm thời chưa sẵn sàng.', 503);
+      if (mode === 'login' || mode === 'signup') {
+        const user = await authenticate(mode, { email, password });
+        setUser(user); setPassword(''); setShowPassword(false); onClose(); return;
       }
-      if (mode === "signup") {
-        const result = await api.post<{ message: string }>("/auth/register", { email, password });
-        setMessage(result.message); setPassword(""); setMode("login"); return;
-      }
-      const result = await api.post<{ message: string }>("/auth/forgot-password", { email });
+      const result = await api.post<{ message: string }>('/auth/forgot-password', { email: email.trim().toLowerCase() });
       setMessage(result.message);
     });
   };
@@ -70,7 +104,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
 
   const subtitle =
     mode === "login" ? "Đăng nhập để theo dõi tiến trình học ✨" :
-    mode === "signup" ? "Tiếp tục hành trình học tiếng Nhật của bạn." :
+    mode === "signup" ? "Đăng ký bằng email và mật khẩu, không cần xác thực email." :
     "Nhập email để nhận liên kết đặt lại mật khẩu.";
 
   const submitLabel =
@@ -80,7 +114,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
   const showMonkey = mode === "login" || mode === "signup";
 
   return (
-    <div className="lm-overlay" onMouseDown={onClose}>
+    <div className="lm-overlay" onMouseDown={close}>
       {/* ── SCENE WRAPPER — keeps monkey + card aligned ── */}
       <div className="lm-scene" onMouseDown={(e) => e.stopPropagation()}>
 
@@ -99,6 +133,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
         ════════════════════════════════════════ */}
         <motion.div
           className="lm-card"
+          ref={dialog}
           role="dialog"
           aria-modal="true"
           aria-label={title}
@@ -107,7 +142,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
         >
           {/* close */}
-          <button className="lm-close" onClick={onClose} aria-label="Đóng">
+          <button className="lm-close" onClick={close} disabled={loading} aria-label="Đóng">
             <X size={16} />
           </button>
 
@@ -124,14 +159,14 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
             <div className="lm-tabs">
               <button
                 className={`lm-tab${mode === "login" ? " active" : ""}`}
-                onClick={() => setMode("login")}
+                disabled={loading} onClick={() => { setMode("login"); setError(null); setMessage(null); }}
               >
                 <LogIn size={14} /> Đăng nhập
               </button>
               <button
                 className={`lm-tab${mode === "signup" ? " active" : ""}`}
-                disabled={unavailable || !authConfig.data?.emailRegistration}
-                onClick={() => setMode("signup")}
+                disabled={loading || unavailable || !authConfig.data?.emailRegistration}
+                onClick={() => { setMode("signup"); setError(null); setMessage(null); }}
               >
                 <UserPlus size={14} /> Đăng ký
               </button>
@@ -154,11 +189,13 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           {authConfig.isError && <p className="lm-alert error" role="alert">Không thể kết nối dịch vụ đăng nhập. <button type="button" onClick={() => authConfig.refetch()}>Thử lại</button></p>}
           {authConfig.isPending && <p role="status">Đang kiểm tra dịch vụ đăng nhập…</p>}
           {authConfig.data && !authConfig.data.emailRegistration && <p className="lm-alert" role="status">Đăng ký tài khoản mới tạm thời chưa sẵn sàng.</p>}
-          <form onSubmit={submit} className="lm-form">
+          <form noValidate={mode !== 'forgot'} onSubmit={submit} className="lm-form" aria-busy={loading}>
               <label className="lm-field">
                 <Mail size={16} className="lm-field-icon" />
                 <input
                   type="email"
+                  aria-label="Email"
+                  disabled={loading}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email của bạn"
@@ -172,11 +209,14 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
                 <Lock size={16} className="lm-field-icon" />
                 <input
                   type={showPassword ? "text" : "password"}
+                  aria-label="Mật khẩu"
+                  disabled={loading}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === "signup" ? "Mật khẩu (ít nhất 8 ký tự)" : "Mật khẩu"}
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
-                  minLength={8}
+                  minLength={mode === "signup" ? 8 : 1}
+                  maxLength={128}
                   required
                   className="lm-input lm-input-pw"
                 />
@@ -197,6 +237,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
                 <motion.p
                   key="error"
                   className="lm-alert error"
+                  role="alert"
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
@@ -208,6 +249,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
                 <motion.p
                   key="msg"
                   className="lm-alert success"
+                  role="status"
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
@@ -217,7 +259,8 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
               )}
             </AnimatePresence>
 
-            <button className="lm-submit" disabled={loading || unavailable}>
+            {mode === 'login' && remaining > 0 && <p role="status">Vui lòng chờ {remaining} giây trước khi đăng nhập lại.</p>}
+            <button className="lm-submit" disabled={loading || unavailable || (mode === 'login' && remaining > 0)}>
               {loading ? (
                 <span className="lm-spinner" />
               ) : (
@@ -229,10 +272,10 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           {/* secondary actions */}
           <div className="lm-secondary-actions">
             {mode === "login" && (
-              <button className="lm-link" disabled={unavailable || !authConfig.data?.passwordReset} onClick={() => setMode("forgot")}>Quên mật khẩu?</button>
+              <button className="lm-link" disabled={loading || unavailable || !authConfig.data?.passwordReset} onClick={() => setMode("forgot")}>Quên mật khẩu?</button>
             )}
             {mode === "forgot" && (
-              <button className="lm-link" onClick={() => setMode("login")}>Quay lại đăng nhập</button>
+              <button className="lm-link" disabled={loading} onClick={() => { setMode("login"); setError(null); setMessage(null); }}>Quay lại đăng nhập</button>
             )}
             {(mode === "login" || mode === "signup") && (
               <p className="lm-legal">
@@ -257,6 +300,7 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
       <style>{`
         /* ── Overlay ── */
         .lm-overlay {
+          overflow-y: auto;
           position: fixed;
           inset: 0;
           z-index: 2000;
