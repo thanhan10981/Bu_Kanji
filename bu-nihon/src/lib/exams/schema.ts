@@ -7,6 +7,13 @@ export const sourcePageSchema = z.object({
   width: z.number().int().positive(), height: z.number().int().positive(),
 });
 export type SourcePage = z.infer<typeof sourcePageSchema>;
+export const examTextSchema = z.array(z.object({ text: z.string(), reading: z.string().optional(), underline: z.boolean().optional() }));
+export type ExamText = z.infer<typeof examTextSchema>;
+export const nativeQuestionSchema = z.object({
+  stem: examTextSchema.min(1), choices: z.record(z.string(), examTextSchema.min(1)), passage: examTextSchema,
+  images: z.array(z.object({ src: z.string().regex(/^\/exams\/exam-\d{4}-\d{2}\/native\/[a-z0-9-]+\.png$/), width: z.number().int().positive(), height: z.number().int().positive(), alt: z.string() })),
+});
+export type NativeQuestion = z.infer<typeof nativeQuestionSchema>;
 export const examDraftSchema = z.object({
   examId: z.string(), title: z.string(), level: z.string(), durationMinutes: z.number().positive().nullable(),
   sections: z.array(z.object({
@@ -19,6 +26,7 @@ export const examDraftSchema = z.object({
       sourcePages: z.array(sourcePageSchema).optional(), initialPage: z.number().int().positive().optional(),
       sourcePdf: z.string().regex(/^\/exams\/exam-\d{4}-\d{2}\/questions\.pdf$/).optional(),
       reviewPages: z.array(sourcePageSchema).optional(),
+      content: nativeQuestionSchema.optional(),
     })),
   })),
   issues: z.array(z.object({ questionId: z.string().nullable().optional(), problem: z.string(), source: z.string().nullable().optional() })),
@@ -55,6 +63,7 @@ export const publicExamSchema = z.object({
       choices: z.array(z.object({ choiceId: z.string(), text: z.string() })), materials: z.array(z.object({ materialId: z.string(), text: z.string() })),
       sourcePages: z.array(sourcePageSchema).optional(), initialPage: z.number().int().positive().optional(),
       sourcePdf: z.string().regex(/^\/exams\/exam-\d{4}-\d{2}\/questions\.pdf$/).optional(),
+      content: nativeQuestionSchema.optional(),
     })),
   })),
 });

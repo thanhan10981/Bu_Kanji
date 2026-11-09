@@ -12,6 +12,7 @@ const sessionSchema = z.object({
   questionIds: z.array(z.string()).min(1).max(200), answers: z.record(z.string(), z.array(z.string()).max(4)),
   flags: z.array(z.string()).max(200), cursor: z.number().int().nonnegative(),
   startedAt: z.number().finite(), deadline: z.number().finite().nullable(),
+  ink: z.record(z.string(), z.array(z.string().max(8000).regex(/^M[\d .L]+$/)).max(50)).optional(),
   report: reportSchema.optional(), submittedAt: z.number().finite().optional(),
 });
 export type ExamSession = z.infer<typeof sessionSchema>;
@@ -24,12 +25,25 @@ interface Store {
   flag: (key: string, questionId: string) => void;
   finish: (key: string, id: string, report: ExamReport) => void;
   clear: (key: string) => void;
+  addInk: (key: string, questionId: string, path: string) => void;
+  clearInk: (key: string) => void;
 }
 const storageHealth = create<{ error: string }>(() => ({ error: '' }));
 const storageError = 'Trình duyệt không lưu được bài làm. Đừng đóng trang trước khi nộp bài.';
 const persistedSchema = z.object({ entries: z.record(z.string(), z.object({ active: sessionSchema.optional(), history: z.array(sessionSchema).max(10) })) });
 export const useExamStore = create<Store>()(persist((set) => ({
   entries: {},
+  addInk: (key, questionId, path) => set(state => {
+    const entry = state.entries[key]; const session = entry?.active;
+    if (!session || session.report || (session.deadline && Date.now() >= session.deadline) || !session.questionIds.includes(questionId)
+      || path.length > 8000 || !/^M[\d .L]+$/.test(path) || Object.values(session.ink ?? {}).reduce((n, paths) => n + paths.length, 0) >= 200) return state;
+    const paths = session.ink?.[questionId] ?? []; if (paths.length >= 50) return state;
+    return { entries: { ...state.entries, [key]: { ...entry, active: { ...session, ink: { ...session.ink, [questionId]: [...paths, path] } } } } };
+  }),
+  clearInk: key => set(state => {
+    const entry = state.entries[key]; if (!entry?.active || entry.active.report) return state;
+    return { entries: { ...state.entries, [key]: { ...entry, active: { ...entry.active, ink: {} } } } };
+  }),
   begin: (key, exam, sectionIds, minutes) => {
     const questions = selectedQuestions(exam, sectionIds);
     if (!Number.isInteger(minutes) || minutes < 0 || minutes > 180) throw new Error('Thời gian không hợp lệ.');

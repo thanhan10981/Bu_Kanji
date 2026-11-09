@@ -1,4 +1,4 @@
-import type { ExamDraft, ExamReport, SourcePage } from './schema';
+import type { ExamDraft, ExamReport, SourcePage, NativeQuestion } from './schema';
 import { examAudio, type ExamAudio } from './audio.ts';
 
 export type Category = 'vocabulary' | 'grammar' | 'reading' | 'listening';
@@ -13,6 +13,7 @@ export interface PublicQuestion {
   questionId: string; originalNumber: string; type: 'single_choice' | 'multiple_choice'; stem: string;
   choices: { choiceId: string; text: string }[]; materials: { materialId: string; text: string }[];
   sourcePages?: SourcePage[]; initialPage?: number; sourcePdf?: string;
+  content?: NativeQuestion;
 }
 export interface PublicSection {
   sectionId: string; title: string; category: Category; instructions: string;
@@ -53,6 +54,7 @@ export function publicExam(draft: ExamDraft, revision: string): PublicExam {
       type: q.type as PublicQuestion['type'], stem: q.stem!,
       choices: q.choices.map(c => ({ choiceId: c.choiceId, text: c.text! })),
       sourcePages: q.sourcePages, initialPage: q.initialPage, sourcePdf: q.sourcePdf,
+      content: q.content,
       materials: q.materialIds.map(id => { const m = section.materials.find(item => item.materialId === id)!; return { materialId: id, text: m.text! }; }),
     }));
     return { sectionId: section.sectionId, title: section.title, category: categoryOf(section.title),

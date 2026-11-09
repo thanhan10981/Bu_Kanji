@@ -5,6 +5,8 @@ import december2025 from '@/data/exams/exam-2025-12.json';
 import july2026 from '@/data/exams/exam-2026-07.json';
 import verifiedInput from '@/data/exams/verified-answers.json';
 import sourceInput from '@/data/exams/source-pages.json';
+import nativeInput from '@/data/exams/native-content.json';
+import { applyNativeContent, nativeContentSchema } from '@/lib/exams/native-content';
 import { applySourcePages, sourceManifestSchema } from '@/lib/exams/source-pages';
 import { applyVerifiedAnswers, verifiedAnswersSchema } from '@/lib/exams/verified-answers';
 import { examDraftSchema } from '@/lib/exams/schema';
@@ -12,8 +14,10 @@ import { publicExam, summarize } from '@/lib/exams/model';
 
 const verified = verifiedAnswersSchema.parse(verifiedInput);
 const sources = sourceManifestSchema.parse(sourceInput);
+const native = nativeContentSchema.parse(nativeInput);
 const catalog = [july2026, december2025, july2025].map(input => {
-  const draft = applySourcePages(applyVerifiedAnswers(examDraftSchema.parse(input), verified), sources);
+  const original = applySourcePages(applyVerifiedAnswers(examDraftSchema.parse(input), verified), sources);
+  const draft = applyNativeContent(original, native, sources.exams[original.examId].questions.sha256);
   const revision = createHash('sha256').update(JSON.stringify({ draft, source: verified.sourceSha256, pages: sources.exams[draft.examId] })).digest('hex').slice(0, 16);
   return { draft, revision, public: publicExam(draft, revision) };
 });

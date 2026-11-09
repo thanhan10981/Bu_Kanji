@@ -67,7 +67,7 @@ export function ExamLibrary({ exams }: { exams: ExamSummary[] }) {
       })}</div>
       {!filtered.length && <div className="exam-empty"><BookOpen size={36} /><h3>{filter === 'unfinished' ? 'Bạn chưa có bài đang làm' : 'Chưa có lượt hoàn thành'}</h3><p>Chọn một bộ đề trong thư viện để bắt đầu hành trình.</p><button className="exam-button secondary" onClick={() => setFilter('all')}>Xem tất cả đề</button></div>}
     </section>
-    <aside className="exam-data-note"><span className="exam-stat-icon amber"><Headphones size={23} /></span><div><strong>Đầy đủ đề gốc, MP3 và đáp án</strong><p>Đã mở {readyCount} câu từ ba PDF gốc, giữ nguyên furigana, hình và đoạn đọc. Chọn đáp án theo số trên đề; xem script nghe sau khi nộp bài.</p></div><span className="exam-soft-badge">Nguyên bản PDF</span></aside>
+    <aside className="exam-data-note"><span className="exam-stat-icon amber"><Headphones size={23} /></span><div><strong>Đầy đủ đề gốc, MP3 và đáp án</strong><p>{readyCount} câu hiển thị nội dung và lựa chọn trực tiếp, hình nghe riêng và đoạn đọc đầy đủ. Có ghi chú bằng bút, furigana theo nguồn và script nghe sau khi nộp.</p></div><span className="exam-soft-badge">JLPT N3</span></aside>
     <p className="exam-footnote">Kết quả thể hiện số câu đúng theo đáp án được cung cấp, không quy đổi thành điểm JLPT chính thức. Lịch sử được lưu trên trình duyệt này.</p>
   </div>;
 }

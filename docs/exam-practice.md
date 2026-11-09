@@ -3,6 +3,8 @@
 ## Trạng thái hiện tại
 
 Đã mở **303/303 câu**, gồm 101 câu mỗi đề: 07/2025, 12/2025 và 07/2026.
+Giao diện đã đổi theo mẫu người dùng: bài cuộn theo phần, thẻ câu hỏi bằng chữ,
+đáp án trực tiếp, hình nghe riêng và thanh nộp bài/đồng hồ cố định.
 Mỗi đề có 35 câu từ vựng, 22 câu ngữ pháp, 16 câu đọc và 28 câu nghe.
 Không phụ thuộc bản OCR bị thiếu đoạn đọc, mất hình hoặc vỡ furigana để hiển thị đề.
 
@@ -18,10 +20,18 @@ Không phụ thuộc bản OCR bị thiếu đoạn đọc, mất hình hoặc v
 Trang `/exams` dùng layout, màu thương hiệu, chế độ sáng/tối và điều hướng hiện tại.
 
 - Chọn nhóm từ vựng/ngữ pháp/đọc/nghe; làm tự do hoặc đặt 15/30/60/90 phút.
-- Đọc trang PDF gốc ngay trong câu hỏi; chuyển trang của nhóm để xem đủ đoạn văn,
-  lựa chọn hoặc bảng biểu. Trang mở đầu được ghép theo câu/đoạn văn.
-- Phóng to 100–400%, cuộn ngang/dọc; dialog hỗ trợ bàn phím, Esc và khôi phục focus.
-- Mở PDF gốc ở tab mới để dùng trình đọc PDF hoặc chọn văn bản.
+- Vào nhanh ba phần: từ vựng 35 câu/30 phút, ngữ pháp–đọc 38 câu/70 phút,
+  nghe 28 câu/40 phút. Đây là thời gian luyện gợi ý, có thể đổi trong thiết lập.
+- Hiển thị chữ câu hỏi, lựa chọn và đoạn đọc trực tiếp; đáp án 2 cột trên desktop,
+  1 cột trên điện thoại. Đoạn đọc chung hiện một lần cho các câu liên quan.
+- Tách riêng hình nghe và bảng/tờ thông báo; không dùng ảnh cả trang làm nội dung mặc định.
+- Thanh cố định có nộp bài, đồng hồ, bút, bật/tắt furigana và tiến độ.
+- Bút vẽ ghi chú trên thẻ câu hỏi, lưu cùng lượt làm; tối đa 200 nét/lượt, 50 nét/câu.
+  Tắt bút để chọn đáp án; có nút xóa nét vẽ.
+- Furigana dùng ruby lấy từ tọa độ chữ nhỏ trong PDF. Chỉ hiện cách đọc có trong nguồn,
+  không tự sinh cách đọc cho từ đang được kiểm tra. Đề 07/2025 có ít furigana hơn hai đề sau.
+- Tiến độ mở bảng số câu, trạng thái đã chọn/đánh dấu; bấm số để cuộn đến câu đó.
+- Có “Đối chiếu đề gốc” để xem trang PDF, phóng to 100–400% hoặc mở PDF ở tab mới.
 - Chọn số đáp án tương ứng trên đề/audio. Nghe 問題4 và 問題5 có 3 lựa chọn;
   các nhóm khác có 4. Không tạo lựa chọn thứ tư cho bài chỉ có ba đáp án.
 - MP3 toàn bài có phát/tạm dừng, tua, lùi/tới 10 giây, tốc độ và tải xuống.
@@ -34,9 +44,9 @@ Trang `/exams` dùng layout, màu thương hiệu, chế độ sáng/tối và �
   không dùng chung bài lưu. Lịch sử chưa đồng bộ giữa thiết bị.
 - Đồng hồ dùng thời hạn tuyệt đối; hết giờ tự nộp một lần. Khi lỗi giữ đáp án và cho thử lại.
 
-Ảnh giữ nguyên hình, gạch chân, dấu sao, furigana và bố cục tài liệu. Trên màn hình nhỏ
-có thể cần nút **Phóng to** để đọc chữ nhỏ. Đây là cách hiển thị nguyên bản,
-chưa phải bản chép lại đầy đủ từng câu bằng văn bản HTML.
+Nội dung chữ được tách theo vị trí ký tự và cột, tách furigana khỏi dòng chính,
+giữ gạch chân và dấu sao. Hình giữ nguyên từ nguồn; bảng/tờ thông báo phức tạp giữ dạng hình.
+Ảnh trang gốc và script chỉ mở khi người học chọn đối chiếu/xem lại.
 MP3 chưa có mốc thời gian riêng từng câu; người học tua thủ công đến nhóm muốn luyện.
 Chấm theo đáp án được cung cấp, mỗi câu trọng số bằng nhau; không quy đổi điểm JLPT chính thức.
 
@@ -55,8 +65,9 @@ kích thước ảnh, SHA-256 ảnh, nhóm câu và trang mở đầu của từ
 Đã kiểm tra contact sheet của toàn bộ 118 trang; trang gốc được render ở 2.5×.
 Script 07/2026 là ảnh scan, giữ nguyên ảnh thay vì suy đoán text.
 
-Lỗi OCR được giải quyết ở lớp dữ liệu chạy bằng trang gốc đã ghép,
-giữ mã/số câu, số lựa chọn và đáp án đã đối chiếu. PDF nguồn không bị sửa.
+Lỗi bản chép được giải quyết ở lớp dữ liệu chạy: trích ký tự theo tọa độ, nhóm dòng/cột,
+phân biệt nhãn lựa chọn với ngày tháng trong đáp án; giữ mã/số câu và đáp án đã đối chiếu.
+PDF nguồn không bị sửa. Bản JSON nhập đầu tiên vẫn được giữ để truy vết.
 Độ chính xác nội dung gốc phụ thuộc tài liệu được cung cấp; ứng dụng không tự hiệu đính đề.
 
 ## Cấu trúc
@@ -64,6 +75,8 @@ giữ mã/số câu, số lựa chọn và đáp án đã đối chiếu. PDF ng
 - `src/data/exams/exam-*.json`: bản nhập gốc, server-only qua catalog.
 - `verified-answers.json`: đáp án theo nhóm/số câu, nguồn PDF/trang/SHA-256.
 - `source-pages.json`: manifest tài liệu/ảnh/nhóm câu; server-only qua catalog.
+- `native-content.json`: 303 câu dạng chữ, ruby/gạch chân, lựa chọn, đoạn đọc và ảnh cắt riêng.
+- `src/lib/exams/native-content.ts`: kiểm đủ câu/lựa chọn và hash PDF, ghép nội dung trực tiếp.
 - `src/lib/exams/verified-answers.ts`: kiểm đủ 17 nhóm/số câu, ghép đáp án theo số gốc.
 - `src/lib/exams/source-pages.ts`: kiểm ánh xạ trang/câu/lựa chọn; tạo bản dùng để luyện.
 - `src/lib/exams/catalog.ts`: catalog cố định, revision bao gồm đáp án và hash tài liệu/ảnh.
@@ -75,6 +88,9 @@ giữ mã/số câu, số lựa chọn và đáp án đã đối chiếu. PDF ng
 - `public/exams/<examId>/questions/page-XX.png`: trang câu hỏi/đoạn văn/hình.
 - `public/exams/<examId>/script/page-XX.png`: script dùng ở phần xem lại sau nộp.
 - `public/exams/<examId>/listening.mp3`: bản sao MP3 gốc khớp hash.
+- `public/exams/<examId>/native/`: hình nghe và bảng/tờ thông báo cắt từ tài liệu.
+- `ExamPaperRunner.tsx`, `ExamQuestion.tsx`, `paper.css`: bài cuộn theo mẫu, native text và controls.
+- `ExamInk.tsx`: nét SVG theo từng thẻ, lưu localStorage; không dùng canvas cao bằng toàn bài.
 
 `GET /api/exams/[examId]` chỉ trả câu hỏi và trang đề. `POST .../submit` kiểm revision,
 phần/câu/lựa chọn rồi trả kết quả và trang script cho câu nghe đã chọn.
@@ -105,8 +121,8 @@ cho API chấm; không dùng static export. `/api/exams/*` phải đến Next tr
 Không cần thêm biến môi trường, database/migration, API AI hay dependency runtime.
 Không thay backend NestJS hoặc luồng đăng nhập.
 
-Deploy cùng toàn bộ `public/exams/`: MP3 khoảng 115 MB, 118 ảnh khoảng 36 MB,
-và ba PDF đề. Hosting cần byte-range để tua MP3/mở PDF; production local đã trả 206.
+Deploy cùng toàn bộ `public/exams/` (khoảng 162 MB), gồm MP3, ảnh trang nguồn/script,
+hình cắt và ba PDF đề. Hosting cần byte-range để tua MP3/mở PDF; local đã trả 206.
 Không tham chiếu đường dẫn Downloads trong ứng dụng chạy trên web.
 Chưa thực hiện deploy, push hoặc commit.
 
@@ -114,15 +130,16 @@ Nhập lại ảnh bằng Python/PyMuPDF (chỉ dùng lúc chuẩn bị dữ li�
 
 ```powershell
 python scripts/import-exam-pdfs.py --sources-root '<thư mục chứa sáu PDF>'
+python scripts/extract-native-exams.py --sources-root '<thư mục chứa sáu PDF>'
 ```
 
 Script chỉ đọc PDF nguồn, kiểm tên/số trang, tạo ảnh và manifest. Ánh xạ nhóm/trang mở đầu
 đã đối chiếu nằm trong script. Khi đổi tài liệu phải rà lại ánh xạ;
 không mặc định tài liệu khác là cùng đề. File nguồn không bị sửa.
 
-## Kiểm tra local — 2026-11-08
+## Kiểm tra local — 2026-11-09
 
-- `test:exams`: 7 test đạt. Cả ba đề 101 câu; tất cả đáp án đúng đạt 101/101 mỗi đề.
+- `test:exams`: 8 test đạt. Cả ba đề 101 câu; tất cả đáp án đúng đạt 101/101 mỗi đề.
   Kiểm bài trống, giả mạo, số lựa chọn 3/4, số câu trùng/bảng thiếu và không lộ script/key ở GET.
 - Kiểm đủ 118 ảnh PNG: tồn tại, kích thước và hash đúng; ba PDF sao chép đúng hash nguồn.
 - TypeScript, ESLint các tệp luyện đề và build production đạt.
@@ -137,7 +154,15 @@ không mặc định tài liệu khác là cùng đề. File nguồn không bị
   đã kiểm sáng/tối. Cuộn bên trong ảnh phóng to là chủ đích.
 - Trước đó đã kiểm ba MP3 phát/tua/tốc độ/tải xuống và lỗi/thử lại;
   đồng hồ, lỗi nộp, tách guest/user và khôi phục localStorage đã qua ở luồng nền.
+- Luồng mới theo mẫu: chữ/đáp án trực tiếp, đoạn đọc dùng chung, hình nghe riêng,
+  furigana ẩn/hiện đúng ruby nguồn, bút vẽ lưu/khôi phục sau reload, deadline giữ nguyên,
+  tiến độ chuyển câu, xác nhận/hủy nộp, chấm từ vựng và nghe, script sau nộp đạt ở 1440/390 px.
+- Đã kiểm lại hết giờ trên giao diện mới: tự nộp một lần, lỗi giữ/khóa đáp án và thử lại được.
+  Thanh công cụ cố định và không tràn ngang ở 320/390/820/1440 px; sáng/tối.
+  Hình cắt gặp lỗi mạng có thông báo, tải lại thành công và không mất bài làm.
 
 Script/ảnh kiểm nằm trong `.tmp/exams-pdf-check.cjs`, `.tmp/exams-browser-check.cjs`,
 `.tmp/exams-audio-check.cjs`, `.tmp/exams-edge-check.cjs`, `.tmp/verify-answer-cells.py`
 và `.tmp/exams-*.png`. Chúng được ignore, không đưa vào deploy.
+Kiểm tra giao diện mới nằm ở `.tmp/exams-native-check.cjs`; bản audit chữ nằm ở
+`.tmp/native-exams/audit.txt` để đối chiếu dữ liệu trích với PDF.
