@@ -36,6 +36,9 @@ Trang `/exams` dùng layout, màu thương hiệu, chế độ sáng/tối và �
   các nhóm khác có 4. Không tạo lựa chọn thứ tư cho bài chỉ có ba đáp án.
 - MP3 toàn bài có phát/tạm dừng, tua, lùi/tới 10 giây, tốc độ và tải xuống.
   Không tự phát hoặc tải toàn file khi chỉ mở trang.
+  Trong lượt làm bài, trình phát nằm ngay trước nhóm nghe đầu tiên được chọn, sau phần đọc.
+  Sau khi bắt đầu nghe và cuộn khỏi trình phát, thanh điều khiển gọn cho tạm dừng/nghe tiếp,
+  tua 10 giây và trở về trình phát; vẫn dùng cùng một audio và giữ vị trí phát.
 - Đánh dấu câu, chuyển câu qua phiếu trả lời, tự lưu và khôi phục khi tải lại.
 - Nộp có xác nhận số câu bỏ trống; chấm tại server, xem đúng/sai/bỏ trống và từng phần.
 - Sau nộp có script nghe nguyên bản, bao gồm lời thoại và phần giải đáp được cung cấp.
@@ -166,3 +169,6 @@ Script/ảnh kiểm nằm trong `.tmp/exams-pdf-check.cjs`, `.tmp/exams-browser-
 và `.tmp/exams-*.png`. Chúng được ignore, không đưa vào deploy.
 Kiểm tra giao diện mới nằm ở `.tmp/exams-native-check.cjs`; bản audit chữ nằm ở
 `.tmp/native-exams/audit.txt` để đối chiếu dữ liệu trích với PDF.
+Vị trí audio và điều khiển nổi được kiểm ở 1440/390 px bằng
+`.tmp/exams-audio-placement-check.cjs`: đúng thứ tự sau đọc/trước nghe, chỉ một audio,
+tạm dừng/nghe tiếp/tua/trở về đúng trạng thái; build/TypeScript/ESLint phần sửa đạt.

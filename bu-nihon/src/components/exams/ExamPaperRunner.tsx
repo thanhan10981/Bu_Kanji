@@ -69,8 +69,8 @@ export function ExamPaperRunner({ exam, session, storageKey, reload, onReset, ca
       {pen && !locked && <div className="exam-paper-pen-note" role="status"><PenLine size={17} /><span>Bút đang bật: kéo trên câu hỏi để ghi chú. Tắt bút để chọn đáp án. {strokes}/200 nét.</span><button onClick={() => useExamStore.getState().clearInk(storageKey)}><Trash2 size={15} />Xóa nét vẽ</button><button onClick={() => setPen(false)}>Xong<Check size={15} /></button></div>}
       {expired && <p className="exam-notice" role="status">{mutation.isError ? 'Đã hết giờ. Bài làm được giữ nguyên; hãy thử nộp lại.' : 'Đã hết giờ. Đang nộp bài để chấm điểm.'}</p>}
       {mutation.isError && <div className="exam-notice" role="alert">{mutation.error.message} Bài làm vẫn được giữ.<button className="exam-text-button" onClick={send}>Thử nộp lại</button><button className="exam-text-button" onClick={reload}>Cập nhật đề</button></div>}
-      {categories.includes('listening') && <ExamAudioPlayer audio={exam.listeningAudio} title={exam.title} />}
       {sections.map(section => <section className={`exam-paper-section category-${section.category}`} key={section.sectionId} aria-label={section.title}>
+        {section.sectionId === sections.find(item => item.category === 'listening')?.sectionId && <ExamAudioPlayer audio={exam.listeningAudio} title={exam.title} follow />}
         <h2 className="exam-paper-instruction" lang="ja">{section.instructions}</h2>
         {section.questions.map((question, localIndex) => {
           const index = questions.findIndex(q => q.questionId === question.questionId);
