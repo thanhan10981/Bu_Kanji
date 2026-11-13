@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test:chat": "node --test --test-isolation=none test/chat.test.cjs",
     "test:exams": "node --experimental-strip-types --test --test-isolation=none src/lib/exams/model.test.ts",
-    "test:vocabulary": "node --experimental-strip-types --test --test-isolation=none src/lib/vocabulary/kana.test.ts src/lib/vocabulary/progress.test.ts"
+    "test:vocabulary": "node --experimental-strip-types --test --test-isolation=none src/lib/vocabulary/kana.test.ts src/lib/vocabulary/progress.test.ts src/lib/vocabulary/flashcard.test.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.0",

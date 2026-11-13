@@ -1,0 +1,43 @@
+.flash-stage { padding-bottom: 32px; }
+.flash-back, .flash-heading .vocab-eyebrow { display: inline-flex; align-items: center; gap: 8px; }
+.flash-heading { margin: 28px 0; }
+.flash-heading h1 { font-size: clamp(26px, 4vw, 36px); line-height: 1.3; margin: 12px 0; overflow-wrap: anywhere; }
+.flash-setup, .flash-results { padding: 36px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+.flash-setup > svg, .flash-results > svg { color: var(--color-brand-500); }
+.flash-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; margin: 10px 0; text-align: left; }
+.flash-settings label { display: flex; flex-direction: column; gap: 10px; font-size: 14px; font-weight: 600; min-width: 0; }
+.flash-settings select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--color-border); color: var(--color-text-primary); background: var(--color-card-bg); }
+.flash-progress > div { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; }
+.flash-progress span { color: var(--color-text-secondary); }
+.flash-progress progress { width: 100%; height: 8px; appearance: none; border: 0; border-radius: 8px; overflow: hidden; background: var(--color-border); margin: 14px 0; }
+.flash-progress progress::-webkit-progress-bar { background: var(--color-border); }
+.flash-progress progress::-webkit-progress-value { background: var(--color-brand-500); border-radius: 8px; }
+.flash-progress progress::-moz-progress-bar { background: var(--color-brand-500); border-radius: 8px; }
+.flash-learning-card { min-height: 340px; border: 1px solid var(--color-border); box-shadow: 0 12px 40px #17346608; overflow-wrap: anywhere; }
+.flash-learning-card.is-revealed { border-color: var(--color-brand-500); }
+.flash-learning-card .vocab-flash-text { line-height: 1.5; }
+.flash-learning-card [lang=ja] { font-family: var(--font-jp); }
+.flash-learning-card .flash-vietnamese { font-size: clamp(25px, 4vw, 36px); }
+.flash-reading { font-family: var(--font-jp); font-size: 22px; }
+.flash-flip-hint { display: inline-flex; gap: 8px; align-items: center; color: var(--color-text-secondary); font-size: 12px; }
+.flash-instruction, .flash-save-note { text-align: center; margin: 22px 0; }
+.flash-rating { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.flash-rating button { justify-content: center; padding: 18px; min-height: 58px; }
+.flash-result-counts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+.flash-result-counts > div { display: flex; flex-direction: column; gap: 8px; padding: 24px 12px; background: var(--color-brand-50); border-radius: 16px; }
+.flash-result-counts strong { font-size: 36px; color: var(--color-brand-500); }
+.flash-result-counts > div, .flash-report .study-report-metrics > div { background: color-mix(in srgb, var(--color-brand-500) 10%, var(--color-card-bg)); }
+.flash-caption { margin: 16px 0; }
+.flash-report h3 { margin-top: 24px; }
+.flash-report .study-report-words { list-style: none; }
+.flash-history ol { list-style: none; margin: 12px 0; padding: 0; }
+.flash-history li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; }
+.flash-history time { color: var(--color-text-secondary); }
+@media (max-width: 600px) {
+  .flash-setup, .flash-results { padding: 24px 18px; }
+  .flash-settings { grid-template-columns: 1fr; }
+  .flash-rating { gap: 10px; }
+  .flash-rating button { padding: 14px 8px; }
+  .flash-result-counts { gap: 12px; }
+  .flash-learning-card { min-height: 300px; }
+}

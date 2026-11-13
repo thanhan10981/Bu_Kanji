@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { useRef, useState, useSyncExternalStore } from 'react';
 import { X, Check, RotateCcw } from 'lucide-react';
 import type { Card, SetDetail } from '@/lib/vocabulary/schemas';
-import { advanceWritten, gradeWritten, matchesCard, normalizeAnswer, startShuffledWritten, startWritten, summarize } from '@/lib/vocabulary/study';
+import { advanceWritten, gradeWritten, matchesCard, normalizeAnswer, startShuffledWritten, summarize } from '@/lib/vocabulary/study';
 import { finalizeKana } from '@/lib/vocabulary/kana';
 import { KanaInput } from './KanaInput';
+import { FlashcardSession } from './FlashcardSession';
 import { useStudyProgress } from '@/lib/vocabulary/progress-store';
 
 interface StudySessionProps { set: SetDetail; mode: 'flashcard' | 'written' }
@@ -15,23 +16,22 @@ const serverSnapshot = () => false;
 
 export function StudySession(props: StudySessionProps) {
   const hydrated = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
+  if (props.mode === 'flashcard') return <FlashcardSession key={props.set.id} set={props.set} />;
   // Start random ordering only in the browser, avoiding server/client question mismatches.
   if (props.mode === 'written' && !hydrated) return <p role="status">Đang xáo trộn câu hỏi…</p>;
   return <StudySessionContent {...props} />;
 }
 
-function StudySessionContent({ set, mode }: StudySessionProps) {
+function StudySessionContent({ set }: StudySessionProps) {
   const studyProgress = useStudyProgress();
   const [cards, setCards] = useState<Card[]>(() => set.cards.map(card => ({ ...card })));
-  const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
   const [answer, setAnswer] = useState('');
-  const [session, setSession] = useState(() => mode === 'written' ? startShuffledWritten(set.cards.length) : startWritten(set.cards.length));
+  const [session, setSession] = useState(() => startShuffledWritten(set.cards.length));
   const [prompt, setPrompt] = useState<'japanese' | 'meaning'>('japanese');
   const [error, setError] = useState('');
   const [inputKey, setInputKey] = useState(0);
   const lock = useRef(false);
-  const card = cards[mode === 'flashcard' ? index : session.queue[0]];
+  const card = cards[session.queue[0]];
   const back = `/vocabulary/sets/${set.id}`;
   const feedback = session.feedback;
   const ready = feedback === 'correct' || feedback === 'corrected';
@@ -60,19 +60,6 @@ function StudySessionContent({ set, mode }: StudySessionProps) {
     setInputKey(key => key + 1); lock.current = false;
   };
   if (!cards.length) return <section className="vocab-study"><Link href={back} className="vocab-back">← Về bộ {set.name}</Link><div className="card vocab-empty"><h2>Bộ chưa có thẻ</h2><p>Thêm thẻ để bắt đầu học.</p></div></section>;
-  if (mode === 'flashcard') return <section className="vocab-study">
-    <Link href={back} className="vocab-back">← Về bộ {set.name}</Link><h1>Flashcard</h1>
-    <p aria-label="Tiến độ">{index + 1}/{cards.length}</p>
-    <button className="card vocab-flashcard" onClick={() => setFlipped(!flipped)} aria-label={flipped ? 'Lật về chữ Nhật' : 'Lật xem đáp án'}>
-      <span className="vocab-eyebrow">{flipped ? 'Cách đọc · Nghĩa tiếng Việt' : 'Chữ Nhật'}</span>
-      <span className="vocab-flash-text" lang="ja">{flipped ? card.reading : card.japanese || card.reading}</span>
-      {flipped && <span className="vocab-flash-meaning" lang="vi">{card.meaning}</span>}
-      {flipped && card.hanViet && <span className="vocab-hint">{card.hanViet}</span>}
-      <span className="vocab-hint">Chạm hoặc nhấn Enter để lật</span>
-    </button>
-    <div className="vocab-actions"><button className="btn-secondary" disabled={index === 0} onClick={() => { setIndex(index - 1); setFlipped(false); }}>← Trước</button>
-      <button className="btn-primary" disabled={index === cards.length - 1} onClick={() => { setIndex(index + 1); setFlipped(false); }}>Sau →</button></div>
-  </section>;
   return <section className="written-stage" aria-label={`Tự luận — ${set.name}`}>
     <div className="written-card">
       <header className="written-top"><span className="written-count" aria-label="Số từ đã thuộc">{session.completed.length} / {cards.length}</span>
